@@ -1,0 +1,49 @@
+/* Importando as fontes */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Reset básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.6;
+}
+
+/* Crown animation - única animação customizada necessária */
+@keyframes fly-crown {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  30% {
+    transform: translate(calc(50vw - 50px), 10vh) scale(1.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(100vw - 100px), 0) scale(0.5);
+    opacity: 0;
+  }
+}
+
+.crown-animation-container {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  font-size: 2.5rem;
+  color: #FFC107;
+  z-index: 2000;
+  pointer-events: none;
+  opacity: 0;
+  text-shadow: 0 0 15px #ffd70080;
+}
+
+.crown-animation-container.animate {
+  animation: fly-crown 1s ease-out forwards;
+}
