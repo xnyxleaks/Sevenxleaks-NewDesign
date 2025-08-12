@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { ArrowLeft, Calendar, Tag, Download, ExternalLink, Shield, Crown, Star } from "lucide-react";
+import {
+  ArrowLeft,
+  Calendar,
+  Tag,
+  Download,
+  ExternalLink,
+  Shield,
+  Crown,
+  Star,
+  ChevronDown,
+} from "lucide-react";
 import Loading from "../../components/Loading/Loading";
 import DownloadOptions from "../../components/DownloadOptions";
 import { linkvertise } from "../../components/Linkvertise";
@@ -29,23 +39,27 @@ const FreeContentDetails = () => {
   const [content, setContent] = useState<ContentItem | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [linkvertiseAccount, setLinkvertiseAccount] = useState<string>('518238');
+  const [linkvertiseAccount, setLinkvertiseAccount] = useState<string>("518238");
+  const [benefitsOpen, setBenefitsOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchLinkvertiseConfig = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/linkvertise-config`, {
-          headers: {
-            'x-api-key': `${import.meta.env.VITE_FRONTEND_API_KEY}`,
-          },
-        });
-        
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/linkvertise-config`,
+          {
+            headers: {
+              "x-api-key": `${import.meta.env.VITE_FRONTEND_API_KEY}`,
+            },
+          }
+        );
+
         if (response.data && response.data.activeAccount) {
           setLinkvertiseAccount(response.data.activeAccount);
         }
       } catch (error) {
-        console.error('Erro ao buscar configuração do Linkvertise:', error);
-        setLinkvertiseAccount('518238');
+        console.error("Erro ao buscar configuração do Linkvertise:", error);
+        setLinkvertiseAccount("518238");
       }
     };
 
@@ -54,8 +68,8 @@ const FreeContentDetails = () => {
 
   useEffect(() => {
     if (content) {
-      linkvertise(linkvertiseAccount, { 
-        whitelist: ["mega.nz", "pixeldrain.com", "gofile.io"] 
+      linkvertise(linkvertiseAccount, {
+        whitelist: ["mega.nz", "pixeldrain.com", "gofile.io"],
       });
     }
   }, [content, linkvertiseAccount]);
@@ -70,19 +84,21 @@ const FreeContentDetails = () => {
     const fetchContentDetails = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/freecontent/${slug}`, {
-          headers: {
-            'x-api-key': `${import.meta.env.VITE_FRONTEND_API_KEY}`,
-          },
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/freecontent/${slug}`,
+          {
+            headers: {
+              "x-api-key": `${import.meta.env.VITE_FRONTEND_API_KEY}`,
+            },
+          }
+        );
 
         if (!response.data || !response.data.data) {
-          throw new Error('Resposta inválida do servidor');
+          throw new Error("Resposta inválida do servidor");
         }
 
         const decodedContent = decodeModifiedBase64(response.data.data);
         setContent(decodedContent);
-
       } catch (error) {
         console.error("Error fetching content details:", error);
         setError("Failed to load content details. Please try again later.");
@@ -120,8 +136,8 @@ const FreeContentDetails = () => {
           </div>
           <h2 className="text-2xl font-bold mb-4 text-white">Error</h2>
           <p className="text-gray-300 mb-6">{error}</p>
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl font-semibold transition-all duration-300"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -147,8 +163,8 @@ const FreeContentDetails = () => {
           <p className="text-gray-300 mb-6">
             The content you're looking for doesn't exist or has been removed.
           </p>
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl font-semibold transition-all duration-300"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -178,8 +194,8 @@ const FreeContentDetails = () => {
           animate={{ opacity: 1, x: 0 }}
           className="mb-6"
         >
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="inline-flex items-center gap-2 px-4 py-2 bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700 hover:border-blue-500/50 rounded-xl text-gray-300 hover:text-white transition-all duration-300 backdrop-blur-sm shadow-lg hover:shadow-blue-500/10"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -204,7 +220,7 @@ const FreeContentDetails = () => {
             >
               {content.name}
             </motion.h1>
-            
+
             <div className="flex flex-wrap items-center gap-4">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
@@ -217,7 +233,7 @@ const FreeContentDetails = () => {
                   {formatDate(content.postDate)}
                 </span>
               </motion.div>
-              
+
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -237,27 +253,8 @@ const FreeContentDetails = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
               className="mb-6"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center shadow-lg">
-                  <Download className="w-4 h-4 text-white" />
-                </div>
-                <h2 className="text-xl font-bold text-white">
-                  Download Options
-                </h2>
-              </div>
-              
-              <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl p-4 mb-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <Shield className="w-4 h-4 text-blue-400" />
-                  <span className="text-blue-400 font-semibold text-sm">Free Content Notice</span>
-                </div>
-                <p className="text-gray-300 text-sm">
-                  This content is free but may contain ads. Upgrade to VIP for an ad-free experience and instant access.
-                </p>
-              </div>
-            </motion.div>
-            
+            ></motion.div>
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -272,26 +269,46 @@ const FreeContentDetails = () => {
               />
             </motion.div>
 
-            {/* VIP Upgrade Section */}
+            {/* VIP Upgrade Section com toggle */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
               className="mt-6 bg-gradient-to-r from-yellow-500/10 to-yellow-600/10 border border-yellow-500/30 rounded-xl p-4"
             >
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-lg">
-                  <Crown className="w-4 h-4 text-black" />
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-lg">
+                    <Crown className="w-4 h-4 text-black" />
+                  </div>
+                  <h3 className="text-lg font-bold text-yellow-400">Upgrade to VIP</h3>
                 </div>
-                <h3 className="text-lg font-bold text-yellow-400">Upgrade to VIP</h3>
+
+                <button
+                  type="button"
+                  onClick={() => setBenefitsOpen((v) => !v)}
+                  aria-expanded={benefitsOpen}
+                  aria-controls="vip-benefits"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-yellow-500/15 border border-yellow-500/30 text-yellow-300 rounded-md text-xs font-medium transition-all"
+                >
+                  {benefitsOpen ? "Ocult benefits" : "Show benefits"}
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform ${benefitsOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
               </div>
-              
-              <div className="grid grid-cols-2 gap-2 mb-4">
+
+              <div
+                id="vip-benefits"
+                className={`grid grid-cols-2 gap-2 mb-4 overflow-hidden transition-all duration-300 ${
+                  benefitsOpen ? "max-h-96 opacity-100 mt-1" : "max-h-0 opacity-0"
+                }`}
+              >
                 {[
                   "Instant access without ads",
                   "All content unlocked",
                   "Premium download speeds",
-                  "Exclusive VIP content"
+                  "Exclusive VIP content",
                 ].map((benefit, index) => (
                   <div key={index} className="flex items-center gap-2 text-gray-300 text-sm">
                     <div className="w-4 h-4 bg-green-500/20 rounded-full flex items-center justify-center">
@@ -301,7 +318,7 @@ const FreeContentDetails = () => {
                   </div>
                 ))}
               </div>
-              
+
               <Link
                 to="/plans"
                 className="inline-flex items-center gap-2 w-full justify-center px-4 py-2.5 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-yellow-500/30 text-sm"

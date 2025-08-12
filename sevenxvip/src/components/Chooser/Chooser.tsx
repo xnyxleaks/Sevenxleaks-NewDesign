@@ -21,7 +21,7 @@ const Chooser: React.FC = () => {
       
       {/* Theme Toggle */}
       <div className="absolute top-6 right-6 z-10">
-        <ThemeToggle />
+        
       </div>
       
       <motion.div
