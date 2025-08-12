@@ -145,6 +145,7 @@ pool.connect((err, client, done) => {
     return;
   }
   console.log('Conexão bem-sucedida ao banco de dados');
+  console.log('DB URL:', process.env.POSTGRES_URL);
   done();
 });
 

@@ -6,37 +6,44 @@ const Sequelize = require('sequelize');
 const process = require('process');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
+const allConfigs = require(__dirname + '/../config/config.json');
+const cfg = allConfigs[env] || {};
 const db = {};
 
-
-
 let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+
+// prioriza POSTGRES_URL; se ausente, usa config.json
+const url = process.env.POSTGRES_URL || (cfg.use_env_variable ? process.env[cfg.use_env_variable] : null);
+
+if (url) {
+  sequelize = new Sequelize(url, {
+    dialect: 'postgres',
+    // mescla opções do config.json se existirem
+    ...(cfg.dialectOptions ? { dialectOptions: cfg.dialectOptions } : {}),
+    ...(cfg.pool ? { pool: cfg.pool } : {}),
+    logging: false
+  });
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  sequelize = new Sequelize(cfg.database, cfg.username, cfg.password, {
+    host: cfg.host,
+    port: cfg.port,
+    dialect: cfg.dialect || 'postgres',
+    ...(cfg.dialectOptions ? { dialectOptions: cfg.dialectOptions } : {}),
+    ...(cfg.pool ? { pool: cfg.pool } : {}),
+    logging: false
+  });
 }
 
 fs
   .readdirSync(__dirname)
-  .filter(file => {
-    return (
-      file.indexOf('.') !== 0 &&
-      file !== basename &&
-      file.slice(-3) === '.js' &&
-      file.indexOf('.test.js') === -1
-    );
-  })
+  .filter(file => file.indexOf('.') !== 0 && file !== basename && file.endsWith('.js') && !file.endsWith('.test.js'))
   .forEach(file => {
     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
     db[model.name] = model;
   });
 
 Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
+  if (db[modelName].associate) db[modelName].associate(db);
 });
 
 db.sequelize = sequelize;

@@ -14,11 +14,11 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "postgres.fomubehgwwfosezslrga",
-    "password": "Sevenxleaks1120",
-    "database": "postgres",
-    "host": "aws-0-sa-east-2.pooler.supabase.com",
-    "port": 6543,
-    "dialect": "postgres"
+    "use_env_variable": "POSTGRES_URL",
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": { "require": true, "rejectUnauthorized": false }
+    },
+    "pool": { "max": 5, "min": 0, "idle": 10000, "acquire": 30000 }
   }
 }
