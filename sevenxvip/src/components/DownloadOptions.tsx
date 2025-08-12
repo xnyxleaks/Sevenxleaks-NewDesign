@@ -1,21 +1,14 @@
+// DownloadOptions.tsx
 import React from 'react';
 import DownloadButton from './DownloadButton';
 import { motion } from 'framer-motion';
-import { Download, Shield } from 'lucide-react';
-import MEGA from '../assets/MEGA.png';
-import Pixeldrain from '../assets/pixeldrain.png';
-import Gofile from '../assets/Gofile.jpg';
+import { Shield } from 'lucide-react';
 
 interface DownloadOptionsProps {
   primaryLinks: {
     mega?: string;
+    mega2?: string;
     pixeldrain?: string;
-    gofile?: string;
-  };
-  mirrorLinks: {
-    mega?: string;
-    pixeldrain?: string;
-    gofile?: string;
   };
 }
 
@@ -24,23 +17,20 @@ const DownloadOptions: React.FC<DownloadOptionsProps> = ({ primaryLinks }) => {
     {
       name: 'MEGA',
       url: primaryLinks.mega,
-      icon: MEGA,
       bgColor: 'from-red-500 to-red-600',
       hoverColor: 'hover:from-red-600 hover:to-red-700',
       shadowColor: 'hover:shadow-red-500/20'
     },
     {
-      name: 'Pixeldrain',
-      url: primaryLinks.pixeldrain,
-      icon: Pixeldrain,
-      bgColor: 'from-gray-600 to-gray-700',
-      hoverColor: 'hover:from-gray-700 hover:to-gray-800',
-      shadowColor: 'hover:shadow-gray-500/20'
+      name: 'MEGA 2',
+      url: primaryLinks.mega2,
+      bgColor: 'from-red-600 to-red-700',
+      hoverColor: 'hover:from-red-700 hover:to-red-800',
+      shadowColor: 'hover:shadow-red-600/20'
     },
     {
-      name: 'Gofile',
-      url: primaryLinks.gofile,
-      icon: Gofile,
+      name: 'Pixeldrain',
+      url: primaryLinks.pixeldrain,
       bgColor: 'from-blue-500 to-blue-600',
       hoverColor: 'hover:from-blue-600 hover:to-blue-700',
       shadowColor: 'hover:shadow-blue-500/20'
@@ -51,11 +41,11 @@ const DownloadOptions: React.FC<DownloadOptionsProps> = ({ primaryLinks }) => {
 
   if (availableOptions.length === 0) {
     return (
-      <div className="text-center py-6">
-        <div className="w-12 h-12 bg-gray-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
-          <Shield className="w-6 h-6 text-gray-400" />
+      <div className="text-center py-8">
+        <div className="w-16 h-16 bg-gray-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Shield className="w-8 h-8 text-gray-400" />
         </div>
-        <p className="text-gray-400 text-sm">No download links available</p>
+        <p className="text-gray-400">No download links available</p>
       </div>
     );
   }
@@ -76,6 +66,7 @@ const DownloadOptions: React.FC<DownloadOptionsProps> = ({ primaryLinks }) => {
               bgColor={option.bgColor}
               hoverColor={option.hoverColor}
               shadowColor={option.shadowColor}
+              // iconSrc="...opcional..."
             />
           </motion.div>
         ))}

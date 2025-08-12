@@ -182,7 +182,7 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', verifyToken, isAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, link, postDate } = req.body;
+    const { name, mega, mega2, pixeldrain, AdmavenMega, AdmavenMega2, AdmavenPixeldrain, postDate } = req.body;
 
     const freeContentToUpdate = await Free.findByPk(id);
     if (!freeContentToUpdate) {
@@ -190,7 +190,12 @@ router.put('/:id', verifyToken, isAdmin, async (req, res) => {
     }
 
     freeContentToUpdate.name = name !== undefined ? name : freeContentToUpdate.name;
-    freeContentToUpdate.link = link !== undefined ? link : freeContentToUpdate.link;
+    freeContentToUpdate.mega = mega !== undefined ? mega : freeContentToUpdate.mega;
+    freeContentToUpdate.mega2 = mega2 !== undefined ? mega2 : freeContentToUpdate.mega2;
+    freeContentToUpdate.pixeldrain = pixeldrain !== undefined ? pixeldrain : freeContentToUpdate.pixeldrain;
+    freeContentToUpdate.AdmavenMega = AdmavenMega !== undefined ? AdmavenMega : freeContentToUpdate.AdmavenMega;
+    freeContentToUpdate.AdmavenMega2 = AdmavenMega2 !== undefined ? AdmavenMega2 : freeContentToUpdate.AdmavenMega2;
+    freeContentToUpdate.AdmavenPixeldrain = AdmavenPixeldrain !== undefined ? AdmavenPixeldrain : freeContentToUpdate.AdmavenPixeldrain;
     freeContentToUpdate.postDate = postDate !== undefined ? postDate : freeContentToUpdate.postDate;
 
     if (name || postDate) {

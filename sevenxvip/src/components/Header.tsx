@@ -69,26 +69,44 @@ const Header: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
+          <nav className="hidden md:flex items-center space-x-4">
             <Link 
               to="/" 
-              className={`relative px-6 py-3 text-gray-300 hover:text-white transition-all duration-300 group rounded-xl hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:${theme.border} hover:${theme.glow}`}
+              className={`relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:${theme.border} hover:${theme.glow}`}
             >
-              <span className="relative z-10 font-medium font-roboto">Home</span>
+              <span className="relative z-10 font-medium font-roboto text-sm">Home</span>
               <div className={`absolute inset-0 bg-gradient-to-r ${theme.gradient} opacity-0 group-hover:opacity-10 rounded-xl transition-opacity duration-300`}></div>
             </Link>
+            
+            <Link 
+              to="/plans" 
+              className={`relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:border-yellow-500/20 hover:shadow-yellow-500/20`}
+            >
+              <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
+                <i className="fa-solid fa-crown text-yellow-400 text-xs"></i>
+                Plans
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-yellow-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
+            </Link>
+            
+            <a 
+              href="https://discord.gg/95BKaYTPPS"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:border-purple-500/20 hover:shadow-purple-500/20`}
+            >
+              <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
+                <i className="fab fa-discord text-purple-400 text-xs"></i>
+                Discord
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-purple-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
+            </a>
+            
             <Link 
               to="/login" 
-              className={`relative px-6 py-3 text-gray-300 hover:text-white transition-all duration-300 group rounded-xl hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:${theme.border} hover:${theme.glow}`}
+              className={`relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:${theme.border} hover:${theme.glow}`}
             >
-              <span className="relative z-10 font-medium font-roboto">Login</span>
-              <div className={`absolute inset-0 bg-gradient-to-r ${theme.gradient} opacity-0 group-hover:opacity-10 rounded-xl transition-opacity duration-300`}></div>
-            </Link>
-            <Link 
-              to="/register" 
-              className={`relative px-6 py-3 text-gray-300 hover:text-white transition-all duration-300 group rounded-xl hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:${theme.border} hover:${theme.glow}`}
-            >
-              <span className="relative z-10 font-medium font-roboto">Register</span>
+              <span className="relative z-10 font-medium font-roboto text-sm">Login</span>
               <div className={`absolute inset-0 bg-gradient-to-r ${theme.gradient} opacity-0 group-hover:opacity-10 rounded-xl transition-opacity duration-300`}></div>
             </Link>
           </nav>
@@ -139,6 +157,31 @@ const Header: React.FC = () => {
                   </div>
                   <span className="font-roboto">Home</span>
                 </Link>
+                
+                <Link 
+                  to="/plans" 
+                  onClick={toggleMenu} 
+                  className={`flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-yellow-500/10 hover:bg-yellow-500/20 rounded-2xl transition-all duration-300 font-medium border border-yellow-500/20 hover:border-yellow-500/30 backdrop-blur-sm`}
+                >
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-500 flex items-center justify-center shadow-lg">
+                    <i className="fa-solid fa-crown text-black text-sm"></i>
+                  </div>
+                  <span className="font-roboto">Plans</span>
+                </Link>
+                
+                <a 
+                  href="https://discord.gg/95BKaYTPPS"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={toggleMenu} 
+                  className={`flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-purple-500/10 hover:bg-purple-500/20 rounded-2xl transition-all duration-300 font-medium border border-purple-500/20 hover:border-purple-500/30 backdrop-blur-sm`}
+                >
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg">
+                    <i className="fab fa-discord text-white text-sm"></i>
+                  </div>
+                  <span className="font-roboto">Discord</span>
+                </a>
+                
                 <Link 
                   to="/login" 
                   onClick={toggleMenu} 
@@ -148,26 +191,6 @@ const Header: React.FC = () => {
                     <i className="fa-solid fa-sign-in-alt text-white text-sm"></i>
                   </div>
                   <span className="font-roboto">Login</span>
-                </Link>
-                <Link 
-                  to="/register" 
-                  onClick={toggleMenu} 
-                  className={`flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white ${theme.bg} hover:bg-gray-700/50 rounded-2xl transition-all duration-300 font-medium border border-gray-700/30 hover:${theme.border} backdrop-blur-sm`}
-                >
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${theme.gradient} flex items-center justify-center shadow-lg`}>
-                    <i className="fa-solid fa-user-plus text-white text-sm"></i>
-                  </div>
-                  <span className="font-roboto">Register</span>
-                </Link>
-                <Link 
-                  to="/plans" 
-                  onClick={toggleMenu} 
-                  className="flex items-center gap-4 px-6 py-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold rounded-2xl shadow-lg transition-all duration-300 border border-yellow-400/20 font-orbitron"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-black/20 flex items-center justify-center">
-                    <i className="fa-solid fa-crown text-yellow-300 text-sm animate-pulse"></i>
-                  </div>
-                  <span>VIP ACCESS</span>
                 </Link>
               </div>
             </motion.div>

@@ -11,12 +11,12 @@ import { motion } from "framer-motion";
 type ContentItem = {
   id: number;
   name: string;
-  link: string;
-  linkP: string;
-  linkG: string;
-  linkMV1: string;
-  linkMV2: string;
-  linkMV3: string;
+  mega: string;
+  mega2: string;
+  pixeldrain: string;
+  admavenmega: string;
+  admavenmega2: string;
+  admavenpixeldrain: string;
   category: string;
   postDate: string;
   createdAt: string;
@@ -265,11 +265,10 @@ const FreeContentDetails = () => {
             >
               <DownloadOptions
                 primaryLinks={{
-                  mega: content.link,
-                  pixeldrain: content.linkP,
-                  gofile: content.linkG
+                  mega: content.mega,
+                  mega2: content.mega2,
+                  pixeldrain: content.pixeldrain,
                 }}
-                mirrorLinks={{}}
               />
             </motion.div>
 

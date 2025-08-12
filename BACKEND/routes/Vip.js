@@ -195,7 +195,7 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', verifyToken, isAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, link, createdAt, postDate } = req.body;
+    const { name, mega, mega2, pixeldrain, admavenmega, admavenmega2, admavenpixeldrain, createdAt, postDate } = req.body;
 
     const vipContentToUpdate = await Vip.findByPk(id);
     if (!vipContentToUpdate) {
@@ -203,7 +203,12 @@ router.put('/:id', verifyToken, isAdmin, async (req, res) => {
     }
 
     vipContentToUpdate.name = name;
-    vipContentToUpdate.link = link;
+    vipContentToUpdate.mega = mega;
+    vipContentToUpdate.mega2 = mega2;
+    vipContentToUpdate.pixeldrain = pixeldrain;
+    vipContentToUpdate.admavenmega = admavenmega;
+    vipContentToUpdate.admavenmega2 = admavenmega2;
+    vipContentToUpdate.admavenpixeldrain = admavenpixeldrain;
     vipContentToUpdate.createdAt = createdAt || vipContentToUpdate.createdAt;
     vipContentToUpdate.postDate = postDate || vipContentToUpdate.postDate;
 

@@ -96,9 +96,9 @@ const AdminLinkForm: React.FC<AdminLinkFormProps> = ({
           <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
           <input
             type="text"
-            placeholder="Primary Link"
-            name="link"
-            value={newLink.link}
+            placeholder="MEGA URL"
+            name="mega"
+            value={newLink.mega}
             onChange={handleInputChange}
             className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
           />
@@ -179,9 +179,9 @@ const AdminLinkForm: React.FC<AdminLinkFormProps> = ({
               <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder="Link P"
-                name="linkP"
-                value={newLink.linkP}
+                placeholder="MEGA 2"
+                name="mega2"
+                value={newLink.mega2}
                 onChange={handleInputChange}
                 className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
               />
@@ -190,9 +190,9 @@ const AdminLinkForm: React.FC<AdminLinkFormProps> = ({
               <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder="Link G"
-                name="linkG"
-                value={newLink.linkG}
+                placeholder="Pixeldrain"
+                name="pixeldrain"
+                value={newLink.pixeldrain}
                 onChange={handleInputChange}
                 className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
               />
@@ -204,9 +204,9 @@ const AdminLinkForm: React.FC<AdminLinkFormProps> = ({
               <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder="MV Link 1"
-                name="linkMV1"
-                value={newLink.linkMV1}
+                placeholder="AdmavenMega"
+                name="AdmavenMega"
+                value={newLink.AdmavenMega}
                 onChange={handleInputChange}
                 className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
               />
@@ -215,9 +215,9 @@ const AdminLinkForm: React.FC<AdminLinkFormProps> = ({
               <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder="MV Link 2"
-                name="linkMV2"
-                value={newLink.linkMV2}
+                placeholder="AdmavenMega2"
+                name="AdmavenMega2"
+                value={newLink.AdmavenMega2}
                 onChange={handleInputChange}
                 className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
               />
@@ -226,9 +226,9 @@ const AdminLinkForm: React.FC<AdminLinkFormProps> = ({
               <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder="MV Link 3"
-                name="linkMV3"
-                value={newLink.linkMV3}
+                placeholder="AdmavenPixeldrain"
+                name="AdmavenPixeldrain"
+                value={newLink.AdmavenPixeldrain}
                 onChange={handleInputChange}
                 className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
               />

@@ -9,9 +9,9 @@ import { motion } from "framer-motion";
 type ContentItem = {
   id: number;
   name: string;
-  link: string;
-  linkP: string;
-  linkG: string;
+  mega: string;
+  mega2: string;
+  pixeldrain: string;
   category: string;
   postDate: string;
   createdAt: string;
@@ -242,11 +242,10 @@ const VIPContentDetails = () => {
             >
               <DownloadOptions
                 primaryLinks={{
-                  mega: content.link,
-                  pixeldrain: content.linkP,
-                  gofile: content.linkG
+                  mega: content.mega,
+                  mega2: content.mega2,
+                  pixeldrain: content.pixeldrain,
                 }}
-                mirrorLinks={{}}
               />
             </motion.div>
           </div>

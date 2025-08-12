@@ -110,9 +110,9 @@ const AdminLinkList: React.FC<AdminLinkListProps> = ({
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center gap-2 text-gray-300">
                     <LinkIcon className="w-4 h-4" />
-                    <span className="truncate">{link.link}</span>
+                    <span className="truncate">{link.mega}</span>
                     <a 
-                      href={link.link} 
+                      href={link.mega} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="p-1 hover:bg-gray-600 rounded-full transition-colors"
@@ -121,39 +121,39 @@ const AdminLinkList: React.FC<AdminLinkListProps> = ({
                     </a>
                   </div>
                   
-                  {link.linkP && (
+                  {link.pixeldrain && (
                     <div className="flex items-center gap-2 text-gray-300">
                       <LinkIcon className="w-4 h-4" />
-                      <span className="text-xs">P:</span>
-                      <span className="truncate">{link.linkP}</span>
+                      <span className="text-xs">Pixeldrain:</span>
+                      <span className="truncate">{link.pixeldrain}</span>
                     </div>
                   )}
                   
-                  {link.linkG && (
+                  {link.mega2 && (
                     <div className="flex items-center gap-2 text-gray-300">
                       <LinkIcon className="w-4 h-4" />
-                      <span className="text-xs">G:</span>
-                      <span className="truncate">{link.linkG}</span>
+                      <span className="text-xs">MEGA 2:</span>
+                      <span className="truncate">{link.mega2}</span>
                     </div>
                   )}
                   
                   <div className="grid grid-cols-3 gap-2 mt-2">
-                    {link.linkMV1 && (
+                    {link.AdmavenMega && (
                       <div className="flex items-center gap-1 text-gray-300 text-xs">
-                        <span>MV1:</span>
-                        <span className="truncate">{link.linkMV1}</span>
+                        <span>AdmavenMega:</span>
+                        <span className="truncate">{link.AdmavenMega}</span>
                       </div>
                     )}
-                    {link.linkMV2 && (
+                    {link.AdmavenMega2 && (
                       <div className="flex items-center gap-1 text-gray-300 text-xs">
-                        <span>MV2:</span>
-                        <span className="truncate">{link.linkMV2}</span>
+                        <span>AdmavenMega2:</span>
+                        <span className="truncate">{link.AdmavenMega2}</span>
                       </div>
                     )}
-                    {link.linkMV3 && (
+                    {link.AdmavenPixeldrain && (
                       <div className="flex items-center gap-1 text-gray-300 text-xs">
-                        <span>MV3:</span>
-                        <span className="truncate">{link.linkMV3}</span>
+                        <span>AdmavenPixeldrain:</span>
+                        <span className="truncate">{link.AdmavenPixeldrain}</span>
                       </div>
                     )}
                   </div>
