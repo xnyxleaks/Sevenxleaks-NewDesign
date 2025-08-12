@@ -27,7 +27,7 @@ export interface Userdatatypes {
 }
 
 export type LinkItem = {
-    id: number;
+    id: number | string;
     name: string;
     mega: string;
     mega2?: string;

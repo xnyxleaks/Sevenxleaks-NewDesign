@@ -4,23 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
 import { Crown, Search, Filter, Calendar, Plus, Star } from "lucide-react";
-
-type LinkItem = {
-  id: string;
-  name: string;
-  category: string;
-  postDate: string;
-  slug: string;
-  link: string;
-  thumbnail?: string;
-  linkP?: string;
-  linkG?: string;
-  linkMV1?: string;
-  linkMV2?: string;
-  linkMV3?: string;
-  updatedAt?: string;
-  createdAt?: string
-};
+import { LinkItem } from "../../types/Userdatatypes";
 
 type Category = {
   id: string;
@@ -120,35 +104,6 @@ const VIPContent: React.FC = () => {
       });
     } catch (error) {
       console.error("Error fetching content:", error);
-      // Fallback para dados de exemplo se a API falhar
-      if (!isLoadMore && links.length === 0) {
-        const fallbackData: LinkItem[] = [
-          {
-            id: "vip-1",
-            name: "VIP Exclusive Content 1",
-            category: "Asian",
-            postDate: new Date().toISOString(),
-            slug: "vip-example-1",
-            link: "#",
-            thumbnail: "https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg"
-          },
-          {
-            id: "vip-2",
-            name: "VIP Exclusive Content 2", 
-            category: "Western",
-            postDate: new Date().toISOString(),
-            slug: "vip-example-2",
-            link: "#",
-            thumbnail: "https://images.pexels.com/photos/1181672/pexels-photo-1181672.jpeg"
-          }
-        ];
-        setLinks(fallbackData);
-        setFilteredLinks(fallbackData);
-        setCategories([
-          { id: "asian", name: "Asian", category: "Asian" },
-          { id: "western", name: "Western", category: "Western" }
-        ]);
-      }
     } finally {
       setLoading(false);
       setLoadingMore(false);
