@@ -27,14 +27,21 @@ export interface Userdatatypes {
 }
 
 export type LinkItem = {
-  id: number;
-  name: string;
-  link: string;
-  slug: string;
-
-  category?: string
-  createdAt: string;
-};
+    id: number;
+    name: string;
+    mega: string;
+    mega2?: string;
+    pixeldrain?: string;
+    AdmavenMega?: string;
+    AdmavenMega2?: string;
+    AdmavenPixeldrain?: string;
+    category: string;
+    postDate: string;
+    createdAt: string;
+    updatedAt: string;
+    slug: string;
+    thumbnail?: string;
+  };
 
 export type Reaction = {
   emoji: string;

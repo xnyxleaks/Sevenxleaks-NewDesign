@@ -3,15 +3,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet";
+import { LinkItem } from "../../types/Userdatatypes";
 
-type LinkItem = {
-  id: string;
-  name: string;
-  category: string;
-  postDate: string;
-  slug: string;
-  thumbnail?: string;
-};
+
 
 type Category = {
   id: string;
