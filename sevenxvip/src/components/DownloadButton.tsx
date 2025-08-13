@@ -1,44 +1,39 @@
-// DownloadButton.tsx
 import React from 'react';
-import { ExternalLink, Download } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { ExternalLink } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface DownloadButtonProps {
-  url: string;
+  url?: string;
+  fallbackUrl?: string;
   label: string;
+  icon: string;
   bgColor: string;
   hoverColor: string;
-  shadowColor: string;
-  iconSrc?: string; // opcional
 }
 
 const DownloadButton: React.FC<DownloadButtonProps> = ({
   url,
+  fallbackUrl,
   label,
   bgColor,
-  hoverColor,
-  shadowColor,
-  iconSrc
+  hoverColor
 }) => {
+  const { theme } = useTheme();
+  const finalUrl = url || fallbackUrl;
+
+  if (!finalUrl) return null;
+
   return (
-    <motion.a
-      href={url}
+    <a
+      href={finalUrl}
       target="_blank"
       rel="noopener noreferrer"
-      whileHover={{ scale: 1.02, y: -2 }}
-      whileTap={{ scale: 0.98 }}
-      className={`flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl ${shadowColor} backdrop-blur-sm border border-white/10 bg-gradient-to-r ${bgColor} ${hoverColor} text-white group`}
+      className={`flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg ${bgColor} text-white ${hoverColor}`}
     >
-      <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-all duration-300">
-        {iconSrc ? (
-          <img src={iconSrc} alt="" aria-hidden="true" className="w-4 h-4 object-contain" />
-        ) : (
-          <Download className="w-4 h-4" aria-hidden="true" />
-        )}
-      </div>
-      <span className="flex-1 text-center text-sm font-medium">{label}</span>
-      <ExternalLink className="w-4 h-4 opacity-75 group-hover:opacity-100 transition-opacity duration-300" />
-    </motion.a>
+      <img alt={label} className="w-4 h-4 sm:w-5 sm:h-5" />
+      <span className="text-sm sm:text-base">{label}</span>
+      <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4" />
+    </a>
   );
 };
 

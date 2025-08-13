@@ -10,9 +10,15 @@ interface DownloadOptionsProps {
     mega2?: string;
     pixeldrain?: string;
   };
+  themeColors?: {
+    primary: string;
+    secondary: string;
+    accent: string;
+    gradient: string;
+  };
 }
 
-const DownloadOptions: React.FC<DownloadOptionsProps> = ({ primaryLinks }) => {
+const DownloadOptions: React.FC<DownloadOptionsProps> = ({ primaryLinks, themeColors }) => {
   const downloadOptions = [
     {
       name: 'MEGA',
@@ -63,9 +69,10 @@ const DownloadOptions: React.FC<DownloadOptionsProps> = ({ primaryLinks }) => {
             <DownloadButton
               url={option.url!}
               label={option.name}
-              bgColor={option.bgColor}
-              hoverColor={option.hoverColor}
-              shadowColor={option.shadowColor}
+              bgColor={themeColors ? `bg-${themeColors.primary}` : "bg-red-500"}
+              hoverColor={themeColors ? `hover:bg-${themeColors.accent}` : "hover:bg-red-600"}
+              shadowColor={themeColors ? `shadow-${themeColors.primary}/50` : "shadow-red-500/50"}
+              textColor="text-white"
               // iconSrc="...opcional..."
             />
           </motion.div>
