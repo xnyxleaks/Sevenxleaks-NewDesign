@@ -23,23 +23,23 @@ const DownloadOptions: React.FC<DownloadOptionsProps> = ({ primaryLinks, themeCo
     {
       name: 'MEGA',
       url: primaryLinks.mega,
-      bgColor: 'from-red-500 to-red-600',
-      hoverColor: 'hover:from-red-600 hover:to-red-700',
-      shadowColor: 'hover:shadow-red-500/20'
+      bgColor: themeColors ? `bg-gradient-to-r ${themeColors.gradient}` : 'bg-gradient-to-r from-red-500 to-red-600',
+      hoverColor: themeColors ? `hover:bg-gradient-to-r hover:from-${themeColors.secondary} hover:to-${themeColors.primary}` : 'hover:from-red-600 hover:to-red-700',
+      shadowColor: themeColors ? `hover:shadow-${themeColors.primary}/20` : 'hover:shadow-red-500/20'
     },
     {
       name: 'MEGA 2',
       url: primaryLinks.mega2,
-      bgColor: 'from-red-600 to-red-700',
-      hoverColor: 'hover:from-red-700 hover:to-red-800',
-      shadowColor: 'hover:shadow-red-600/20'
+      bgColor: themeColors ? `bg-gradient-to-r from-${themeColors.secondary} to-${themeColors.primary}` : 'bg-gradient-to-r from-red-600 to-red-700',
+      hoverColor: themeColors ? `hover:bg-gradient-to-r hover:from-${themeColors.primary} hover:to-${themeColors.accent}` : 'hover:from-red-700 hover:to-red-800',
+      shadowColor: themeColors ? `hover:shadow-${themeColors.secondary}/20` : 'hover:shadow-red-600/20'
     },
     {
       name: 'Pixeldrain',
       url: primaryLinks.pixeldrain,
-      bgColor: 'from-blue-500 to-blue-600',
-      hoverColor: 'hover:from-blue-600 hover:to-blue-700',
-      shadowColor: 'hover:shadow-blue-500/20'
+      bgColor: themeColors ? `bg-gradient-to-r from-${themeColors.accent} to-${themeColors.secondary}` : 'bg-gradient-to-r from-blue-500 to-blue-600',
+      hoverColor: themeColors ? `hover:bg-gradient-to-r hover:from-${themeColors.secondary} hover:to-${themeColors.accent}` : 'hover:from-blue-600 hover:to-blue-700',
+      shadowColor: themeColors ? `hover:shadow-${themeColors.accent}/20` : 'hover:shadow-blue-500/20'
     }
   ];
 
@@ -69,11 +69,9 @@ const DownloadOptions: React.FC<DownloadOptionsProps> = ({ primaryLinks, themeCo
             <DownloadButton
               url={option.url!}
               label={option.name}
-              bgColor={themeColors ? `bg-${themeColors.primary}` : "bg-red-500"}
-              hoverColor={themeColors ? `hover:bg-${themeColors.accent}` : "hover:bg-red-600"}
-              shadowColor={themeColors ? `shadow-${themeColors.primary}/50` : "shadow-red-500/50"}
-              textColor="text-white"
-              // iconSrc="...opcional..."
+              bgColor={option.bgColor}
+              hoverColor={option.hoverColor}
+              icon=""
             />
           </motion.div>
         ))}

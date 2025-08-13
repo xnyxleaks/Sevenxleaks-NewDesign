@@ -26,6 +26,10 @@ import ViewStats from "./pages/Viewstats";
 import ViewRequests from "./pages/ViewRequests";
 import AccessDenied from "./pages/AccessDenied";
 import AdminDisabledVipUsers from "./pages/AdminDisabledVipUsers";
+import BannedContent from "./pages/BannedContent";
+import UnknownContent from "./pages/UnknownContent";
+import BannedContentDetails from "./pages/BannedContentDetails";
+import UnknownContentDetails from "./pages/UnknownContentDetails";
 
 const App = () => {
   const [hasPermission, setHasPermission] = useState({ vip: false, admin: false });
@@ -71,6 +75,10 @@ const App = () => {
             <Route path="/asian" element={<AsianPage />} />
             <Route path="/western" element={<WesternPage />} />
             <Route path="/free/:slug" element={<FreeContentDetails />} />
+            <Route path="/banned" element={<BannedContent />} />
+            <Route path="/unknown" element={<UnknownContent />} />
+            <Route path="/banned/:slug" element={<BannedContentDetails />} />
+            <Route path="/unknown/:slug" element={<UnknownContentDetails />} />
             
             <Route 
               path="/vip" 

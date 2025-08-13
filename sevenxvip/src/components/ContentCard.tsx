@@ -10,6 +10,8 @@ interface ContentCardProps {
   slug: string;
   thumbnail?: string;
   isVip?: boolean;
+  isBanned?: boolean;
+  isUnknown?: boolean;
   isNew?: boolean;
   index?: number;
 }
@@ -21,9 +23,18 @@ const ContentCard: React.FC<ContentCardProps> = ({
   slug,
   thumbnail,
   isVip = false,
+  isBanned = false,
+  isUnknown = false,
   isNew = false,
   index = 0
 }) => {
+  const getPath = () => {
+    if (isBanned) return `/banned/${slug}`;
+    if (isUnknown) return `/unknown/${slug}`;
+    if (isVip) return `/vip/${slug}`;
+    return `/free/${slug}`;
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 30 }}
@@ -35,7 +46,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
       }}
       className="post-item"
     >
-      <Link to={isVip ? `/vip/${slug}` : `/free/${slug}`} className="w-full">
+      <Link to={getPath()} className="w-full">
         <div className="post-title-container">
           <h3>{name}</h3>
           {isNew && <span className="tag tag-new">NEW</span>}
@@ -43,6 +54,18 @@ const ContentCard: React.FC<ContentCardProps> = ({
             <span className="tag" style={{ backgroundColor: 'var(--accent-vip)', color: '#111' }}>
               <i className="fa-solid fa-crown mr-1"></i>
               VIP
+            </span>
+          )}
+          {isBanned && (
+            <span className="tag" style={{ backgroundColor: 'var(--accent-banned)', color: '#fff' }}>
+              <i className="fa-solid fa-ban mr-1"></i>
+              BANNED
+            </span>
+          )}
+          {isUnknown && (
+            <span className="tag" style={{ backgroundColor: 'var(--accent-unknown)', color: '#fff' }}>
+              <i className="fa-solid fa-question mr-1"></i>
+              UNKNOWN
             </span>
           )}
         </div>

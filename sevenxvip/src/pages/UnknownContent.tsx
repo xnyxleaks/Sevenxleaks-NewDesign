@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { Search, Calendar, LayoutGrid, SortDesc, ChevronDown, HelpCircle, Zap, Filter } from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
 import { useRegion } from "../contexts/RegionContext";
-import ContentCard from "../components/ContentCard";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
 
@@ -13,8 +13,12 @@ type LinkItem = {
   category: string;
   postDate: string;
   slug: string;
-  link: string;
+  mega: string;
+  mega2?: string;
+  pixeldrain?: string;
   thumbnail?: string;
+  createdAt: string;
+  region: string;
 };
 
 const months = [
@@ -40,73 +44,126 @@ const DreamyLoading = () => (
 );
 
 const UnknownContent: React.FC = () => {
+  const navigate = useNavigate();
   const [links, setLinks] = useState<LinkItem[]>([]);
   const [filteredLinks, setFilteredLinks] = useState<LinkItem[]>([]);
   const [searchName, setSearchName] = useState<string>("");
   const [selectedMonth, setSelectedMonth] = useState<string>("");
   const [sortOption, setSortOption] = useState<string>("mostRecent");
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMoreContent, setHasMoreContent] = useState(true);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
   const { theme } = useTheme();
   const { region } = useRegion();
 
-  // Mock data for unknown content - replace with actual API call
-  useEffect(() => {
-    const fetchUnknownContent = async () => {
-      setLoading(true);
-      // Simulate API call
-      setTimeout(() => {
-        const mockData: LinkItem[] = [
-          {
-            id: "1",
-            name: "Unknown Content Example 1",
-            category: "Unknown",
-            postDate: "2024-01-15",
-            slug: "unknown-content-1",
-            link: "https://example.com/unknown1",
-            thumbnail: "https://images.pexels.com/photos/1591056/pexels-photo-1591056.jpeg?auto=compress&cs=tinysrgb&w=400"
-          },
-          {
-            id: "2", 
-            name: "Unknown Content Example 2",
-            category: "Unknown",
-            postDate: "2024-01-10",
-            slug: "unknown-content-2",
-            link: "https://example.com/unknown2",
-            thumbnail: "https://images.pexels.com/photos/1591056/pexels-photo-1591056.jpeg?auto=compress&cs=tinysrgb&w=400"
-          }
-        ];
-        
-        setLinks(mockData);
-        setFilteredLinks(mockData);
-        setLoading(false);
-      }, 1000);
-    };
+  function decodeModifiedBase64<T>(encodedStr: string): T {
+    const fixedBase64 = encodedStr.slice(0, 2) + encodedStr.slice(3);
+    const jsonString = atob(fixedBase64);
+    return JSON.parse(jsonString) as T;
+  }
 
-    fetchUnknownContent();
-  }, []);
+  const fetchContent = async (page: number, isLoadMore = false) => {
+    try {
+      if (!isLoadMore) setLoading(true);
+      setSearchLoading(true);
 
-  useEffect(() => {
-    let filtered = links.filter(link => 
-      link.name.toLowerCase().includes(searchName.toLowerCase())
-    );
-
-    if (selectedMonth) {
-      filtered = filtered.filter(link => {
-        const linkMonth = new Date(link.postDate).getMonth() + 1;
-        return linkMonth.toString().padStart(2, '0') === selectedMonth;
+      const params = new URLSearchParams({
+        page: page.toString(),
+        search: searchName,
+        region: region,
+        sortBy: "postDate",
+        sortOrder: "DESC",
+        limit: "24",
       });
-    }
 
-    if (sortOption === 'oldest') {
-      filtered.sort((a, b) => new Date(a.postDate).getTime() - new Date(b.postDate).getTime());
-    } else {
-      filtered.sort((a, b) => new Date(b.postDate).getTime() - new Date(a.postDate).getTime());
-    }
+      if (selectedMonth) {
+        params.append('month', selectedMonth);
+      }
 
-    setFilteredLinks(filtered);
-  }, [searchName, selectedMonth, sortOption, links]);
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/unknowncontent/search?${params}`,
+        {
+          headers: {
+            "x-api-key": `${import.meta.env.VITE_FRONTEND_API_KEY}`,
+          },
+        }
+      );
+
+      if (!response.data?.data) {
+        throw new Error("Invalid server response");
+      }
+
+      const decoded = decodeModifiedBase64<{ data: LinkItem[]; totalPages: number }>(
+        response.data.data
+      );
+
+      const { data: rawData, totalPages } = decoded;
+
+      if (isLoadMore) {
+        setLinks((prev) => [...prev, ...rawData]);
+        setFilteredLinks((prev) => [...prev, ...rawData]);
+      } else {
+        setLinks(rawData);
+        setFilteredLinks(rawData);
+      }
+
+      setTotalPages(totalPages);
+      setHasMoreContent(page < totalPages);
+    } catch (error) {
+      console.error("Error fetching unknown content:", error);
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+      setSearchLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCurrentPage(1);
+      fetchContent(1);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchName, selectedMonth, sortOption, region]);
+
+  const handleLoadMore = () => {
+    if (loadingMore || currentPage >= totalPages) return;
+    setLoadingMore(true);
+    const nextPage = currentPage + 1;
+    setCurrentPage(nextPage);
+    fetchContent(nextPage, true);
+  };
+
+  const recentLinks = filteredLinks.slice(0, 5);
+
+  const formatDateHeader = (dateString: string): string => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "2-digit",
+    });
+  };
+
+  const groupPostsByDate = (posts: LinkItem[]) => {
+    const grouped: { [key: string]: LinkItem[] } = {};
+    
+    posts.forEach(post => {
+      const dateKey = formatDateHeader(post.postDate || post.createdAt);
+      if (!grouped[dateKey]) {
+        grouped[dateKey] = [];
+      }
+      grouped[dateKey].push(post);
+    });
+    
+    return grouped;
+  };
+
+  const groupedLinks = groupPostsByDate(filteredLinks);
 
   return (
     <div className="dreamy-page">
@@ -178,6 +235,11 @@ const UnknownContent: React.FC = () => {
                 onChange={(e) => setSearchName(e.target.value)}
                 className="dreamy-input w-full pl-12 pr-4 text-gray-900 placeholder-gray-500"
               />
+              {searchLoading && (
+                <div className="ml-2">
+                  <div className="w-4 h-4 border-2 border-purple-400 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+              )}
             </div>
 
             <div className="relative group">
@@ -214,42 +276,95 @@ const UnknownContent: React.FC = () => {
           {loading ? (
             <DreamyLoading />
           ) : filteredLinks.length > 0 ? (
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="dreamy-grid"
-            >
-              {filteredLinks.map((link: LinkItem, index: number) => (
-                <ContentCard
-                  key={link.id}
-                  id={link.id}
-                  name={link.name}
-                  category={link.category}
-                  postDate={link.postDate}
-                  slug={link.slug}
-                  thumbnail={link.thumbnail}
-                  isUnknown={true}
-                  index={index}
-                />
-              ))}
-            </motion.div>
+            <>
+              {Object.entries(groupedLinks)
+                .sort(([dateA], [dateB]) => {
+                  const parseDateA = new Date(dateA);
+                  const parseDateB = new Date(dateB);
+                  return parseDateB.getTime() - parseDateA.getTime();
+                })
+                .map(([date, posts]) => (
+                  <div key={date} className="mb-8">
+                    <h2 className="text-2xl font-bold text-gray-300 mb-8 pb-4 border-b border-gray-700/50 font-orbitron flex items-center gap-4">
+                      <div className="w-3 h-8 bg-gradient-to-b from-purple-500 to-purple-600 rounded-full shadow-lg shadow-purple-500/30"></div>
+                      <span className="bg-gradient-to-r from-purple-400 to-purple-300 bg-clip-text text-transparent">{date}</span>
+                    </h2>
+                    <div className="space-y-4">
+                      {posts
+                        .sort((a, b) => new Date(b.postDate || b.createdAt).getTime() - new Date(a.postDate || a.createdAt).getTime())
+                        .map((link, index) => (
+                        <motion.div
+                          key={link.id}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                          className="group bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700/50 hover:border-purple-500/50 rounded-2xl p-6 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl hover:shadow-purple-500/10 transform hover:scale-[1.02]"
+                          onClick={() => navigate(`/unknown/${link.slug}`)}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-4 flex-1">
+                              <HelpCircle className="w-5 h-5 text-purple-400" />
+                              <h3 className="text-lg font-bold text-white group-hover:text-purple-300 transition-colors duration-300 font-orbitron relative">
+                                {link.name}
+                                <div className="absolute -bottom-1 left-0 w-16 h-0.5 bg-gradient-to-r from-purple-500 to-purple-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                              </h3>
+                              <div className="h-px bg-gradient-to-r from-purple-500/50 to-transparent flex-1 max-w-20 group-hover:from-purple-400/70 transition-all duration-300"></div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              {recentLinks.includes(link) && (
+                                <span className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white text-xs font-bold rounded-full shadow-lg animate-pulse border border-purple-400/30 font-roboto">
+                                  <i className="fa-solid fa-star mr-1 text-xs"></i>
+                                  NEW
+                                </span>
+                              )}
+                              <span className="inline-flex items-center px-4 py-2 bg-gray-700/70 text-gray-300 text-sm font-medium rounded-full border border-gray-600/50 backdrop-blur-sm font-roboto">
+                                <i className="fa-solid fa-tag mr-2 text-xs"></i>
+                                {link.category}
+                              </span>
+                            </div>
+                          </div>
+                        </motion.div>
+                        ))}
+                    </div>
+                  </div>
+                ))}
+
+              {hasMoreContent && (
+                <div className="text-center mt-12">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={handleLoadMore}
+                    disabled={loadingMore}
+                    className="px-10 py-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-300 transform disabled:opacity-50 disabled:cursor-not-allowed border border-purple-400/30 backdrop-blur-sm font-orbitron"
+                  >
+                    {loadingMore ? (
+                      <>
+                        <i className="fa-solid fa-spinner fa-spin mr-3"></i>
+                        Loading More...
+                      </>
+                    ) : (
+                      <>
+                        <i className="fa-solid fa-plus mr-3"></i>
+                        Load More Content
+                      </>
+                    )}
+                  </motion.button>
+                </div>
+              )}
+            </>
           ) : (
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="dreamy-section text-center py-12"
-            >
-              <div className="text-gray-400 mb-6">
-                <Search className="w-16 h-16 mx-auto" />
+            <div className="text-center py-20">
+              <div className="mb-8">
+                <i className="fa-solid fa-search text-6xl text-gray-500"></i>
               </div>
-              <h3 className="text-2xl font-bold mb-3 text-gray-900">
+              <h3 className="text-3xl font-bold mb-4 text-white font-orbitron">
                 No Unknown Content Found
               </h3>
-              <p className="text-gray-600">
-                Try adjusting your search or filters.
+              <p className="text-gray-400 text-lg font-roboto">
+                Try adjusting your search or filters to find what you're looking for.
               </p>
-            </motion.div>
+            </div>
           )}
         </div>
       </div>
