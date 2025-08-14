@@ -64,6 +64,8 @@ const renewVipRouter = require('./routes/Renewvip');
 const cancelsubscriptionRouter = require('./routes/Cancelsubscription')
 const filterOptionsRoutes = require('./routes/FilterOptions');
 const stripeCustomerPortalRouter = require('./routes/stripeCustomerPortal');
+const bannedContentRouter = require('./routes/BannedContent');
+const unknownContentRouter = require('./routes/UnknownContent');
 const rateLimit = require('express-rate-limit');
 const checkApiKey = require('./Middleware/CheckapiKey');
 
@@ -91,6 +93,8 @@ app.use('/auth', renewVipRouter);
 app.use('/filteroptions', filterOptionsRoutes);
 app.use('/linkvertise-config', linkvertiseConfigRouter);
 app.use('/stripe-portal', stripeCustomerPortalRouter);
+app.use('/bannedcontent', checkApiKey, bannedContentRouter);
+app.use('/unknowncontent', checkApiKey, unknownContentRouter);
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, 
