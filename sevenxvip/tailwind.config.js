@@ -2,19 +2,35 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   safelist: [
     // Asian theme
-    'from-asian-primary', 'to-asian-accent',
-    'hover:from-asian-accent', 'hover:to-asian-primary',
-    'hover:shadow-asian-primary/20',
+    'from-purple-500', 'to-purple-600', 'from-purple-600', 'to-purple-700',
+    'hover:from-purple-600', 'hover:to-purple-700',
+    'hover:shadow-purple-500/20', 'bg-purple-500/10', 'border-purple-500/30',
+    'text-purple-400', 'from-purple-400', 'to-purple-500',
 
     // Western theme
-    'from-western-primary', 'to-western-accent',
-    'hover:from-western-accent', 'hover:to-western-primary',
-    'hover:shadow-western-primary/20',
+    'from-orange-500', 'to-orange-600', 'from-orange-600', 'to-orange-700',
+    'hover:from-orange-600', 'hover:to-orange-700',
+    'hover:shadow-orange-500/20', 'bg-orange-500/10', 'border-orange-500/30',
+    'text-orange-400', 'from-orange-400', 'to-orange-500',
 
     // VIP theme
-    'from-vip-primary', 'to-vip-accent',
-    'hover:from-vip-accent', 'hover:to-vip-primary',
-    'hover:shadow-vip-primary/20',
+    'from-yellow-500', 'to-yellow-600', 'from-yellow-600', 'to-yellow-700',
+    'hover:from-yellow-600', 'hover:to-yellow-700',
+    'hover:shadow-yellow-500/20', 'bg-yellow-500/10', 'border-yellow-500/30',
+    'text-yellow-400', 'from-yellow-400', 'to-yellow-500',
+
+    // Banned theme
+    'from-red-500', 'to-red-600', 'from-red-600', 'to-red-700',
+    'hover:from-red-600', 'hover:to-red-700',
+    'hover:shadow-red-500/20', 'bg-red-500/10', 'border-red-500/30',
+    'text-red-400', 'from-red-400', 'to-red-500',
+
+    // Unknown theme (minimalist)
+    'from-slate-500', 'to-slate-600', 'from-slate-600', 'to-slate-700',
+    'hover:from-slate-600', 'hover:to-slate-700',
+    'hover:shadow-slate-500/20', 'bg-slate-500/10', 'border-slate-500/30',
+    'text-slate-400', 'from-slate-400', 'to-slate-500',
+    'bg-slate-800/60', 'hover:bg-slate-700/80', 'border-slate-700/50', 'hover:border-slate-500/50',
   ],
   darkMode: 'class',
   theme: {

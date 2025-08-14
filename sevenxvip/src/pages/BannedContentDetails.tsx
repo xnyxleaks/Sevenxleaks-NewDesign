@@ -297,12 +297,6 @@ const BannedContentDetails = () => {
                   mega2: content.mega2,
                   pixeldrain: content.pixeldrain,
                 }}
-                themeColors={{
-                  primary: "red-500",
-                  secondary: "red-600",
-                  accent: "red-400",
-                  gradient: "from-red-500 to-red-600"
-                }}
               />
             </motion.div>
 

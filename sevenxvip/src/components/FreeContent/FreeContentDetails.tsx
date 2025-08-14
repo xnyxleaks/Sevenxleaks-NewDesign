@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import {
   ArrowLeft,
@@ -36,11 +36,53 @@ type ContentItem = {
 
 const FreeContentDetails = () => {
   const { slug } = useParams<{ slug: string }>();
+  const location = useLocation();
   const [content, setContent] = useState<ContentItem | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [linkvertiseAccount, setLinkvertiseAccount] = useState<string>("518238");
   const [benefitsOpen, setBenefitsOpen] = useState<boolean>(false);
+
+  // Determine theme based on current path
+  const getTheme = () => {
+    if (location.pathname.includes('/western')) return 'western';
+    if (location.pathname.includes('/asian')) return 'asian';
+    return 'asian'; // default
+  };
+
+  const theme = getTheme();
+
+  const getThemeColors = () => {
+    switch (theme) {
+      case 'western':
+        return {
+          primary: 'orange-500',
+          secondary: 'orange-600',
+          accent: 'orange-400',
+          gradient: 'from-orange-500 to-orange-600',
+          gradientHover: 'hover:from-orange-600 hover:to-orange-700',
+          glow: 'shadow-orange-500/20',
+          border: 'border-orange-500/30',
+          bg: 'bg-orange-500/10',
+          text: 'text-orange-400'
+        };
+      case 'asian':
+      default:
+        return {
+          primary: 'purple-500',
+          secondary: 'purple-600',
+          accent: 'purple-400',
+          gradient: 'from-purple-500 to-purple-600',
+          gradientHover: 'hover:from-purple-600 hover:to-purple-700',
+          glow: 'shadow-purple-500/20',
+          border: 'border-purple-500/30',
+          bg: 'bg-purple-500/10',
+          text: 'text-purple-400'
+        };
+    }
+  };
+
+  const colors = getThemeColors();
 
   useEffect(() => {
     const fetchLinkvertiseConfig = async () => {
@@ -183,9 +225,9 @@ const FreeContentDetails = () => {
       </Helmet>
 
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-gray-900 to-gray-900"></div>
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className={`absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-${colors.primary}/20 via-gray-900 to-gray-900`}></div>
+      <div className={`absolute top-1/4 left-1/4 w-96 h-96 bg-${colors.primary}/10 rounded-full blur-3xl animate-pulse`}></div>
+      <div className={`absolute bottom-1/4 right-1/4 w-96 h-96 bg-${colors.accent}/10 rounded-full blur-3xl animate-pulse`}></div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Button */}
@@ -196,7 +238,7 @@ const FreeContentDetails = () => {
         >
           <Link
             to="/"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700 hover:border-blue-500/50 rounded-xl text-gray-300 hover:text-white transition-all duration-300 backdrop-blur-sm shadow-lg hover:shadow-blue-500/10"
+            className={`inline-flex items-center gap-2 px-4 py-2 bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700 hover:${colors.border} rounded-xl text-gray-300 hover:text-white transition-all duration-300 backdrop-blur-sm shadow-lg hover:${colors.glow}`}
           >
             <ArrowLeft className="w-4 h-4" />
             <span className="text-sm">Back to content</span>
@@ -211,7 +253,7 @@ const FreeContentDetails = () => {
           className="bg-gray-800/90 backdrop-blur-xl border border-gray-700/50 rounded-2xl overflow-hidden shadow-2xl"
         >
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-900/40 to-indigo-900/40 px-6 py-6 border-b border-gray-700/50">
+          <div className={`bg-gradient-to-r from-${colors.primary}/40 to-${colors.secondary}/40 px-6 py-6 border-b border-gray-700/50`}>
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -228,7 +270,7 @@ const FreeContentDetails = () => {
                 transition={{ delay: 0.3 }}
                 className="flex items-center gap-2 px-3 py-1.5 bg-gray-700/50 rounded-lg border border-gray-600/50 backdrop-blur-sm"
               >
-                <Calendar className="w-4 h-4 text-blue-400" />
+                <Calendar className={`w-4 h-4 ${colors.text}`} />
                 <span className="text-gray-300 text-sm">
                   {formatDate(content.postDate)}
                 </span>
@@ -238,7 +280,7 @@ const FreeContentDetails = () => {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 }}
-                className="flex items-center gap-2 px-3 py-1.5 bg-blue-500/20 text-blue-300 rounded-lg border border-blue-500/30 backdrop-blur-sm"
+                className={`flex items-center gap-2 px-3 py-1.5 ${colors.bg} ${colors.text} rounded-lg border ${colors.border} backdrop-blur-sm`}
               >
                 <Tag className="w-4 h-4" />
                 <span className="font-medium text-sm">{content.category}</span>
@@ -253,7 +295,14 @@ const FreeContentDetails = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
               className="mb-6"
-            ></motion.div>
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className={`w-8 h-8 bg-gradient-to-br from-${colors.accent} to-${colors.primary} rounded-lg flex items-center justify-center shadow-lg`}>
+                  <Download className="w-4 h-4 text-black" />
+                </div>
+                <h2 className="text-xl font-bold text-white">Download Options</h2>
+              </div>
+            </motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -321,7 +370,7 @@ const FreeContentDetails = () => {
 
               <Link
                 to="/plans"
-                className="inline-flex items-center gap-2 w-full justify-center px-4 py-2.5 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-yellow-500/30 text-sm"
+                className={`inline-flex items-center gap-2 w-full justify-center px-4 py-2.5 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-yellow-500/30 text-sm`}
               >
                 <Crown className="w-4 h-4" />
                 <span>Unlock VIP Access</span>

@@ -29,12 +29,11 @@ const UserMenu: React.FC<UserMenuProps> = ({
   const isMobile = window.innerWidth <= 768;
   const navigate = useNavigate();
 
-  const Handleaccount = () => {
+  const handleAccountClick = () => {
     if(isMobile){
       navigate('/account');
     } else{
       handleMenuToggle();
-      setIsMenuOpen(true);
     }
   };
 
@@ -44,7 +43,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         className="flex items-center gap-3 cursor-pointer px-4 py-3 rounded-2xl bg-gray-800/60 hover:bg-gray-700/80 backdrop-blur-sm border border-gray-700/40 hover:border-gray-600/60 transition-all duration-300 shadow-lg hover:shadow-xl"
-        onClick={Handleaccount}
+        onClick={handleAccountClick}
       >
         <div className="relative">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 flex items-center justify-center shadow-lg ring-2 ring-blue-500/20">

@@ -44,6 +44,18 @@ const UnknownContentDetails = () => {
   const [linkvertiseAccount, setLinkvertiseAccount] = useState<string>("518238");
   const [benefitsOpen, setBenefitsOpen] = useState<boolean>(false);
 
+  const getMinimalistTheme = () => ({
+    bg: 'bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900',
+    card: 'bg-slate-800/90 border-slate-500/30',
+    accent: 'text-slate-400',
+    primary: 'slate-500',
+    secondary: 'slate-600',
+    glow: 'shadow-slate-500/10',
+    border: 'border-slate-500/30'
+  });
+
+  const minimalistTheme = getMinimalistTheme();
+
   useEffect(() => {
     const fetchLinkvertiseConfig = async () => {
       try {
@@ -178,16 +190,16 @@ const UnknownContentDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+    <div className={`min-h-screen ${minimalistTheme.bg}`}>
       <Helmet>
         <title>Sevenxleaks - {content.name} (Unknown)</title>
         <link rel="canonical" href={`https://sevenxleaks.com/unknown/${content.slug}`} />
       </Helmet>
 
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-gray-900 to-gray-900"></div>
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900/20 via-gray-900 to-gray-900"></div>
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-slate-500/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-slate-600/10 rounded-full blur-3xl animate-pulse"></div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Button */}
@@ -198,7 +210,7 @@ const UnknownContentDetails = () => {
         >
           <Link
             to="/unknown"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700 hover:border-purple-500/50 rounded-xl text-gray-300 hover:text-white transition-all duration-300 backdrop-blur-sm shadow-lg hover:shadow-purple-500/10"
+            className={`inline-flex items-center gap-2 px-4 py-2 bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700 hover:${minimalistTheme.border} rounded-xl text-gray-300 hover:text-white transition-all duration-300 backdrop-blur-sm shadow-lg hover:${minimalistTheme.glow}`}
           >
             <ArrowLeft className="w-4 h-4" />
             <span className="text-sm">Back to unknown content</span>
@@ -210,15 +222,15 @@ const UnknownContentDetails = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-gray-800/90 backdrop-blur-xl border border-purple-500/30 rounded-2xl overflow-hidden shadow-2xl shadow-purple-500/10"
+          className={`${minimalistTheme.card} backdrop-blur-xl rounded-2xl overflow-hidden shadow-2xl ${minimalistTheme.glow}`}
         >
           {/* Header */}
-          <div className="bg-gradient-to-r from-purple-900/40 to-indigo-900/40 px-6 py-6 border-b border-purple-500/20">
+          <div className={`bg-gradient-to-r from-${minimalistTheme.primary}/40 to-${minimalistTheme.secondary}/40 px-6 py-6 border-b ${minimalistTheme.border}`}>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-500 rounded-xl flex items-center justify-center shadow-xl">
+              <div className={`w-10 h-10 bg-gradient-to-br from-${minimalistTheme.primary} to-${minimalistTheme.secondary} rounded-xl flex items-center justify-center shadow-xl`}>
                 <HelpCircle className="w-5 h-5 text-white" />
               </div>
-              <div className="flex items-center gap-2 px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30 backdrop-blur-sm">
+              <div className={`flex items-center gap-2 px-3 py-1 bg-${minimalistTheme.primary}/20 ${minimalistTheme.accent} rounded-full border ${minimalistTheme.border} backdrop-blur-sm`}>
                 <HelpCircle className="w-3 h-3" />
                 <span className="font-bold text-xs">UNKNOWN CONTENT</span>
               </div>
@@ -240,7 +252,7 @@ const UnknownContentDetails = () => {
                 transition={{ delay: 0.3 }}
                 className="flex items-center gap-2 px-3 py-1.5 bg-gray-700/50 rounded-lg border border-gray-600/50 backdrop-blur-sm"
               >
-                <Calendar className="w-4 h-4 text-purple-400" />
+                <Calendar className={`w-4 h-4 ${minimalistTheme.accent}`} />
                 <span className="text-gray-300 text-sm">
                   {formatDate(content.postDate)}
                 </span>
@@ -250,7 +262,7 @@ const UnknownContentDetails = () => {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 }}
-                className="flex items-center gap-2 px-3 py-1.5 bg-purple-500/20 text-purple-300 rounded-lg border border-purple-500/30 backdrop-blur-sm"
+                className={`flex items-center gap-2 px-3 py-1.5 bg-${minimalistTheme.primary}/20 ${minimalistTheme.accent} rounded-lg border ${minimalistTheme.border} backdrop-blur-sm`}
               >
                 <Tag className="w-4 h-4" />
                 <span className="font-medium text-sm">{content.category}</span>
@@ -267,7 +279,7 @@ const UnknownContentDetails = () => {
               className="mb-6"
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-500 rounded-lg flex items-center justify-center shadow-lg">
+                <div className={`w-8 h-8 bg-gradient-to-br from-${minimalistTheme.primary} to-${minimalistTheme.secondary} rounded-lg flex items-center justify-center shadow-lg`}>
                   <Download className="w-4 h-4 text-white" />
                 </div>
                 <h2 className="text-xl font-bold text-white">
@@ -275,10 +287,10 @@ const UnknownContentDetails = () => {
                 </h2>
               </div>
               
-              <div className="bg-gradient-to-r from-purple-500/10 to-purple-600/10 border border-purple-500/20 rounded-xl p-4 mb-4">
+              <div className={`bg-gradient-to-r from-${minimalistTheme.primary}/10 to-${minimalistTheme.secondary}/10 border ${minimalistTheme.border} rounded-xl p-4 mb-4`}>
                 <div className="flex items-center gap-2 mb-2">
-                  <HelpCircle className="w-4 h-4 text-purple-400" />
-                  <span className="text-purple-400 font-semibold text-sm">Unknown Content Notice</span>
+                  <HelpCircle className={`w-4 h-4 ${minimalistTheme.accent}`} />
+                  <span className={`${minimalistTheme.accent} font-semibold text-sm`}>Unknown Content Notice</span>
                 </div>
                 <p className="text-gray-300 text-sm">
                   This content is unclassified and may contain varied material.
@@ -296,12 +308,6 @@ const UnknownContentDetails = () => {
                   mega: content.mega,
                   mega2: content.mega2,
                   pixeldrain: content.pixeldrain,
-                }}
-                themeColors={{
-                  primary: "purple-500",
-                  secondary: "purple-600",
-                  accent: "purple-400",
-                  gradient: "from-purple-500 to-purple-600"
                 }}
               />
             </motion.div>

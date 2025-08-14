@@ -213,159 +213,164 @@ const BannedContent: React.FC = () => {
           </motion.p>
         </motion.div>
 
-        {/* Search and Filter Section */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="dreamy-section mb-8"
-        >
-          <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-3">
-            <Filter className="w-5 h-5 text-purple-500" />
-            Search & Filter
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="relative group">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 group-focus-within:text-purple-500 transition-colors" />
-              <input
-                type="text"
-                placeholder="Search by name..."
-                value={searchName}
-                onChange={(e) => setSearchName(e.target.value)}
-                className="dreamy-input w-full pl-12 pr-4 text-gray-900 placeholder-gray-500"
-              />
-              {searchLoading && (
-                <div className="ml-2">
-                  <div className="w-4 h-4 border-2 border-purple-400 border-t-transparent rounded-full animate-spin"></div>
-                </div>
-              )}
-            </div>
+        {/* Filter Bar */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="bg-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-6 shadow-2xl">
+            <div className="flex flex-col lg:flex-row items-center gap-4 bg-gray-700/50 rounded-2xl px-6 py-4 border border-gray-600/30 shadow-inner">
+              {/* Search Bar */}
+              <div className="flex items-center gap-3 flex-1 min-w-0">
+                <AlertTriangle className="text-red-400 w-5 h-5" />
+                <input
+                  type="text"
+                  className="flex-1 bg-transparent border-none outline-none text-white placeholder-gray-400 text-lg"
+                  placeholder="Search banned content..."
+                  value={searchName}
+                  onChange={(e) => setSearchName(e.target.value)}
+                />
+                {searchLoading && (
+                  <div className="w-4 h-4 border-2 border-red-400 border-t-transparent rounded-full animate-spin"></div>
+                )}
+              </div>
 
-            <div className="relative group">
-              <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 group-focus-within:text-purple-500 transition-colors" />
-              <select
-                value={selectedMonth}
-                onChange={(e) => setSelectedMonth(e.target.value)}
-                className="dreamy-input w-full pl-12 pr-4 appearance-none cursor-pointer text-gray-900"
-              >
-                {months.map((month) => (
-                  <option key={month.value} value={month.value}>
-                    {month.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+              {/* Filter Controls */}
+              <div className="flex items-center gap-2">
+                <select
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  className="px-3 py-1.5 bg-gray-700/50 border border-gray-600/50 rounded-lg text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-red-500/50 transition-all duration-300 hover:bg-gray-600/50 min-w-[120px]"
+                >
+                  {months.map((month) => (
+                    <option key={month.value} value={month.value}>
+                      {month.label}
+                    </option>
+                  ))}
+                </select>
 
-            <div className="relative group">
-              <SortDesc className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 group-focus-within:text-purple-500 transition-colors" />
-              <select
-                value={sortOption}
-                onChange={(e) => setSortOption(e.target.value)}
-                className="dreamy-input w-full pl-12 pr-4 appearance-none cursor-pointer text-gray-900"
-              >
-                <option value="mostRecent">Most Recent</option>
-                <option value="oldest">Oldest</option>
-              </select>
+                <select
+                  value={sortOption}
+                  onChange={(e) => setSortOption(e.target.value)}
+                  className="px-3 py-1.5 bg-gray-700/50 border border-gray-600/50 rounded-lg text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-red-500/50 transition-all duration-300 hover:bg-gray-600/50 min-w-[120px]"
+                >
+                  <option value="mostRecent">Most Recent</option>
+                  <option value="oldest">Oldest</option>
+                </select>
+
+                <button 
+                  className="p-2 bg-gray-700/50 hover:bg-red-500/20 text-gray-300 hover:text-red-300 rounded-lg transition-all duration-300 border border-gray-600/50" 
+                  title="Calendar View"
+                >
+                  <Calendar className="w-5 h-5" />
+                </button>
+              </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Content Grid */}
-        <div className="space-y-8">
-          {loading ? (
-            <DreamyLoading />
-          ) : filteredLinks.length > 0 ? (
-            <>
-              {Object.entries(groupedLinks)
-                .sort(([dateA], [dateB]) => {
-                  const parseDateA = new Date(dateA);
-                  const parseDateB = new Date(dateB);
-                  return parseDateB.getTime() - parseDateA.getTime();
-                })
-                .map(([date, posts]) => (
-                  <div key={date} className="mb-6">
-                    <h2 className="text-xl font-bold text-gray-300 mb-4 pb-2 border-b border-gray-700/50 font-orbitron flex items-center gap-3">
-                      <div className="w-3 h-8 bg-gradient-to-b from-red-500 to-red-600 rounded-full shadow-lg shadow-red-500/30"></div>
-                      <span className="bg-gradient-to-r from-red-400 to-red-300 bg-clip-text text-transparent">{date}</span>
-                    </h2>
-                    <div className="space-y-2">
-                      {posts
-                        .sort((a, b) => new Date(b.postDate || b.createdAt).getTime() - new Date(a.postDate || a.createdAt).getTime())
-                        .map((link, index) => (
-                        <motion.div
-                          key={link.id}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.05 }}
-                          className="group bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700/50 hover:border-red-500/50 rounded-xl p-3 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl hover:shadow-red-500/10 transform hover:scale-[1.01]"
-                          onClick={() => navigate(`/banned/${link.slug}`)}
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4 flex-1">
-                              <AlertTriangle className="w-5 h-5 text-red-400" />
-                              <h3 className="text-lg font-bold text-white group-hover:text-red-300 transition-colors duration-300 font-orbitron relative">
-                                {link.name}
-                                <div className="absolute -bottom-1 left-0 w-16 h-0.5 bg-gradient-to-r from-red-500 to-red-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                              </h3>
-                              <div className="h-px bg-gradient-to-r from-red-500/50 to-transparent flex-1 max-w-20 group-hover:from-red-400/70 transition-all duration-300"></div>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              {recentLinks.includes(link) && (
-                                <span className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold rounded-full shadow-lg animate-pulse border border-red-400/30 font-roboto">
-                                  <i className="fa-solid fa-star mr-1 text-xs"></i>
-                                  NEW
-                                </span>
-                              )}
-                              <span className="inline-flex items-center px-4 py-2 bg-gray-700/70 text-gray-300 text-sm font-medium rounded-full border border-gray-600/50 backdrop-blur-sm font-roboto">
-                                <i className="fa-solid fa-tag mr-2 text-xs"></i>
-                                {link.category}
-                              </span>
-                            </div>
-                          </div>
-                        </motion.div>
-                        ))}
-                    </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+          <main>
+            {loading ? (
+              <div className="flex items-center justify-center py-20">
+                <div className="relative">
+                  <div className="w-16 h-16 border-4 border-red-500/20 rounded-full animate-spin"></div>
+                  <div className="absolute inset-0 border-4 border-transparent border-t-red-500 rounded-full animate-spin"></div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <AlertTriangle className="w-6 h-6 text-red-500 animate-pulse" />
                   </div>
-                ))}
-
-              {hasMoreContent && (
-                <div className="text-center mt-12">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={handleLoadMore}
-                    disabled={loadingMore}
-                    className="px-10 py-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl hover:shadow-red-500/30 transition-all duration-300 transform disabled:opacity-50 disabled:cursor-not-allowed border border-red-400/30 backdrop-blur-sm font-orbitron"
-                  >
-                    {loadingMore ? (
-                      <>
-                        <i className="fa-solid fa-spinner fa-spin mr-3"></i>
-                        Loading More...
-                      </>
-                    ) : (
-                      <>
-                        <i className="fa-solid fa-plus mr-3"></i>
-                        Load More Content
-                      </>
-                    )}
-                  </motion.button>
                 </div>
-              )}
-            </>
-          ) : (
-            <div className="text-center py-20">
-              <div className="mb-8">
-                <i className="fa-solid fa-search text-6xl text-gray-500"></i>
               </div>
-              <h3 className="text-3xl font-bold mb-4 text-white font-orbitron">
-                No Banned Content Found
-              </h3>
-              <p className="text-gray-400 text-lg font-roboto">
-                Try adjusting your search or filters to find what you're looking for.
-              </p>
-            </div>
-          )}
+            ) : filteredLinks.length > 0 ? (
+              <>
+                {Object.entries(groupedLinks)
+                  .sort(([dateA], [dateB]) => {
+                    const parseDateA = new Date(dateA);
+                    const parseDateB = new Date(dateB);
+                    return parseDateB.getTime() - parseDateA.getTime();
+                  })
+                  .map(([date, posts]) => (
+                    <div key={date} className="mb-6">
+                      <h2 className="text-xl font-bold text-gray-300 mb-4 pb-2 border-b border-gray-700/50 font-orbitron flex items-center gap-3">
+                        <div className="w-3 h-8 bg-gradient-to-b from-red-500 to-red-600 rounded-full shadow-lg shadow-red-500/30"></div>
+                        <span className="bg-gradient-to-r from-red-400 to-red-300 bg-clip-text text-transparent">{date}</span>
+                      </h2>
+                      <div className="space-y-2">
+                        {posts
+                          .sort((a, b) => new Date(b.postDate || b.createdAt).getTime() - new Date(a.postDate || a.createdAt).getTime())
+                          .map((link, index) => (
+                          <motion.div
+                            key={link.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.05 }}
+                            className="group bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700/50 hover:border-red-500/50 rounded-xl p-3 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl hover:shadow-red-500/10 transform hover:scale-[1.01]"
+                            onClick={() => navigate(`/banned/${link.slug}`)}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-4 flex-1">
+                                <AlertTriangle className="w-5 h-5 text-red-400" />
+                                <h3 className="text-lg font-bold text-white group-hover:text-red-300 transition-colors duration-300 font-orbitron relative">
+                                  {link.name}
+                                  <div className="absolute -bottom-1 left-0 w-16 h-0.5 bg-gradient-to-r from-red-500 to-red-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                </h3>
+                                <div className="h-px bg-gradient-to-r from-red-500/50 to-transparent flex-1 max-w-20 group-hover:from-red-400/70 transition-all duration-300"></div>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                {recentLinks.includes(link) && (
+                                  <span className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold rounded-full shadow-lg animate-pulse border border-red-400/30 font-roboto">
+                                    <i className="fa-solid fa-star mr-1 text-xs"></i>
+                                    NEW
+                                  </span>
+                                )}
+                                <span className="inline-flex items-center px-4 py-2 bg-gray-700/70 text-gray-300 text-sm font-medium rounded-full border border-gray-600/50 backdrop-blur-sm font-roboto">
+                                  <i className="fa-solid fa-tag mr-2 text-xs"></i>
+                                  {link.category}
+                                </span>
+                              </div>
+                            </div>
+                          </motion.div>
+                          ))}
+                      </div>
+                    </div>
+                  ))}
+
+                {hasMoreContent && (
+                  <div className="text-center mt-12">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={handleLoadMore}
+                      disabled={loadingMore}
+                      className="px-10 py-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl hover:shadow-red-500/30 transition-all duration-300 transform disabled:opacity-50 disabled:cursor-not-allowed border border-red-400/30 backdrop-blur-sm font-orbitron"
+                    >
+                      {loadingMore ? (
+                        <>
+                          <i className="fa-solid fa-spinner fa-spin mr-3"></i>
+                          Loading More...
+                        </>
+                      ) : (
+                        <>
+                          <i className="fa-solid fa-plus mr-3"></i>
+                          Load More Content
+                        </>
+                      )}
+                    </motion.button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="text-center py-20">
+                <div className="mb-8">
+                  <i className="fa-solid fa-search text-6xl text-gray-500"></i>
+                </div>
+                <h3 className="text-3xl font-bold mb-4 text-white font-orbitron">
+                  No Banned Content Found
+                </h3>
+                <p className="text-gray-400 text-lg font-roboto">
+                  Try adjusting your search or filters to find what you're looking for.
+                </p>
+              </div>
+            )}
+          </main>
         </div>
       </div>
     </div>

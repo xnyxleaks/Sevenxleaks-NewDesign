@@ -1,8 +1,8 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import DownloadButton from './DownloadButton';
 import { motion } from 'framer-motion';
 import { Shield } from 'lucide-react';
-import { useTheme } from '../contexts/ThemeContext';
 
 interface DownloadOptionsProps {
   primaryLinks: {
@@ -13,27 +13,57 @@ interface DownloadOptionsProps {
 }
 
 const DownloadOptions: React.FC<DownloadOptionsProps> = ({ primaryLinks }) => {
-  const { theme } = useTheme();
+  const location = useLocation();
 
-  const themeColors = {
-    asian: {
-      primary: 'from-asian-primary to-asian-accent',
-      hover: 'hover:from-asian-accent hover:to-asian-primary',
-      shadow: 'hover:shadow-asian-primary/20'
-    },
-    western: {
-      primary: 'from-western-primary to-western-accent',
-      hover: 'hover:from-western-accent hover:to-western-primary',
-      shadow: 'hover:shadow-western-primary/20'
-    },
-    vip: {
-      primary: 'from-vip-primary to-vip-accent',
-      hover: 'hover:from-vip-accent hover:to-vip-primary',
-      shadow: 'hover:shadow-vip-primary/20'
+  // Determine theme based on current path
+  const getTheme = () => {
+    if (location.pathname.includes('/western')) return 'western';
+    if (location.pathname.includes('/asian')) return 'asian';
+    if (location.pathname.includes('/vip')) return 'vip';
+    if (location.pathname.includes('/banned')) return 'banned';
+    if (location.pathname.includes('/unknown')) return 'unknown';
+    return 'asian'; // default
+  };
+
+  const theme = getTheme();
+
+  const getThemeColors = () => {
+    switch (theme) {
+      case 'western':
+        return {
+          primary: 'from-orange-500 to-orange-600',
+          hover: 'hover:from-orange-600 hover:to-orange-700',
+          shadow: 'hover:shadow-orange-500/20'
+        };
+      case 'vip':
+        return {
+          primary: 'from-yellow-500 to-yellow-600',
+          hover: 'hover:from-yellow-600 hover:to-yellow-700',
+          shadow: 'hover:shadow-yellow-500/20'
+        };
+      case 'banned':
+        return {
+          primary: 'from-red-500 to-red-600',
+          hover: 'hover:from-red-600 hover:to-red-700',
+          shadow: 'hover:shadow-red-500/20'
+        };
+      case 'unknown':
+        return {
+          primary: 'from-gray-500 to-gray-600',
+          hover: 'hover:from-gray-600 hover:to-gray-700',
+          shadow: 'hover:shadow-gray-500/20'
+        };
+      case 'asian':
+      default:
+        return {
+          primary: 'from-purple-500 to-purple-600',
+          hover: 'hover:from-purple-600 hover:to-purple-700',
+          shadow: 'hover:shadow-purple-500/20'
+        };
     }
   };
 
-  const colors = themeColors[theme as keyof typeof themeColors] || themeColors.asian;
+  const colors = getThemeColors();
 
   const downloadOptions = [
     {
