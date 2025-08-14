@@ -84,7 +84,7 @@ const BannedContent: React.FC = () => {
       }
 
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/bannedcontent/search?${params}`,
+        `${import.meta.env.VITE_BACKEND_URL}/bannedcontent`,
         {
           headers: {
             "x-api-key": `${import.meta.env.VITE_FRONTEND_API_KEY}`,
@@ -190,16 +190,16 @@ const BannedContent: React.FC = () => {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Shield className="w-12 h-12 text-purple-500" />
+              <Shield className="w-12 h-12 text-red-500" />
             </motion.div>
-            <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700">
+            <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-600 to-red-700">
               Banned Content
             </h1>
             <motion.div
               animate={{ rotate: [0, -10, 10, 0] }}
               transition={{ duration: 2, repeat: Infinity, delay: 1 }}
             >
-              <AlertTriangle className="w-12 h-12 text-purple-500" />
+              <AlertTriangle className="w-12 h-12 text-red-500" />
             </motion.div>
           </motion.div>
           

@@ -16,7 +16,7 @@ import ForgotPassword from "./pages/Forgotpassword";
 import ResetPassword from "./pages/ResetPassword";
 import Plans from "./pages/Plans";
 import VIPcontent from "./pages/VIPcontent";
-import FreeContentDetails from "./components/FreeContent/FreeContentDetails";
+import FreeContentDetails from "./components/AsianContentDetails";
 import VIPContentDetails from "./components/FreeContent/VIPContentDetails";
 import AdminPainel from "./pages/AdminPainel";
 import AdminVipUsers from "./pages/AdminVipUsers";
@@ -30,6 +30,8 @@ import BannedContent from "./pages/BannedContent";
 import UnknownContent from "./pages/UnknownContent";
 import BannedContentDetails from "./pages/BannedContentDetails";
 import UnknownContentDetails from "./pages/UnknownContentDetails";
+import WesternContentDetails from "./pages/WesternContentDetails";
+import AsianContentDetails from "./components/AsianContentDetails";
 
 const App = () => {
   const [hasPermission, setHasPermission] = useState({ vip: false, admin: false });
@@ -73,11 +75,12 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Chooser />} />
             <Route path="/asian" element={<AsianPage />} />
+            <Route path="/asian/:slug" element={<AsianContentDetails />} />
             <Route path="/western" element={<WesternPage />} />
-            <Route path="/free/:slug" element={<FreeContentDetails />} />
+            <Route path="/western/:slug" element={<WesternContentDetails />} />
             <Route path="/banned" element={<BannedContent />} />
-            <Route path="/unknown" element={<UnknownContent />} />
             <Route path="/banned/:slug" element={<BannedContentDetails />} />
+            <Route path="/unknown" element={<UnknownContent />} />
             <Route path="/unknown/:slug" element={<UnknownContentDetails />} />
             
             <Route 

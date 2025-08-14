@@ -187,7 +187,7 @@ const BannedContentDetails = () => {
       {/* Background Effects */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-red-900/20 via-gray-900 to-gray-900"></div>
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-500/10 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-red-500/10 rounded-full blur-3xl animate-pulse"></div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Button */}
@@ -266,24 +266,6 @@ const BannedContentDetails = () => {
               transition={{ delay: 0.5 }}
               className="mb-6"
             >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-red-400 to-red-500 rounded-lg flex items-center justify-center shadow-lg">
-                  <Download className="w-4 h-4 text-white" />
-                </div>
-                <h2 className="text-xl font-bold text-white">
-                  Download Options
-                </h2>
-              </div>
-              
-              <div className="bg-gradient-to-r from-red-500/10 to-red-600/10 border border-red-500/20 rounded-xl p-4 mb-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <AlertTriangle className="w-4 h-4 text-red-400" />
-                  <span className="text-red-400 font-semibold text-sm">Banned Content Warning</span>
-                </div>
-                <p className="text-gray-300 text-sm">
-                  This content has been flagged or restricted. Proceed with caution.
-                </p>
-              </div>
             </motion.div>
 
             <motion.div

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link, useLocation } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import {
   ArrowLeft,
@@ -11,10 +11,11 @@ import {
   Crown,
   Star,
   ChevronDown,
+  AlertTriangle,
 } from "lucide-react";
-import Loading from "../../components/Loading/Loading";
-import DownloadOptions from "../../components/DownloadOptions";
-import { linkvertise } from "../../components/Linkvertise";
+import Loading from "../components/Loading/Loading";
+import DownloadOptions from "../components/DownloadOptions";
+import { linkvertise } from "../components/Linkvertise";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
 
@@ -24,65 +25,24 @@ type ContentItem = {
   mega: string;
   mega2: string;
   pixeldrain: string;
-  admavenmega: string;
-  admavenmega2: string;
-  admavenpixeldrain: string;
+  AdmavenMega: string;
+  AdmavenMega2: string;
+  AdmavenPixeldrain: string;
   category: string;
   postDate: string;
   createdAt: string;
   updatedAt: string;
   slug: string;
+  region: string;
 };
 
-const FreeContentDetails = () => {
+const WesternContentDetails = () => {
   const { slug } = useParams<{ slug: string }>();
-  const location = useLocation();
   const [content, setContent] = useState<ContentItem | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [linkvertiseAccount, setLinkvertiseAccount] = useState<string>("518238");
   const [benefitsOpen, setBenefitsOpen] = useState<boolean>(false);
-
-  // Determine theme based on current path
-  const getTheme = () => {
-    if (location.pathname.includes('/western')) return 'western';
-    if (location.pathname.includes('/asian')) return 'asian';
-    return 'asian'; // default
-  };
-
-  const theme = getTheme();
-
-  const getThemeColors = () => {
-    switch (theme) {
-      case 'western':
-        return {
-          primary: 'orange-500',
-          secondary: 'orange-600',
-          accent: 'orange-400',
-          gradient: 'from-orange-500 to-orange-600',
-          gradientHover: 'hover:from-orange-600 hover:to-orange-700',
-          glow: 'shadow-orange-500/20',
-          border: 'border-orange-500/30',
-          bg: 'bg-orange-500/10',
-          text: 'text-orange-400'
-        };
-      case 'asian':
-      default:
-        return {
-          primary: 'purple-500',
-          secondary: 'purple-600',
-          accent: 'purple-400',
-          gradient: 'from-purple-500 to-purple-600',
-          gradientHover: 'hover:from-purple-600 hover:to-purple-700',
-          glow: 'shadow-purple-500/20',
-          border: 'border-purple-500/30',
-          bg: 'bg-purple-500/10',
-          text: 'text-purple-400'
-        };
-    }
-  };
-
-  const colors = getThemeColors();
 
   useEffect(() => {
     const fetchLinkvertiseConfig = async () => {
@@ -127,7 +87,7 @@ const FreeContentDetails = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/freecontent/${slug}`,
+          `${import.meta.env.VITE_BACKEND_URL}/westerncontent/${slug}`,
           {
             headers: {
               "x-api-key": `${import.meta.env.VITE_FRONTEND_API_KEY}`,
@@ -173,17 +133,17 @@ const FreeContentDetails = () => {
           animate={{ opacity: 1, scale: 1 }}
           className="max-w-md bg-gray-800/90 backdrop-blur-xl border border-gray-700 rounded-2xl p-8 text-center shadow-2xl"
         >
-          <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Shield className="w-8 h-8 text-red-400" />
+          <div className="w-16 h-16 bg-orange-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Shield className="w-8 h-8 text-orange-400" />
           </div>
           <h2 className="text-2xl font-bold mb-4 text-white">Error</h2>
           <p className="text-gray-300 mb-6">{error}</p>
           <Link
-            to="/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl font-semibold transition-all duration-300"
+            to="/western"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl font-semibold transition-all duration-300"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to content list
+            Back to western content
           </Link>
         </motion.div>
       </div>
@@ -199,18 +159,18 @@ const FreeContentDetails = () => {
           className="max-w-md bg-gray-800/90 backdrop-blur-xl border border-gray-700 rounded-2xl p-8 text-center shadow-2xl"
         >
           <div className="w-16 h-16 bg-gray-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Shield className="w-8 h-8 text-gray-400" />
+            <AlertTriangle className="w-8 h-8 text-gray-400" />
           </div>
           <h2 className="text-2xl font-bold mb-4 text-white">Content Not Found</h2>
           <p className="text-gray-300 mb-6">
-            The content you're looking for doesn't exist or has been removed.
+            The western content you're looking for doesn't exist or has been removed.
           </p>
           <Link
-            to="/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl font-semibold transition-all duration-300"
+            to="/western"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl font-semibold transition-all duration-300"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to content list
+            Back to western content
           </Link>
         </motion.div>
       </div>
@@ -220,14 +180,14 @@ const FreeContentDetails = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       <Helmet>
-        <title>Sevenxleaks - {content.name}</title>
-        <link rel="canonical" href={`https://sevenxleaks.com/free/${content.slug}`} />
+        <title>Sevenxleaks - {content.name} (western)</title>
+        <link rel="canonical" href={`https://sevenxleaks.com/western/${content.slug}`} />
       </Helmet>
 
       {/* Background Effects */}
-      <div className={`absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-${colors.primary}/20 via-gray-900 to-gray-900`}></div>
-      <div className={`absolute top-1/4 left-1/4 w-96 h-96 bg-${colors.primary}/10 rounded-full blur-3xl animate-pulse`}></div>
-      <div className={`absolute bottom-1/4 right-1/4 w-96 h-96 bg-${colors.accent}/10 rounded-full blur-3xl animate-pulse`}></div>
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-900/20 via-gray-900 to-gray-900"></div>
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl animate-pulse"></div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Button */}
@@ -237,11 +197,11 @@ const FreeContentDetails = () => {
           className="mb-6"
         >
           <Link
-            to="/"
-            className={`inline-flex items-center gap-2 px-4 py-2 bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700 hover:${colors.border} rounded-xl text-gray-300 hover:text-white transition-all duration-300 backdrop-blur-sm shadow-lg hover:${colors.glow}`}
+            to="/western"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700 hover:border-orange-500/50 rounded-xl text-gray-300 hover:text-white transition-all duration-300 backdrop-blur-sm shadow-lg hover:shadow-orange-500/10"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm">Back to content</span>
+            <span className="text-sm">Back to western content</span>
           </Link>
         </motion.div>
 
@@ -250,10 +210,20 @@ const FreeContentDetails = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-gray-800/90 backdrop-blur-xl border border-gray-700/50 rounded-2xl overflow-hidden shadow-2xl"
+          className="bg-gray-800/90 backdrop-blur-xl border border-orange-500/30 rounded-2xl overflow-hidden shadow-2xl shadow-orange-500/10"
         >
           {/* Header */}
-          <div className={`bg-gradient-to-r from-${colors.primary}/40 to-${colors.secondary}/40 px-6 py-6 border-b border-gray-700/50`}>
+          <div className="bg-gradient-to-r from-orange-900/40 to-orange-800/40 px-6 py-6 border-b border-orange-500/20">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-500 rounded-xl flex items-center justify-center shadow-xl">
+                <AlertTriangle className="w-5 h-5 text-white" />
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full border border-orange-500/30 backdrop-blur-sm">
+                <Shield className="w-3 h-3" />
+                <span className="font-bold text-xs">WESTERN CONTENT</span>
+              </div>
+            </div>
+
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -270,7 +240,7 @@ const FreeContentDetails = () => {
                 transition={{ delay: 0.3 }}
                 className="flex items-center gap-2 px-3 py-1.5 bg-gray-700/50 rounded-lg border border-gray-600/50 backdrop-blur-sm"
               >
-                <Calendar className={`w-4 h-4 ${colors.text}`} />
+                <Calendar className="w-4 h-4 text-orange-400" />
                 <span className="text-gray-300 text-sm">
                   {formatDate(content.postDate)}
                 </span>
@@ -280,7 +250,7 @@ const FreeContentDetails = () => {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 }}
-                className={`flex items-center gap-2 px-3 py-1.5 ${colors.bg} ${colors.text} rounded-lg border ${colors.border} backdrop-blur-sm`}
+                className="flex items-center gap-2 px-3 py-1.5 bg-orange-500/20 text-orange-300 rounded-lg border border-orange-500/30 backdrop-blur-sm"
               >
                 <Tag className="w-4 h-4" />
                 <span className="font-medium text-sm">{content.category}</span>
@@ -296,12 +266,6 @@ const FreeContentDetails = () => {
               transition={{ delay: 0.5 }}
               className="mb-6"
             >
-              <div className="flex items-center gap-3 mb-4">
-                <div className={`w-8 h-8 bg-gradient-to-br from-${colors.accent} to-${colors.primary} rounded-lg flex items-center justify-center shadow-lg`}>
-                  <Download className="w-4 h-4 text-black" />
-                </div>
-                <h2 className="text-xl font-bold text-white">Download Options</h2>
-              </div>
             </motion.div>
 
             <motion.div
@@ -318,7 +282,7 @@ const FreeContentDetails = () => {
               />
             </motion.div>
 
-            {/* VIP Upgrade Section com toggle */}
+            {/* VIP Upgrade Section */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -340,7 +304,7 @@ const FreeContentDetails = () => {
                   aria-controls="vip-benefits"
                   className="inline-flex items-center gap-2 px-3 py-1.5 bg-yellow-500/15 border border-yellow-500/30 text-yellow-300 rounded-md text-xs font-medium transition-all"
                 >
-                  {benefitsOpen ? "Ocult benefits" : "Show benefits"}
+                  {benefitsOpen ? "Hide benefits" : "Show benefits"}
                   <ChevronDown
                     className={`w-4 h-4 transition-transform ${benefitsOpen ? "rotate-180" : ""}`}
                   />
@@ -370,7 +334,7 @@ const FreeContentDetails = () => {
 
               <Link
                 to="/plans"
-                className={`inline-flex items-center gap-2 w-full justify-center px-4 py-2.5 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-yellow-500/30 text-sm`}
+                className="inline-flex items-center gap-2 w-full justify-center px-4 py-2.5 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-yellow-500/30 text-sm"
               >
                 <Crown className="w-4 h-4" />
                 <span>Unlock VIP Access</span>
@@ -384,4 +348,4 @@ const FreeContentDetails = () => {
   );
 };
 
-export default FreeContentDetails;
+export default WesternContentDetails;

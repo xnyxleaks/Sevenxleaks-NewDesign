@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Free = sequelize.define("Free", {
+  const WesternContent = sequelize.define("WesternContent", {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -47,5 +47,5 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  return Free;
+  return WesternContent;
 };

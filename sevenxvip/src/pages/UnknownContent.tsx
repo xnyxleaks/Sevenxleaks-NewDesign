@@ -84,7 +84,7 @@ const UnknownContent: React.FC = () => {
       }
 
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/unknowncontent/search?${params}`,
+        `${import.meta.env.VITE_BACKEND_URL}/unknowncontent`,
         {
           headers: {
             "x-api-key": `${import.meta.env.VITE_FRONTEND_API_KEY}`,

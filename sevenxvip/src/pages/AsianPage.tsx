@@ -68,7 +68,7 @@ const AsianPage: React.FC = () => {
       });
 
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/freecontent/search?${params}`,
+        `${import.meta.env.VITE_BACKEND_URL}/asiancontent`,
         {
           headers: {
             "x-api-key": `${import.meta.env.VITE_FRONTEND_API_KEY}`,
@@ -275,7 +275,7 @@ const AsianPage: React.FC = () => {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.05 }}
                           className="group bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700/50 hover:border-purple-500/50 rounded-xl p-3 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl hover:shadow-purple-500/10 transform hover:scale-[1.01]"
-                          onClick={() => navigate(`/free/${link.slug}`)}
+                          onClick={() => navigate(`/asian/${link.slug}`)}
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4 flex-1">

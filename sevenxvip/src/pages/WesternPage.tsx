@@ -68,7 +68,7 @@ const WesternPage: React.FC = () => {
       });
 
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/freecontent/search?${params}`,
+        `${import.meta.env.VITE_BACKEND_URL}/westerncontent`,
         {
           headers: {
             "x-api-key": `${import.meta.env.VITE_FRONTEND_API_KEY}`,
@@ -235,9 +235,9 @@ const WesternPage: React.FC = () => {
               <i className="fa-regular fa-calendar text-sm"></i>
             </button>
             <button 
-              className="p-2 bg-gray-700/50 hover:bg-purple-500/20 text-gray-300 hover:text-purple-300 rounded-lg transition-all duration-300 border border-gray-600/50" 
+              className="p-2 bg-gray-700/50 hover:bg-orange-500/20 text-gray-300 hover:text-orange-300 rounded-lg transition-all duration-300 border border-gray-600/50" 
               title="Switch to Asian"
-              onClick={() => navigate('/asian')}
+              onClick={() => navigate('/western')}
             >
               <i className="fa-solid fa-repeat text-sm"></i>
             </button>
@@ -275,7 +275,7 @@ const WesternPage: React.FC = () => {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.05 }}
                           className="group bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700/50 hover:border-orange-500/50 rounded-xl p-3 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl hover:shadow-orange-500/10 transform hover:scale-[1.01]"
-                          onClick={() => navigate(`/free/${link.slug}`)}
+                          onClick={() => navigate(`/western/${link.slug}`)}
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4 flex-1">

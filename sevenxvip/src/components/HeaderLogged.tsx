@@ -49,8 +49,10 @@ const HeaderLogged: React.FC = () => {
   }, [token]);
 
   const getLogoText = () => {
-    if (location.pathname === '/western') return ' WESTERN';
-    if (location.pathname === '/asian') return ' ASIAN';
+    if (location.pathname.includes('western')) return ' WESTERN';
+    if (location.pathname.includes('asian')) return ' ASIAN';
+    if (location.pathname.includes('banned')) return ' BANNED'
+    if (location.pathname.includes('unknown')) return ' UNKNOWN'
     if (location.pathname.includes('vip')) return ' VIP';
     return '';
   };
@@ -76,6 +78,30 @@ const HeaderLogged: React.FC = () => {
         border: 'border-yellow-500/20',
         bg: 'bg-yellow-500/10',
         glow: 'shadow-yellow-500/20'
+      };
+    }
+
+     if (location.pathname.includes('banned')) {
+      return {
+        accent: 'text-red-400',
+        accentHover: 'hover:text-red-300',
+        gradient: 'from-red-500 to-red-600',
+        gradientHover: 'hover:from-red-600 hover:to-red-700',
+        border: 'border-red-500/20',
+        bg: 'bg-red-500/10',
+        glow: 'shadow-red-500/20'
+      };
+    }
+
+      if (location.pathname.includes('unknown')) {
+      return {
+        accent: 'text-slate-400',
+        accentHover: 'hover:text-slate-300',
+        gradient: 'from-slate-500 to-slate-600',
+        gradientHover: 'hover:from-slate-600 hover:to-slate-700',
+        border: 'border-slate-500/20',
+        bg: 'bg-slate-500/10',
+        glow: 'shadow-slate-500/20'
       };
     }
     return {
