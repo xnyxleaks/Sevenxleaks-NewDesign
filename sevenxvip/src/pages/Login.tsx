@@ -35,7 +35,7 @@ const Login: React.FC = () => {
         localStorage.setItem('name', data.name);
         localStorage.setItem('email', email);
         setSuccess('Login successful! Redirecting...');
-        setTimeout(() => navigate('/'), 1500);
+        setTimeout(() => window.location.href = '/', 1500);
       } else {
         setError(data.error || 'Login failed. Please try again.');
       }

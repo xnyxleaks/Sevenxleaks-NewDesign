@@ -1,5 +1,21 @@
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  safelist: [
+    // Asian theme
+    'from-asian-primary', 'to-asian-accent',
+    'hover:from-asian-accent', 'hover:to-asian-primary',
+    'hover:shadow-asian-primary/20',
+
+    // Western theme
+    'from-western-primary', 'to-western-accent',
+    'hover:from-western-accent', 'hover:to-western-primary',
+    'hover:shadow-western-primary/20',
+
+    // VIP theme
+    'from-vip-primary', 'to-vip-accent',
+    'hover:from-vip-accent', 'hover:to-vip-primary',
+    'hover:shadow-vip-primary/20',
+  ],
   darkMode: 'class',
   theme: {
     extend: {

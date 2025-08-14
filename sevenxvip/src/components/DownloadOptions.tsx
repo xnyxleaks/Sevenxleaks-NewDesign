@@ -1,8 +1,8 @@
-// DownloadOptions.tsx
 import React from 'react';
 import DownloadButton from './DownloadButton';
 import { motion } from 'framer-motion';
 import { Shield } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface DownloadOptionsProps {
   primaryLinks: {
@@ -10,36 +10,43 @@ interface DownloadOptionsProps {
     mega2?: string;
     pixeldrain?: string;
   };
-  themeColors?: {
-    primary: string;
-    secondary: string;
-    accent: string;
-    gradient: string;
-  };
 }
 
-const DownloadOptions: React.FC<DownloadOptionsProps> = ({ primaryLinks, themeColors }) => {
+const DownloadOptions: React.FC<DownloadOptionsProps> = ({ primaryLinks }) => {
+  const { theme } = useTheme();
+
+  const themeColors = {
+    asian: {
+      primary: 'from-asian-primary to-asian-accent',
+      hover: 'hover:from-asian-accent hover:to-asian-primary',
+      shadow: 'hover:shadow-asian-primary/20'
+    },
+    western: {
+      primary: 'from-western-primary to-western-accent',
+      hover: 'hover:from-western-accent hover:to-western-primary',
+      shadow: 'hover:shadow-western-primary/20'
+    },
+    vip: {
+      primary: 'from-vip-primary to-vip-accent',
+      hover: 'hover:from-vip-accent hover:to-vip-primary',
+      shadow: 'hover:shadow-vip-primary/20'
+    }
+  };
+
+  const colors = themeColors[theme as keyof typeof themeColors] || themeColors.asian;
+
   const downloadOptions = [
     {
       name: 'MEGA',
       url: primaryLinks.mega,
-      bgColor: themeColors ? `bg-gradient-to-r ${themeColors.gradient}` : 'bg-gradient-to-r from-red-500 to-red-600',
-      hoverColor: themeColors ? `hover:bg-gradient-to-r hover:from-${themeColors.secondary} hover:to-${themeColors.primary}` : 'hover:from-red-600 hover:to-red-700',
-      shadowColor: themeColors ? `hover:shadow-${themeColors.primary}/20` : 'hover:shadow-red-500/20'
     },
     {
       name: 'MEGA 2',
       url: primaryLinks.mega2,
-      bgColor: themeColors ? `bg-gradient-to-r from-${themeColors.secondary} to-${themeColors.primary}` : 'bg-gradient-to-r from-red-600 to-red-700',
-      hoverColor: themeColors ? `hover:bg-gradient-to-r hover:from-${themeColors.primary} hover:to-${themeColors.accent}` : 'hover:from-red-700 hover:to-red-800',
-      shadowColor: themeColors ? `hover:shadow-${themeColors.secondary}/20` : 'hover:shadow-red-600/20'
     },
     {
       name: 'Pixeldrain',
       url: primaryLinks.pixeldrain,
-      bgColor: themeColors ? `bg-gradient-to-r from-${themeColors.accent} to-${themeColors.secondary}` : 'bg-gradient-to-r from-blue-500 to-blue-600',
-      hoverColor: themeColors ? `hover:bg-gradient-to-r hover:from-${themeColors.secondary} hover:to-${themeColors.accent}` : 'hover:from-blue-600 hover:to-blue-700',
-      shadowColor: themeColors ? `hover:shadow-${themeColors.accent}/20` : 'hover:shadow-blue-500/20'
     }
   ];
 
@@ -69,9 +76,10 @@ const DownloadOptions: React.FC<DownloadOptionsProps> = ({ primaryLinks, themeCo
             <DownloadButton
               url={option.url!}
               label={option.name}
-              bgColor={option.bgColor}
-              hoverColor={option.hoverColor}
-              icon=""
+              bgColor={colors.primary}
+              hoverColor={colors.hover}
+              shadowColor={colors.shadow}
+              textColor="text-white"
             />
           </motion.div>
         ))}

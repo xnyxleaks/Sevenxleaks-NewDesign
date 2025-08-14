@@ -260,12 +260,12 @@ const WesternPage: React.FC = () => {
                   return parseDateB.getTime() - parseDateA.getTime();
                 })
                 .map(([date, posts]) => (
-                  <div key={date} className="mb-12">
-                    <h2 className="text-2xl font-bold text-gray-300 mb-8 pb-4 border-b border-gray-700/50 font-orbitron flex items-center gap-4">
+                  <div key={date} className="mb-8">
+                    <h2 className="text-xl font-bold text-gray-300 mb-4 pb-2 border-b border-gray-700/50 font-orbitron flex items-center gap-3">
                       <div className="w-3 h-8 bg-gradient-to-b from-orange-500 to-orange-600 rounded-full shadow-lg shadow-orange-500/30"></div>
                       <span className="bg-gradient-to-r from-orange-400 to-orange-300 bg-clip-text text-transparent">{date}</span>
                     </h2>
-                    <div className="space-y-4">
+                    <div className="space-y-2">
                       {posts
                         .sort((a, b) => new Date(b.postDate || b.createdAt).getTime() - new Date(a.postDate || a.createdAt).getTime())
                         .map((link, index) => (
@@ -274,7 +274,7 @@ const WesternPage: React.FC = () => {
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.05 }}
-                          className="group bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700/50 hover:border-orange-500/50 rounded-2xl p-6 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl hover:shadow-orange-500/10 transform hover:scale-[1.02]"
+                          className="group bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700/50 hover:border-orange-500/50 rounded-xl p-3 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl hover:shadow-orange-500/10 transform hover:scale-[1.01]"
                           onClick={() => navigate(`/free/${link.slug}`)}
                         >
                           <div className="flex items-center justify-between">

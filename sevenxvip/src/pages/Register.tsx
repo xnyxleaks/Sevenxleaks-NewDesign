@@ -51,41 +51,63 @@ const Register: React.FC = () => {
   };
 
   const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setSuccess('');
+  e.preventDefault();
+  setError('');
+  setSuccess('');
 
-    if (!validateForm()) return;
+  if (!validateForm()) return;
 
-    setIsLoading(true);
+  setIsLoading(true);
 
-    try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/register`, {
+  try {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password
+      }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      setSuccess('Account created successfully! Logging you in...');
+
+      // Login automático
+      const loginRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: formData.name,
           email: formData.email,
           password: formData.password
         }),
       });
 
-      const data = await response.json();
+      const loginData = await loginRes.json();
 
-      if (response.ok) {
-        setSuccess('Account created successfully! Redirecting to login...');
-        setTimeout(() => navigate('/login'), 2000);
+      if (loginRes.ok) {
+        localStorage.setItem('Token', loginData.token);
+        localStorage.setItem('name', loginData.name);
+        localStorage.setItem('email', formData.email);
+        setTimeout(() => window.location.href = '/', 1000);
       } else {
-        setError(data.error || 'Registration failed. Please try again.');
+        setError('Account created but automatic login failed.');
       }
-    } catch (err) {
-      setError('Network error. Please check your connection.');
-    } finally {
-      setIsLoading(false);
+    } else {
+      setError(data.error || 'Registration failed. Please try again.');
     }
-  };
+  } catch (err) {
+    setError('Network error. Please check your connection.');
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center p-4 relative overflow-hidden">

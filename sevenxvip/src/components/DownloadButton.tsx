@@ -1,14 +1,14 @@
 import React from 'react';
 import { ExternalLink } from 'lucide-react';
-import { useTheme } from '../contexts/ThemeContext';
 
 interface DownloadButtonProps {
   url?: string;
   fallbackUrl?: string;
   label: string;
-  icon: string;
   bgColor: string;
   hoverColor: string;
+  shadowColor: string;
+  textColor: string;
 }
 
 const DownloadButton: React.FC<DownloadButtonProps> = ({
@@ -16,11 +16,11 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
   fallbackUrl,
   label,
   bgColor,
-  hoverColor
+  hoverColor,
+  shadowColor,
+  textColor
 }) => {
-  const { theme } = useTheme();
   const finalUrl = url || fallbackUrl;
-
   if (!finalUrl) return null;
 
   return (
@@ -28,7 +28,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
       href={finalUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className={`flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg text-white ${bgColor} ${hoverColor}`}
+      className={`flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg ${textColor} bg-gradient-to-r ${bgColor} ${hoverColor} ${shadowColor}`}
     >
       <span className="text-sm sm:text-base">{label}</span>
       <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4" />
