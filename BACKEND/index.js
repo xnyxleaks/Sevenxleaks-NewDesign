@@ -6,6 +6,8 @@ const { Pool } = require('pg');
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true
