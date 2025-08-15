@@ -7,11 +7,6 @@ module.exports = function checkApiKey(req, res, next) {
   const allowedApiKey = process.env.VITE_FRONTEND_API_KEY;
   const allowedAdminKey = process.env.ADMIN_API_KEY;
 
-  const allowedOrigins = [
-    'https://sevenxleaks.com',
-    'http://localhost:5173',
-  ];
-
   const isAllowedOrigin =
     allowedOrigins.includes(origin) ||
     allowedOrigins.some(o => referer?.startsWith(o));
