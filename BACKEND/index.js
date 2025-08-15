@@ -12,7 +12,9 @@ app.use(cors({
     'https://www.sevenxleaks.com',
     'http://localhost:5173',
     'https://sevenxleaks.vercel.app/',
-    'https://www.sevenxleaks.vercel.app/'
+    'https://www.sevenxleaks.vercel.app/',
+    'https://newdesign-livid.vercel.app',
+    'https://newdesign-livid.vercel.app/'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true
