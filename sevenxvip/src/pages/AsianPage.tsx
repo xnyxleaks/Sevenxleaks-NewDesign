@@ -53,74 +53,87 @@ const AsianPage: React.FC = () => {
     return JSON.parse(jsonString) as T;
   }
 
-  const fetchContent = async (page: number, isLoadMore = false) => {
-    try {
-      if (!isLoadMore) setLoading(true);
-      setSearchLoading(true);
+ const fetchContent = async (page: number, isLoadMore = false) => {
+  try {
+    if (!isLoadMore) setLoading(true);
+    setSearchLoading(true);
 
-      const params = new URLSearchParams({
-        page: page.toString(),
-        search: searchName,
-        category: selectedCategory,
-        sortBy: "postDate",
-        sortOrder: "DESC",
-        limit: "24",
-      });
+    const params = new URLSearchParams({
+      page: page.toString(),
+      search: searchName,
+      category: selectedCategory,
+      sortBy: "postDate",
+      sortOrder: "DESC",
+      limit: "24",
+    });
 
-      const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/asiancontent`,
-        {
-          headers: {
-            "x-api-key": `${import.meta.env.VITE_FRONTEND_API_KEY}`,
-          },
-        }
-      );
-
-      if (!response.data?.data) {
-        throw new Error("Invalid server response");
+    const response = await axios.get(
+      `${import.meta.env.VITE_BACKEND_URL}/asiancontent`,
+      {
+        headers: {
+          "x-api-key": `${import.meta.env.VITE_FRONTEND_API_KEY}`,
+        },
       }
+    );
 
-      const decoded = decodeModifiedBase64<{ data: LinkItem[]; totalPages: number }>(
-        response.data.data
-      );
-
-      const { data: rawData, totalPages } = decoded;
-
-      if (isLoadMore) {
-        setLinks((prev) => [...prev, ...rawData]);
-        setFilteredLinks((prev) => [...prev, ...rawData]);
-      } else {
-        setLinks(rawData);
-        setFilteredLinks(rawData);
-      }
-
-      setTotalPages(totalPages);
-      setHasMoreContent(page < totalPages);
-
-      const uniqueCategories = Array.from(
-        new Set(rawData.map((item) => item.category))
-      ).map((category) => ({
-        id: category,
-        name: category,
-        category,
-      }));
-
-      setCategories((prev) => {
-        const existingCategories = new Set(prev.map((c) => c.category));
-        const newCategories = uniqueCategories.filter(
-          (c) => !existingCategories.has(c.category)
-        );
-        return [...prev, ...newCategories];
-      });
-    } catch (error) {
-      console.error("Error fetching content:", error);
-    } finally {
-      setLoading(false);
-      setLoadingMore(false);
-      setSearchLoading(false);
-      console.log(import.meta.env.VITE_FRONTEND_API_KEY)
+    if (!response.data?.data) {
+      throw new Error("Invalid server response");
     }
-  };
+
+    const decoded = decodeModifiedBase64<{ data: LinkItem[]; totalPages: number }>(
+      response.data.data
+    );
+
+    const { data: rawData, totalPages } = decoded;
+
+    if (isLoadMore) {
+      setLinks((prev) => [...prev, ...rawData]);
+      setFilteredLinks((prev) => [...prev, ...rawData]);
+    } else {
+      setLinks(rawData);
+      setFilteredLinks(rawData);
+    }
+
+    setTotalPages(totalPages);
+    setHasMoreContent(page < totalPages);
+
+    const uniqueCategories = Array.from(
+      new Set(rawData.map((item) => item.category))
+    ).map((category) => ({
+      id: category,
+      name: category,
+      category,
+    }));
+
+    setCategories((prev) => {
+      const existingCategories = new Set(prev.map((c) => c.category));
+      const newCategories = uniqueCategories.filter(
+        (c) => !existingCategories.has(c.category)
+      );
+      return [...prev, ...newCategories];
+    });
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error message:", error.message);
+      console.error("Axios request config:", error.config);
+
+      if (error.response) {
+        console.error("Status code:", error.response.status);
+        console.error("Response headers:", error.response.headers);
+        console.error("Response data:", error.response.data);
+      } else if (error.request) {
+        console.error("No response received from server:", error.request);
+      }
+    } else {
+      console.error("Unexpected error:", error);
+    }
+  } finally {
+    setLoading(false);
+    setLoadingMore(false);
+    setSearchLoading(false);
+  }
+};
+
 
   useEffect(() => {
     const timer = setTimeout(() => {

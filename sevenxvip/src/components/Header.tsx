@@ -12,9 +12,15 @@ const Header: React.FC = () => {
   };
 
   const getLogoText = () => {
-    if (location.pathname === '/western') return 'WESTERN';
-    if (location.pathname === '/asian') return 'ASIAN';
-    return 'SEVENXLEAKS';
+    if (location.pathname.includes('western')) return ' WESTERN';
+    if (location.pathname.includes('asian')) return ' ASIAN';
+    if (location.pathname.includes('banned')) return ' BANNED'
+    if (location.pathname.includes('unknown')) return ' UNKNOWN'
+    if (location.pathname.includes('vip')) return ' VIP';
+    if (location.pathname.includes('plans')) return ' PLANS';
+    if (location.pathname.includes('login')) return ' LOGIN';
+    if (location.pathname.includes('register')) return ' REGISTER';
+    return '';
   };
 
   const getThemeClasses = () => {
@@ -26,9 +32,42 @@ const Header: React.FC = () => {
         gradientHover: 'hover:from-orange-600 hover:to-orange-700',
         border: 'border-orange-500/20',
         bg: 'bg-orange-500/10',
-        glow: 'shadow-orange-500/20',
-        buttonGradient: 'from-orange-400 to-orange-500',
-        buttonHover: 'hover:from-orange-500 hover:to-orange-600'
+        glow: 'shadow-orange-500/20'
+      };
+    }
+    if (location.pathname.includes('vip')) {
+      return {
+        accent: 'text-yellow-400',
+        accentHover: 'hover:text-yellow-300',
+        gradient: 'from-yellow-500 to-yellow-600',
+        gradientHover: 'hover:from-yellow-600 hover:to-yellow-700',
+        border: 'border-yellow-500/20',
+        bg: 'bg-yellow-500/10',
+        glow: 'shadow-yellow-500/20'
+      };
+    }
+
+     if (location.pathname.includes('banned')) {
+      return {
+        accent: 'text-red-400',
+        accentHover: 'hover:text-red-300',
+        gradient: 'from-red-500 to-red-600',
+        gradientHover: 'hover:from-red-600 hover:to-red-700',
+        border: 'border-red-500/20',
+        bg: 'bg-red-500/10',
+        glow: 'shadow-red-500/20'
+      };
+    }
+
+      if (location.pathname.includes('unknown')) {
+      return {
+        accent: 'text-slate-400',
+        accentHover: 'hover:text-slate-300',
+        gradient: 'from-slate-500 to-slate-600',
+        gradientHover: 'hover:from-slate-600 hover:to-slate-700',
+        border: 'border-slate-500/20',
+        bg: 'bg-slate-500/10',
+        glow: 'shadow-slate-500/20'
       };
     }
     return {
@@ -38,9 +77,7 @@ const Header: React.FC = () => {
       gradientHover: 'hover:from-purple-600 hover:to-purple-700',
       border: 'border-purple-500/20',
       bg: 'bg-purple-500/10',
-      glow: 'shadow-purple-500/20',
-      buttonGradient: 'from-purple-400 to-purple-500',
-      buttonHover: 'hover:from-purple-500 hover:to-purple-600'
+      glow: 'shadow-purple-500/20'
     };
   };
 
