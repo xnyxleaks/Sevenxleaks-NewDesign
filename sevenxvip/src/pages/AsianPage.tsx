@@ -118,6 +118,7 @@ const AsianPage: React.FC = () => {
       setLoading(false);
       setLoadingMore(false);
       setSearchLoading(false);
+      console.log(import.meta.env.VITE_FRONTEND_API_KEY)
     }
   };
 
