@@ -18,6 +18,7 @@ import DownloadOptions from "../components/DownloadOptions";
 import { linkvertise } from "../components/Linkvertise";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
+import LoadingAsian from "./Loaders/LoadingAsian";
 
 type ContentItem = {
   id: number;
@@ -122,7 +123,7 @@ const asianContentDetails = () => {
   };
 
   if (loading) {
-    return <Loading />;
+    return <LoadingAsian/>
   }
 
   if (error) {

@@ -18,6 +18,7 @@ import DownloadOptions from "../components/DownloadOptions";
 import { linkvertise } from "../components/Linkvertise";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
+import LoadingBanned from "../components/Loaders/LoadingBanned";
 
 type ContentItem = {
   id: number;
@@ -122,7 +123,7 @@ const BannedContentDetails = () => {
   };
 
   if (loading) {
-    return <Loading />;
+    return <LoadingBanned />;
   }
 
   if (error) {

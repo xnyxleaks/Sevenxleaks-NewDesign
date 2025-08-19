@@ -18,6 +18,7 @@ import DownloadOptions from "../components/DownloadOptions";
 import { linkvertise } from "../components/Linkvertise";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
+import LoadingUnknown from "../components/Loaders/LoadingUnknown";
 
 type ContentItem = {
   id: number;
@@ -134,7 +135,7 @@ const UnknownContentDetails = () => {
   };
 
   if (loading) {
-    return <Loading />;
+    return <LoadingUnknown />;
   }
 
   if (error) {

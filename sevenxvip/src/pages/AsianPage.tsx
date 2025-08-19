@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
+import LoadingAsian from "../components/Loaders/LoadingAsian";
 
 type LinkItem = {
   id: string;
@@ -21,15 +22,7 @@ type Category = {
 };
 
 const LoadingSpinner = () => (
-  <div className="flex items-center justify-center py-20">
-    <div className="relative">
-      <div className="w-16 h-16 border-4 border-purple-500/20 rounded-full animate-spin"></div>
-      <div className="absolute inset-0 border-4 border-transparent border-t-purple-500 rounded-full animate-spin"></div>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <i className="fa-solid fa-spinner text-purple-500 animate-spin text-xl"></i>
-      </div>
-    </div>
-  </div>
+<LoadingAsian/>
 );
 
 const AsianPage: React.FC = () => {

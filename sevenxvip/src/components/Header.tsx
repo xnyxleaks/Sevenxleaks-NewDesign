@@ -120,7 +120,7 @@ const Header: React.FC = () => {
               className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:border-red-500/20 hover:shadow-red-500/20"
             >
               <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
-                <i className="fa-solid fa-ban text-red-400 text-xs"></i>
+                <i className="fa-solid  text-red-400 text-xs"></i>
                 Banned
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-red-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
@@ -131,7 +131,7 @@ const Header: React.FC = () => {
               className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:border-gray-500/20 hover:shadow-gray-500/20"
             >
               <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
-                <i className="fa-solid fa-question text-gray-400 text-xs"></i>
+                <i className="fa-solid  text-gray-400 text-xs"></i>
                 Unknown
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-gray-500 to-gray-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
@@ -223,7 +223,7 @@ const Header: React.FC = () => {
                   className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-red-500/10 hover:bg-red-500/20 rounded-2xl transition-all duration-300 font-medium border border-red-500/20 hover:border-red-500/30 backdrop-blur-sm"
                 >
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg">
-                    <i className="fa-solid fa-ban text-white text-sm"></i>
+                    <i className="fa-solid  text-white text-sm"></i>
                   </div>
                   <span className="font-roboto">Banned Content</span>
                 </Link>
@@ -234,7 +234,7 @@ const Header: React.FC = () => {
                   className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-gray-500/10 hover:bg-gray-500/20 rounded-2xl transition-all duration-300 font-medium border border-gray-500/20 hover:border-gray-500/30 backdrop-blur-sm"
                 >
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center shadow-lg">
-                    <i className="fa-solid fa-question text-white text-sm"></i>
+                    <i className="fa-solid  text-white text-sm"></i>
                   </div>
                   <span className="font-roboto">Unknown Content</span>
                 </Link>

@@ -58,13 +58,13 @@ const ContentCard: React.FC<ContentCardProps> = ({
           )}
           {isBanned && (
             <span className="tag" style={{ backgroundColor: 'var(--accent-banned)', color: '#fff' }}>
-              <i className="fa-solid fa-ban mr-1"></i>
+              <i className="fa-solid  mr-1"></i>
               BANNED
             </span>
           )}
           {isUnknown && (
             <span className="tag" style={{ backgroundColor: 'var(--accent-unknown)', color: '#fff' }}>
-              <i className="fa-solid fa-question mr-1"></i>
+              <i className="fa-solid  mr-1"></i>
               UNKNOWN
             </span>
           )}

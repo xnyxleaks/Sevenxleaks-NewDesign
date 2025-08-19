@@ -6,6 +6,7 @@ import { useTheme } from "../contexts/ThemeContext";
 import { useRegion } from "../contexts/RegionContext";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
+import LoadingUnknown from "../components/Loaders/LoadingUnknown";
 
 type LinkItem = {
   id: string;
@@ -37,11 +38,6 @@ const months = [
   { value: "12", label: "December" },
 ];
 
-const DreamyLoading = () => (
-  <div className="dreamy-loading">
-    <div className="dreamy-spinner"></div>
-  </div>
-);
 
 const UnknownContent: React.FC = () => {
   const navigate = useNavigate();
@@ -242,15 +238,7 @@ const UnknownContent: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
           <main>
             {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <div className="relative">
-                  <div className="w-16 h-16 border-4 border-slate-500/20 rounded-full animate-spin"></div>
-                  <div className="absolute inset-0 border-4 border-transparent border-t-slate-500 rounded-full animate-spin"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <HelpCircle className="w-6 h-6 text-slate-500 animate-pulse" />
-                  </div>
-                </div>
-              </div>
+              <LoadingUnknown/>
             ) : filteredLinks.length > 0 ? (
               <>
                 {Object.entries(groupedLinks)

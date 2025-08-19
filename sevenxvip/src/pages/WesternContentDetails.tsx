@@ -18,6 +18,7 @@ import DownloadOptions from "../components/DownloadOptions";
 import { linkvertise } from "../components/Linkvertise";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
+import LoadingWestern from "../components/Loaders/LoadingWestern";
 
 type ContentItem = {
   id: number;
@@ -122,7 +123,7 @@ const WesternContentDetails = () => {
   };
 
   if (loading) {
-    return <Loading />;
+    return <LoadingWestern/>;
   }
 
   if (error) {
