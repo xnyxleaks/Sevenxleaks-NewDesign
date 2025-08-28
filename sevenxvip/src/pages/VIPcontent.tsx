@@ -79,7 +79,7 @@ const VIPContent: React.FC = () => {
         params.append('month', (targetDate.getMonth() + 1).toString().padStart(2, '0'));
       }
 
-      const endpoint = searchName ? '/vipcontent/search' : '/vipcontent';
+      const endpoint = '/vipcontent/search';
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}${endpoint}?${params}`,
         {
@@ -217,10 +217,10 @@ const VIPContent: React.FC = () => {
             {["all", "today", "yesterday", "7days"].map((filter) => (
               <button
                 key={filter}
-                className={`px-6 py-3 rounded-2xl font-semibold transition-all duration-300 border backdrop-blur-sm font-roboto ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 border whitespace-nowrap ${
                   dateFilter === filter
-                    ? "bg-gradient-to-r from-yellow-500 to-yellow-600 text-black shadow-lg shadow-yellow-500/30 border-yellow-400/50 transform scale-105"
-                    : "bg-gray-700/50 text-gray-300 hover:bg-yellow-500/20 hover:text-yellow-300 border-gray-600/50 hover:border-yellow-500/30 hover:shadow-lg hover:shadow-yellow-500/10"
+                    ? "bg-yellow-500 text-black border-yellow-400"
+                    : "bg-gray-700/50 text-gray-300 hover:bg-yellow-500/20 border-gray-600/50"
                 }`}
                 onClick={() => setDateFilter(filter)}
               >
@@ -235,7 +235,7 @@ const VIPContent: React.FC = () => {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-6 py-3 bg-gray-700/50 border border-gray-600/50 rounded-2xl text-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 focus:border-yellow-500/50 transition-all duration-300 backdrop-blur-sm font-roboto hover:bg-gray-600/50"
+              className="px-3 py-1.5 bg-gray-700/50 border border-gray-600/50 rounded-lg text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-yellow-500/50 transition-all duration-300 hover:bg-gray-600/50 min-w-[120px]"
             >
               <option value="">All Categories</option>
               {categories.map((category) => (
@@ -247,7 +247,7 @@ const VIPContent: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="p-4 bg-gray-700/50 hover:bg-yellow-500/20 text-gray-300 hover:text-yellow-300 rounded-2xl transition-all duration-300 border border-gray-600/50 hover:border-yellow-500/50 shadow-lg hover:shadow-yellow-500/10 backdrop-blur-sm">
+            <button className="p-2 bg-gray-700/50 hover:bg-yellow-500/20 text-gray-300 hover:text-yellow-300 rounded-lg transition-all duration-300 border border-gray-600/50" title="Calendar View">
               <Calendar className="w-5 h-5" />
             </button>
           </div>

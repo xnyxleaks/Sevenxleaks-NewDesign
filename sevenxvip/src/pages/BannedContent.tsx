@@ -82,7 +82,7 @@ const BannedContent: React.FC = () => {
         params.append('month', selectedMonth);
       }
 
-      const endpoint = searchName ? '/bannedcontent/search' : '/bannedcontent';
+      const endpoint = '/bannedcontent';
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}${endpoint}?${params}`,
         {

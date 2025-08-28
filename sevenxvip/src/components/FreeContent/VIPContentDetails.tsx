@@ -178,7 +178,7 @@ const VIPContentDetails = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-2xl sm:text-3xl font-bold text-white mb-4"
+              className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-4 break-words"
             >
               {content.name}
             </motion.h1>
@@ -191,7 +191,7 @@ const VIPContentDetails = () => {
                 className="flex items-center gap-2 px-3 py-1.5 bg-gray-700/50 rounded-lg border border-gray-600/50 backdrop-blur-sm"
               >
                 <Calendar className="w-4 h-4 text-yellow-400" />
-                <span className="text-gray-300 text-sm">
+                <span className="text-gray-300 text-xs sm:text-sm">
                   {formatDate(content.postDate)}
                 </span>
               </motion.div>
@@ -203,13 +203,13 @@ const VIPContentDetails = () => {
                 className="flex items-center gap-2 px-3 py-1.5 bg-yellow-500/20 text-yellow-300 rounded-lg border border-yellow-500/30 backdrop-blur-sm"
               >
                 <Tag className="w-4 h-4" />
-                <span className="font-medium text-sm">{content.category}</span>
+                <span className="font-medium text-xs sm:text-sm">{content.category}</span>
               </motion.div>
             </div>
           </div>
 
           {/* VIP Download Section */}
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -220,7 +220,7 @@ const VIPContentDetails = () => {
                 <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-lg">
                   <Download className="w-4 h-4 text-black" />
                 </div>
-                <h2 className="text-xl font-bold text-white">
+                <h2 className="text-lg sm:text-xl font-bold text-white">
                   VIP Download Options
                 </h2>
               </div>
@@ -230,7 +230,7 @@ const VIPContentDetails = () => {
                   <Crown className="w-4 h-4 text-yellow-400" />
                   <span className="text-yellow-400 font-semibold text-sm">VIP Benefits Active</span>
                 </div>
-                <p className="text-gray-300 text-sm">
+                <p className="text-gray-300 text-xs sm:text-sm">
                   Enjoy instant access, no ads, and premium download speeds as a VIP member.
                 </p>
               </div>

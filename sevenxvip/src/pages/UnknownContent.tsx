@@ -83,7 +83,7 @@ const UnknownContent: React.FC = () => {
         params.append('month', selectedMonth);
       }
 
-      const endpoint = searchName ? '/unknowncontent/search' : '/unknowncontent';
+      const endpoint = '/unknowncontent';
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}${endpoint}?${params}`,
         {

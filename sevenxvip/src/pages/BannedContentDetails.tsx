@@ -229,7 +229,7 @@ const BannedContentDetails = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-xl sm:text-3xl font-bold text-white mb-4"
+              className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-4 break-words"
             >
               {content.name}
             </motion.h1>
@@ -260,7 +260,7 @@ const BannedContentDetails = () => {
           </div>
 
           {/* Download Section */}
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

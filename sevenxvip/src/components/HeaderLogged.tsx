@@ -287,37 +287,28 @@ const HeaderLogged: React.FC = () => {
               transition={{ duration: 0.3 }}
               className="lg:hidden border-t border-gray-700/50 bg-gray-800/95 backdrop-blur-xl rounded-b-2xl"
             >
-              <div className="px-6 py-8 space-y-4">
+              <div className="px-4 py-6 space-y-3">
                 <Link 
                   to="/" 
                   onClick={handleMobileMenuToggle} 
-                  className={`flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white ${theme.bg} hover:bg-gray-700/50 rounded-2xl transition-all duration-300 font-medium border border-gray-700/30 hover:${theme.border} backdrop-blur-sm`}
+                  className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-700/50 rounded-lg transition-all duration-300 font-medium border border-gray-700/30 hover:border-purple-500/20"
                 >
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${theme.gradient} flex items-center justify-center shadow-lg`}>
-                    <i className="fa-solid fa-home text-white text-sm"></i>
-                  </div>
-                  <span className="font-['Roboto']">Home</span>
+                  <span className="font-roboto">Home</span>
                 </Link>
                 
                 <Link 
                   to="/banned" 
                   onClick={handleMobileMenuToggle} 
-                  className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-red-500/10 hover:bg-red-500/20 rounded-2xl transition-all duration-300 font-medium border border-red-500/20 hover:border-red-500/30 backdrop-blur-sm"
+                  className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-red-500/20 rounded-lg transition-all duration-300 font-medium border border-red-500/20 hover:border-red-500/30"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg">
-                    <i className="fa-solid  text-white text-sm"></i>
-                  </div>
                   <span className="font-roboto">Banned Content</span>
                 </Link>
                 
                 <Link 
                   to="/unknown" 
                   onClick={handleMobileMenuToggle} 
-                  className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-gray-500/10 hover:bg-gray-500/20 rounded-2xl transition-all duration-300 font-medium border border-gray-500/20 hover:border-gray-500/30 backdrop-blur-sm"
+                  className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-500/20 rounded-lg transition-all duration-300 font-medium border border-gray-500/20 hover:border-gray-500/30"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center shadow-lg">
-                    <i className="fa-solid  text-white text-sm"></i>
-                  </div>
                   <span className="font-roboto">Unknown Content</span>
                 </Link>
                 
@@ -325,11 +316,8 @@ const HeaderLogged: React.FC = () => {
                   <Link 
                     to="/plans" 
                     onClick={handleMobileMenuToggle} 
-                    className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-yellow-500/10 hover:bg-yellow-500/20 rounded-2xl transition-all duration-300 font-medium border border-yellow-500/20 hover:border-yellow-500/30 backdrop-blur-sm"
+                    className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-yellow-500/20 rounded-lg transition-all duration-300 font-medium border border-yellow-500/20 hover:border-yellow-500/30"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-500 flex items-center justify-center shadow-lg">
-                      <i className="fa-solid fa-crown text-black text-sm"></i>
-                    </div>
                     <span className="font-roboto">Plans</span>
                   </Link>
                 )}
@@ -339,11 +327,8 @@ const HeaderLogged: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={handleMobileMenuToggle} 
-                  className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-purple-500/10 hover:bg-purple-500/20 rounded-2xl transition-all duration-300 font-medium border border-purple-500/20 hover:border-purple-500/30 backdrop-blur-sm"
+                  className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-500/20 rounded-lg transition-all duration-300 font-medium border border-purple-500/20 hover:border-purple-500/30"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg">
-                    <i className="fab fa-discord text-white text-sm"></i>
-                  </div>
                   <span className="font-roboto">Discord</span>
                 </a>
                 
@@ -352,22 +337,16 @@ const HeaderLogged: React.FC = () => {
                     <Link
                       to="/admin/settings"
                       onClick={handleMobileMenuToggle}
-                      className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-red-500/10 hover:bg-red-500/20 rounded-2xl transition-all duration-300 font-medium border border-red-500/20 hover:border-red-500/30 backdrop-blur-sm"
+                      className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-red-500/20 rounded-lg transition-all duration-300 font-medium border border-red-500/20 hover:border-red-500/30"
                     >
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg">
-                        <i className="fa-solid fa-shield text-white text-sm"></i>
-                      </div>
-                      <span className="font-['Roboto']">Admin Panel</span>
+                      <span className="font-roboto">Admin Panel</span>
                     </Link>
                     <Link 
                       to="/admin/stats" 
                       onClick={handleMobileMenuToggle}
-                      className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-green-500/10 hover:bg-green-500/20 rounded-2xl transition-all duration-300 font-medium border border-green-500/20 hover:border-green-500/30 backdrop-blur-sm"
+                      className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-green-500/20 rounded-lg transition-all duration-300 font-medium border border-green-500/20 hover:border-green-500/30"
                     >
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-lg">
-                        <i className="fa-solid fa-chart-line text-white text-sm"></i>
-                      </div>
-                      <span className="font-['Roboto']">Statistics</span>
+                      <span className="font-roboto">Statistics</span>
                     </Link>
                   </>
                 )}
@@ -375,15 +354,9 @@ const HeaderLogged: React.FC = () => {
                   <Link
                     to="/vip"
                     onClick={handleMobileMenuToggle}
-                    className="flex items-center gap-4 px-6 py-4 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-black font-bold rounded-2xl shadow-lg transition-all duration-300 border border-yellow-400/30 mt-4"
+                    className="block px-4 py-3 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-black font-bold rounded-lg shadow-lg transition-all duration-300 border border-yellow-400/30 mt-4 text-center"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-black/20 flex items-center justify-center relative">
-                      <i className="fa-solid fa-crown text-yellow-300 text-sm animate-pulse"></i>
-                      <div className="absolute inset-0 animate-ping">
-                        <i className="fa-solid fa-crown text-yellow-600/50 text-sm"></i>
-                      </div>
-                    </div>
-                    <span className="font-['Orbitron'] tracking-wide">VIP ACCESS</span>
+                    <span className="font-orbitron tracking-wide">VIP ACCESS</span>
                   </Link>
                 )}
               </div>

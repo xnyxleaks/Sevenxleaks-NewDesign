@@ -241,7 +241,7 @@ const UnknownContentDetails = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-2xl sm:text-3xl font-bold text-white mb-4"
+              className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-4 break-words"
             >
               {content.name}
             </motion.h1>
@@ -254,7 +254,7 @@ const UnknownContentDetails = () => {
                 className="flex items-center gap-2 px-3 py-1.5 bg-gray-700/50 rounded-lg border border-gray-600/50 backdrop-blur-sm"
               >
                 <Calendar className={`w-4 h-4 ${minimalistTheme.accent}`} />
-                <span className="text-gray-300 text-sm">
+                <span className="text-gray-300 text-xs sm:text-sm">
                   {formatDate(content.postDate)}
                 </span>
               </motion.div>
@@ -266,13 +266,13 @@ const UnknownContentDetails = () => {
                 className={`flex items-center gap-2 px-3 py-1.5 bg-${minimalistTheme.primary}/20 ${minimalistTheme.accent} rounded-lg border ${minimalistTheme.border} backdrop-blur-sm`}
               >
                 <Tag className="w-4 h-4" />
-                <span className="font-medium text-sm">{content.category}</span>
+                <span className="font-medium text-xs sm:text-sm">{content.category}</span>
               </motion.div>
             </div>
           </div>
 
           {/* Download Section */}
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -308,7 +308,7 @@ const UnknownContentDetails = () => {
                   <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-lg">
                     <Crown className="w-4 h-4 text-black" />
                   </div>
-                  <h3 className="text-lg font-bold text-yellow-400">Upgrade to VIP</h3>
+                  <h3 className="text-base sm:text-lg font-bold text-yellow-400">Upgrade to VIP</h3>
                 </div>
 
                 <button
@@ -316,9 +316,10 @@ const UnknownContentDetails = () => {
                   onClick={() => setBenefitsOpen((v) => !v)}
                   aria-expanded={benefitsOpen}
                   aria-controls="vip-benefits"
-                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-yellow-500/15 border border-yellow-500/30 text-yellow-300 rounded-md text-xs font-medium transition-all"
+                  className="inline-flex items-center gap-2 px-2 sm:px-3 py-1.5 bg-yellow-500/15 border border-yellow-500/30 text-yellow-300 rounded-md text-xs font-medium transition-all"
                 >
-                  {benefitsOpen ? "Hide benefits" : "Show benefits"}
+                  <span className="hidden sm:inline">{benefitsOpen ? "Hide benefits" : "Show benefits"}</span>
+                  <span className="sm:hidden">{benefitsOpen ? "Hide" : "Show"}</span>
                   <ChevronDown
                     className={`w-4 h-4 transition-transform ${benefitsOpen ? "rotate-180" : ""}`}
                   />
@@ -337,7 +338,7 @@ const UnknownContentDetails = () => {
                   "Premium download speeds",
                   "Exclusive VIP content",
                 ].map((benefit, index) => (
-                  <div key={index} className="flex items-center gap-2 text-gray-300 text-sm">
+                  <div key={index} className="flex items-center gap-2 text-gray-300 text-xs sm:text-sm">
                     <div className="w-4 h-4 bg-green-500/20 rounded-full flex items-center justify-center">
                       <i className="fa-solid fa-check text-green-400 text-xs"></i>
                     </div>
@@ -348,7 +349,7 @@ const UnknownContentDetails = () => {
 
               <Link
                 to="/plans"
-                className="inline-flex items-center gap-2 w-full justify-center px-4 py-2.5 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-yellow-500/30 text-sm"
+                className="inline-flex items-center gap-2 w-full justify-center px-4 py-2.5 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-yellow-500/30 text-xs sm:text-sm"
               >
                 <Crown className="w-4 h-4" />
                 <span>Unlock VIP Access</span>
