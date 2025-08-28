@@ -77,7 +77,7 @@ const BannedContent: React.FC = () => {
       if (searchName) {
         params.append('search', searchName);
       }
-      if (region) params.append('region', region);
+      
       if (selectedMonth) {
         params.append('month', selectedMonth);
       }
