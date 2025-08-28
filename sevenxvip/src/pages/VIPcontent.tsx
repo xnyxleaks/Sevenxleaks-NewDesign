@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
-import { Crown, Search, Filter, Calendar, Plus, Star } from "lucide-react";
+import { Crown, Calendar, Plus, Star } from "lucide-react";
 import { LinkItem } from "../../types/Userdatatypes";
 
 type Category = {
@@ -56,30 +56,31 @@ const VIPContent: React.FC = () => {
       });
 
       if (searchName) {
-        params.append('search', searchName);
+        params.append("search", searchName);
       }
       if (selectedCategory) {
-        params.append('category', selectedCategory);
+        params.append("category", selectedCategory);
       }
-      if (dateFilter !== 'all') {
+      if (dateFilter !== "all") {
         const today = new Date();
-        let targetDate = new Date();
-        
+        const targetDate = new Date(today);
+
         switch (dateFilter) {
-          case 'today':
-            break;
-          case 'yesterday':
+          case "yesterday":
             targetDate.setDate(today.getDate() - 1);
             break;
-          case '7days':
+          case "7days":
             targetDate.setDate(today.getDate() - 7);
             break;
         }
-        
-        params.append('month', (targetDate.getMonth() + 1).toString().padStart(2, '0'));
+
+        params.append(
+          "month",
+          (targetDate.getMonth() + 1).toString().padStart(2, "0")
+        );
       }
 
-      const endpoint = searchName ? '/vipcontent/search' : '/vipcontent';
+      const endpoint = searchName ? "/vipcontent/search" : "/vipcontent";
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}${endpoint}?${params}`,
         {
@@ -114,7 +115,7 @@ const VIPContent: React.FC = () => {
       ).map((category) => ({
         id: category,
         name: category,
-        category: category,
+        category,
       }));
 
       setCategories((prev) => {
@@ -168,15 +169,13 @@ const VIPContent: React.FC = () => {
 
   const groupPostsByDate = (posts: LinkItem[]) => {
     const grouped: { [key: string]: LinkItem[] } = {};
-    
-    posts.forEach(post => {
+    posts.forEach((post) => {
       const dateKey = formatDateHeader(post.postDate || post.createdAt);
       if (!grouped[dateKey]) {
         grouped[dateKey] = [];
       }
       grouped[dateKey].push(post);
     });
-    
     return grouped;
   };
 
@@ -186,7 +185,7 @@ const VIPContent: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
       <Helmet>
         <title>VIP Content - Sevenxleaks</title>
-        <link rel="canonical" href="https://sevenxleaks.com/vip" />
+        <link href="https://sevenxleaks.com/vip" />
       </Helmet>
 
       {/* Background Effects */}
@@ -195,61 +194,75 @@ const VIPContent: React.FC = () => {
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl animate-pulse"></div>
 
       {/* Filter Bar */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="bg-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-6 shadow-2xl">
-          <div className="flex items-center gap-4 bg-gray-700/50 rounded-2xl px-6 py-4 mb-6 border border-gray-600/30 shadow-inner">
-            <Search className="text-yellow-400 w-5 h-5" />
-            <input
-              type="text"
-              className="flex-1 bg-transparent border-none outline-none text-white placeholder-gray-400 font-roboto text-lg"
-              placeholder="Search VIP content..."
-              value={searchName}
-              onChange={(e) => setSearchName(e.target.value)}
-            />
-            {searchLoading && (
-              <div className="ml-3">
-                <div className="w-5 h-5 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
-              </div>
-            )}
-          </div>
+          <div className="flex flex-col lg:flex-row items-center gap-4 bg-gray-700/50 rounded-2xl px-6 py-4 border border-gray-600/30 shadow-inner">
+            {/* Search Bar */}
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <i className="fa-solid fa-search text-yellow-400 text-lg"></i>
+              <input
+                type="text"
+                className="flex-1 bg-transparent border-none outline-none text-white placeholder-gray-400 text-lg"
+                placeholder="Search VIP Content..."
+                value={searchName}
+                onChange={(e) => setSearchName(e.target.value)}
+              />
+              {searchLoading && (
+                <div className="w-4 h-4 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
+              )}
+            </div>
 
-          <div className="flex flex-wrap items-center gap-3 mb-6">
-            {["all", "today", "yesterday", "7days"].map((filter) => (
-              <button
-                key={filter}
-                className={`px-6 py-3 rounded-2xl font-semibold transition-all duration-300 border backdrop-blur-sm font-roboto ${
-                  dateFilter === filter
-                    ? "bg-gradient-to-r from-yellow-500 to-yellow-600 text-black shadow-lg shadow-yellow-500/30 border-yellow-400/50 transform scale-105"
-                    : "bg-gray-700/50 text-gray-300 hover:bg-yellow-500/20 hover:text-yellow-300 border-gray-600/50 hover:border-yellow-500/30 hover:shadow-lg hover:shadow-yellow-500/10"
-                }`}
-                onClick={() => setDateFilter(filter)}
-              >
-                {filter === "all"
-                  ? "All"
-                  : filter === "7days"
-                  ? "7 Days"
-                  : filter.charAt(0).toUpperCase() + filter.slice(1)}
-              </button>
-            ))}
-
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-6 py-3 bg-gray-700/50 border border-gray-600/50 rounded-2xl text-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 focus:border-yellow-500/50 transition-all duration-300 backdrop-blur-sm font-roboto hover:bg-gray-600/50"
-            >
-              <option value="">All Categories</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.category}>
-                  {category.name}
-                </option>
+            {/* Filter Buttons */}
+            <div className="flex items-center gap-2">
+              {["all", "today", "yesterday", "7days"].map((filter) => (
+                <button
+                  key={filter}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 border whitespace-nowrap ${
+                    dateFilter === filter
+                      ? "bg-yellow-500 text-white border-yellow-400"
+                      : "bg-gray-700/50 text-gray-300 hover:bg-yellow-500/20 border-gray-600/50"
+                  }`}
+                  onClick={() => setDateFilter(filter)}
+                >
+                  {filter === "all"
+                    ? "All"
+                    : filter === "7days"
+                    ? "7 Days"
+                    : filter.charAt(0).toUpperCase() + filter.slice(1)}
+                </button>
               ))}
-            </select>
-          </div>
+            </div>
 
-          <div className="flex items-center gap-4">
-            <button className="p-4 bg-gray-700/50 hover:bg-yellow-500/20 text-gray-300 hover:text-yellow-300 rounded-2xl transition-all duration-300 border border-gray-600/50 hover:border-yellow-500/50 shadow-lg hover:shadow-yellow-500/10 backdrop-blur-sm">
-              <Calendar className="w-5 h-5" />
-            </button>
+            {/* Category Select */}
+            <div className="flex items-center gap-2">
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="px-3 py-1.5 bg-gray-700/50 border border-gray-600/50 rounded-lg text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-yellow-500/50 transition-all duration-300 hover:bg-gray-600/50 min-w-[120px]"
+              >
+                <option value="">All Categories</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.category}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+
+              {/* Action Buttons */}
+              <button
+                className="p-2 bg-gray-700/50 hover:bg-yellow-500/20 text-gray-300 hover:text-yellow-300 rounded-lg transition-all duration-300 border border-gray-600/50"
+                title="Calendar View"
+              >
+                <i className="fa-regular fa-calendar text-sm"></i>
+              </button>
+              <button
+                className="p-2 bg-gray-700/50 hover:bg-yellow-500/20 text-gray-300 hover:text-yellow-300 rounded-lg transition-all duration-300 border border-gray-600/50"
+                title="Switch to Asian"
+                onClick={() => navigate("/western")}
+              >
+                <i className="fa-solid fa-repeat text-sm"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -272,79 +285,99 @@ const VIPContent: React.FC = () => {
                     <h2 className="text-2xl font-bold text-gray-300 mb-8 pb-4 border-b border-gray-700/50 font-orbitron flex items-center gap-4">
                       <div className="w-3 h-8 bg-gradient-to-b from-yellow-500 to-yellow-600 rounded-full shadow-lg shadow-yellow-500/30"></div>
                       <Crown className="w-6 h-6 text-yellow-400" />
-                      <span className="bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent">VIP Content - {date}</span>
+                      <span className="bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent">
+                        VIP Content - {date}
+                      </span>
                     </h2>
                     <div className="space-y-4">
                       {posts
-                        .sort((a, b) => new Date(b.postDate || b.createdAt).getTime() - new Date(a.postDate || a.createdAt).getTime())
+                        .sort(
+                          (a, b) =>
+                            new Date(b.postDate || b.createdAt).getTime() -
+                            new Date(a.postDate || a.createdAt).getTime()
+                        )
                         .map((link, index) => (
-                        <motion.div
-                          key={link.id}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.05 }}
-                          className="group bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700/50 hover:border-yellow-500/50 rounded-2xl p-6 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl hover:shadow-yellow-500/10 transform hover:scale-[1.02]"
-                          onClick={() => {
-                            const contentType = link.contentType || 'vip';
-                            switch (contentType) {
-                              case 'asian':
-                                navigate(`/asian/${link.slug}`);
-                                break;
-                              case 'western':
-                                navigate(`/western/${link.slug}`);
-                                break;
-                              case 'banned':
-                                navigate(`/banned/${link.slug}`);
-                                break;
-                              case 'unknown':
-                                navigate(`/unknown/${link.slug}`);
-                                break;
-                              default:
-                                navigate(`/vip/${link.slug}`);
-                            }
-                          }}
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4 flex-1">
-                              {link.contentType && link.contentType !== 'vip' && (
-                                <div className={`w-2 h-2 rounded-full ${
-                                  link.contentType === 'asian' ? 'bg-purple-400' :
-                                  link.contentType === 'western' ? 'bg-orange-400' :
-                                  link.contentType === 'banned' ? 'bg-red-400' :
-                                  link.contentType === 'unknown' ? 'bg-gray-400' : 'bg-yellow-400'
-                                }`}></div>
-                              )}
-                              <Crown className="w-5 h-5 text-yellow-400 animate-pulse" />
-                              <h3 className="text-lg font-bold text-white group-hover:text-yellow-300 transition-colors duration-300 font-orbitron relative">
-                                {link.name}
-                                <div className="absolute -bottom-1 left-0 w-16 h-0.5 bg-gradient-to-r from-yellow-500 to-yellow-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                              </h3>
-                              <div className="h-px bg-gradient-to-r from-yellow-500/50 to-transparent flex-1 max-w-20 group-hover:from-yellow-400/70 transition-all duration-300"></div>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              {recentLinks.includes(link) && (
-                                <span className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black text-xs font-bold rounded-full shadow-lg animate-pulse border border-yellow-400/30 font-roboto">
-                                  <Star className="w-3 h-3 mr-1" />
-                                  NEW
+                          <motion.div
+                            key={link.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.05 }}
+                            className="group bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700/50 hover:border-yellow-500/50 rounded-2xl p-6 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl hover:shadow-yellow-500/10 transform hover:scale-[1.02]"
+                            onClick={() => {
+                              const contentType = link.contentType || "vip";
+                              switch (contentType) {
+                                case "asian":
+                                  navigate(`/asian/${link.slug}`);
+                                  break;
+                                case "western":
+                                  navigate(`/western/${link.slug}`);
+                                  break;
+                                case "banned":
+                                  navigate(`/banned/${link.slug}`);
+                                  break;
+                                case "unknown":
+                                  navigate(`/unknown/${link.slug}`);
+                                  break;
+                                default:
+                                  navigate(`/vip/${link.slug}`);
+                              }
+                            }}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-4 flex-1">
+                                {link.contentType && link.contentType !== "vip" && (
+                                  <div
+                                    className={`w-2 h-2 rounded-full ${
+                                      link.contentType === "asian"
+                                        ? "bg-purple-400"
+                                        : link.contentType === "western"
+                                        ? "bg-yellow-400"
+                                        : link.contentType === "banned"
+                                        ? "bg-red-400"
+                                        : link.contentType === "unknown"
+                                        ? "bg-gray-400"
+                                        : "bg-yellow-400"
+                                    }`}
+                                  ></div>
+                                )}
+                                <Crown className="w-5 h-5 text-yellow-400 animate-pulse" />
+                                <h3 className="text-lg font-bold text-white group-hover:text-yellow-300 transition-colors duration-300 font-orbitron relative">
+                                  {link.name}
+                                  <div className="absolute -bottom-1 left-0 w-16 h-0.5 bg-gradient-to-r from-yellow-500 to-yellow-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                </h3>
+                                <div className="h-px bg-gradient-to-r from-yellow-500/50 to-transparent flex-1 max-w-20 group-hover:from-yellow-400/70 transition-all duration-300"></div>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                {recentLinks.includes(link) && (
+                                  <span className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black text-xs font-bold rounded-full shadow-lg animate-pulse border border-yellow-400/30 font-roboto">
+                                    <Star className="w-3 h-3 mr-1" />
+                                    NEW
+                                  </span>
+                                )}
+                                {link.contentType && link.contentType !== "vip" && (
+                                  <span
+                                    className={`inline-flex items-center px-3 py-1 text-xs font-bold rounded-full ${
+                                      link.contentType === "asian"
+                                        ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
+                                        : link.contentType === "western"
+                                        ? "bg-yellow-500/20 text-yellow-300 border border-yellow-500/30"
+                                        : link.contentType === "banned"
+                                        ? "bg-red-500/20 text-red-300 border border-red-500/30"
+                                        : link.contentType === "unknown"
+                                        ? "bg-gray-500/20 text-gray-300 border-gray-500/30"
+                                        : ""
+                                    }`}
+                                  >
+                                    {link.contentType.toUpperCase()}
+                                  </span>
+                                )}
+                                <span className="inline-flex items-center px-4 py-2 bg-yellow-500/20 text-yellow-300 text-sm font-medium rounded-full border border-yellow-500/30 backdrop-blur-sm font-roboto">
+                                  <Crown className="w-3 h-3 mr-2" />
+                                  {link.category}
                                 </span>
-                              )}
-                              {link.contentType && link.contentType !== 'vip' && (
-                                <span className={`inline-flex items-center px-3 py-1 text-xs font-bold rounded-full ${
-                                  link.contentType === 'asian' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' :
-                                  link.contentType === 'western' ? 'bg-orange-500/20 text-orange-300 border border-orange-500/30' :
-                                  link.contentType === 'banned' ? 'bg-red-500/20 text-red-300 border border-red-500/30' :
-                                  link.contentType === 'unknown' ? 'bg-gray-500/20 text-gray-300 border border-gray-500/30' : ''
-                                }`}>
-                                  {link.contentType.toUpperCase()}
-                                </span>
-                              )}
-                              <span className="inline-flex items-center px-4 py-2 bg-yellow-500/20 text-yellow-300 text-sm font-medium rounded-full border border-yellow-500/30 backdrop-blur-sm font-roboto">
-                                <Crown className="w-3 h-3 mr-2" />
-                                {link.category}
-                              </span>
+                              </div>
                             </div>
-                          </div>
-                        </motion.div>
+                          </motion.div>
                         ))}
                     </div>
                   </div>
@@ -379,9 +412,12 @@ const VIPContent: React.FC = () => {
               <div className="mb-8">
                 <Crown className="w-16 h-16 text-gray-500 mx-auto" />
               </div>
-              <h3 className="text-3xl font-bold mb-4 text-white font-orbitron">No VIP Content Found</h3>
+              <h3 className="text-3xl font-bold mb-4 text-white font-orbitron">
+                No VIP Content Found
+              </h3>
               <p className="text-gray-400 text-lg font-roboto">
-                Try adjusting your search or filters to find what you're looking for.
+                Try adjusting your search or filters to find what you're looking
+                for.
               </p>
             </div>
           )}
