@@ -26,22 +26,24 @@ export interface Userdatatypes {
   createdAt: string
 }
 
-export type LinkItem = {
-    id: number | string;
-    name: string;
-    mega: string;
-    mega2?: string;
-    pixeldrain?: string;
-    AdmavenMega?: string;
-    AdmavenMega2?: string;
-    AdmavenPixeldrain?: string;
-    category: string;
-    postDate: string;
-    createdAt: string;
-    updatedAt: string;
-    slug: string;
-    thumbnail?: string;
-  };
+
+ export type LinkItem = {
+     id: number | string;
+     name: string;
+     mega: string;
+     mega2?: string;
+     pixeldrain?: string;
+     AdmavenMega?: string;
+     AdmavenMega2?: string;
+     AdmavenPixeldrain?: string;
+     category: string;
+     postDate: string;
+     createdAt: string;
+     updatedAt: string;
+     slug: string;
+     thumbnail?: string;
+    contentType?: 'asian' | 'western' | 'banned' | 'unknown' | 'vip';
+   };
 
 export type Reaction = {
   emoji: string;

@@ -12,7 +12,7 @@ const Loading: React.FC<LoadingProps> = ({
   text = 'Loading...'
 }) => {
   const containerClasses = fullScreen 
-    ? "fixed inset-0 bg-gray-900/80 backdrop-blur-sm flex items-center justify-center z-50" 
+    ? "fixed inset-0 bg-gray-800/70 backdrop-blur-sm flex items-center justify-center z-50" 
     : "flex flex-col items-center justify-center p-8";
 
   return (
@@ -26,14 +26,14 @@ const Loading: React.FC<LoadingProps> = ({
         <div className="relative">
           {/* Outer spinning circle */}
           <motion.div
-            className="w-16 h-16 rounded-full border-4 border-red-500/20"
+            className="w-16 h-16 rounded-full border-4 border-gray-400/30"
             animate={{ rotate: 360 }}
             transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
           />
           
           {/* Inner spinning circle */}
           <motion.div
-            className="absolute inset-0 rounded-full border-4 border-transparent border-t-red-500"
+            className="absolute inset-0 rounded-full border-4 border-transparent border-t-gray-400"
             animate={{ rotate: -360 }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
           />
@@ -45,25 +45,25 @@ const Loading: React.FC<LoadingProps> = ({
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <Loader2 className="w-6 h-6 text-red-500 animate-spin" />
+            <Loader2 className="w-6 h-6 text-gray-400 animate-spin" />
           </motion.div>
         </div>
 
-        {/* Loading text with gradient */}
+        {/* Loading text */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
           className="text-center"
         >
-          <h3 className="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-600">
+          <h3 className="text-lg font-semibold text-gray-200">
             {text}
           </h3>
           <div className="mt-2 flex gap-1">
             {[...Array(3)].map((_, i) => (
               <motion.div
                 key={i}
-                className="w-1.5 h-1.5 rounded-full bg-red-500"
+                className="w-1.5 h-1.5 rounded-full bg-gray-400"
                 initial={{ opacity: 0.3 }}
                 animate={{ opacity: 1 }}
                 transition={{

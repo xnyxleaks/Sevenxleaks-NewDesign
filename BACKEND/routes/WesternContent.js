@@ -5,6 +5,7 @@ const verifyToken = require('../Middleware/verifyToken');
 const isAdmin = require('../Middleware/isAdmin');
 const { Op, Sequelize } = require('sequelize');
 const { v4: uuidv4 } = require('uuid');
+const { AsianContent, BannedContent, UnknownContent, Vip } = require('../models');
 
 function insertRandomChar(base64Str) {
   const letters = 'abcdefghijklmnopqrstuvwxyz';
@@ -46,42 +47,122 @@ router.get('/search', async (req, res) => {
     const limit = parseInt(req.query.limit) || 20;
     const offset = (page - 1) * limit;
 
-    const { search, category, month, region, sortBy = 'id', sortOrder = 'ASC' } = req.query;
+    const { search, category, month, region, sortBy = 'postDate', sortOrder = 'DESC' } = req.query;
 
-    const where = {};
+    let allResults = [];
+    
+    // Busca universal em todas as tabelas
     if (search) {
-      where.name = { [Op.iLike]: `%${search}%` };
-    }
-    if (category) {
-      where.category = category;
-    }
-    if (region) {
-      where.region = region;
-    }
-    if (month) {
-      where.postDate = {
-        [Op.and]: [
-          Sequelize.where(
-            Sequelize.fn('EXTRACT', Sequelize.literal('MONTH FROM "postDate"')),
-            month
-          )
-        ]
-      };
+      const searchWhere = { name: { [Op.iLike]: `%${search}%` } };
+      
+      // Adiciona filtro de mês se especificado
+      if (month) {
+        searchWhere.postDate = {
+          [Op.and]: [
+            Sequelize.where(
+              Sequelize.fn('EXTRACT', Sequelize.literal('MONTH FROM "postDate"')),
+              month
+            )
+          ]
+        };
+      }
+      
+      // Busca em AsianContent
+      const asianResults = await AsianContent.findAll({
+        where: searchWhere,
+        order: [[sortBy, sortOrder]],
+        raw: true
+      });
+      
+      // Busca em WesternContent
+      const westernResults = await WesternContent.findAll({
+        where: searchWhere,
+        order: [[sortBy, sortOrder]],
+        raw: true
+      });
+      
+      // Busca em BannedContent
+      const bannedResults = await BannedContent.findAll({
+        where: searchWhere,
+        order: [[sortBy, sortOrder]],
+        raw: true
+      });
+      
+      // Busca em UnknownContent
+      const unknownResults = await UnknownContent.findAll({
+        where: searchWhere,
+        order: [[sortBy, sortOrder]],
+        raw: true
+      });
+      
+      // Busca em VIP
+      const vipResults = await Vip.findAll({
+        where: searchWhere,
+        order: [[sortBy, sortOrder]],
+        raw: true
+      });
+      
+      // Adiciona tipo de conteúdo para identificação
+      const asianWithType = asianResults.map(item => ({ ...item, contentType: 'asian' }));
+      const westernWithType = westernResults.map(item => ({ ...item, contentType: 'western' }));
+      const bannedWithType = bannedResults.map(item => ({ ...item, contentType: 'banned' }));
+      const unknownWithType = unknownResults.map(item => ({ ...item, contentType: 'unknown' }));
+      const vipWithType = vipResults.map(item => ({ ...item, contentType: 'vip' }));
+      
+      // Combina todos os resultados
+      allResults = [
+        ...asianWithType,
+        ...westernWithType,
+        ...bannedWithType,
+        ...unknownWithType,
+        ...vipWithType
+      ];
+      
+      // Ordena por data
+      allResults.sort((a, b) => {
+        const dateA = new Date(a.postDate);
+        const dateB = new Date(b.postDate);
+        return sortOrder === 'DESC' ? dateB.getTime() - dateA.getTime() : dateA.getTime() - dateB.getTime();
+      });
+    } else {
+      // Se não há busca, retorna apenas conteúdo western
+      const where = {};
+      if (category) {
+        where.category = category;
+      }
+      if (region) {
+        where.region = region;
+      }
+      if (month) {
+        where.postDate = {
+          [Op.and]: [
+            Sequelize.where(
+              Sequelize.fn('EXTRACT', Sequelize.literal('MONTH FROM "postDate"')),
+              month
+            )
+          ]
+        };
+      }
+      
+      const results = await WesternContent.findAll({
+        where,
+        order: [[sortBy, sortOrder]],
+        raw: true
+      });
+      
+      allResults = results.map(item => ({ ...item, contentType: 'western' }));
     }
 
-    const { count, rows } = await WesternContent.findAndCountAll({
-      where,
-      order: [[sortBy, sortOrder]],
-      limit,
-      offset
-    });
+    // Paginação manual
+    const total = allResults.length;
+    const paginatedResults = allResults.slice(offset, offset + limit);
 
     const payload = {
       page,
       perPage: limit,
-      total: count,
-      totalPages: Math.ceil(count / limit),
-      data: rows
+      total,
+      totalPages: Math.ceil(total / limit),
+      data: paginatedResults
     };
 
     const encodedPayload = encodePayloadToBase64(payload);

@@ -50,22 +50,44 @@ const VIPContent: React.FC = () => {
 
       const params = new URLSearchParams({
         page: page.toString(),
-        search: searchName,
-        category: selectedCategory,
         sortBy: "postDate",
         sortOrder: "DESC",
         limit: "24",
       });
 
+      if (searchName) {
+        params.append('search', searchName);
+      }
+      if (selectedCategory) {
+        params.append('category', selectedCategory);
+      }
+      if (dateFilter !== 'all') {
+        const today = new Date();
+        let targetDate = new Date();
+        
+        switch (dateFilter) {
+          case 'today':
+            break;
+          case 'yesterday':
+            targetDate.setDate(today.getDate() - 1);
+            break;
+          case '7days':
+            targetDate.setDate(today.getDate() - 7);
+            break;
+        }
+        
+        params.append('month', (targetDate.getMonth() + 1).toString().padStart(2, '0'));
+      }
+
+      const endpoint = searchName ? '/vipcontent/search' : '/vipcontent';
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/vipcontent/search?${params}`,
+        `${import.meta.env.VITE_BACKEND_URL}${endpoint}?${params}`,
         {
           headers: {
             "x-api-key": `${import.meta.env.VITE_FRONTEND_API_KEY}`,
           },
         }
       );
-
       if (!response.data?.data) {
         throw new Error("Invalid server response");
       }
@@ -262,10 +284,36 @@ const VIPContent: React.FC = () => {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.05 }}
                           className="group bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700/50 hover:border-yellow-500/50 rounded-2xl p-6 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl hover:shadow-yellow-500/10 transform hover:scale-[1.02]"
-                          onClick={() => navigate(`/vip/${link.slug}`)}
+                          onClick={() => {
+                            const contentType = link.contentType || 'vip';
+                            switch (contentType) {
+                              case 'asian':
+                                navigate(`/asian/${link.slug}`);
+                                break;
+                              case 'western':
+                                navigate(`/western/${link.slug}`);
+                                break;
+                              case 'banned':
+                                navigate(`/banned/${link.slug}`);
+                                break;
+                              case 'unknown':
+                                navigate(`/unknown/${link.slug}`);
+                                break;
+                              default:
+                                navigate(`/vip/${link.slug}`);
+                            }
+                          }}
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4 flex-1">
+                              {link.contentType && link.contentType !== 'vip' && (
+                                <div className={`w-2 h-2 rounded-full ${
+                                  link.contentType === 'asian' ? 'bg-purple-400' :
+                                  link.contentType === 'western' ? 'bg-orange-400' :
+                                  link.contentType === 'banned' ? 'bg-red-400' :
+                                  link.contentType === 'unknown' ? 'bg-gray-400' : 'bg-yellow-400'
+                                }`}></div>
+                              )}
                               <Crown className="w-5 h-5 text-yellow-400 animate-pulse" />
                               <h3 className="text-lg font-bold text-white group-hover:text-yellow-300 transition-colors duration-300 font-orbitron relative">
                                 {link.name}
@@ -278,6 +326,16 @@ const VIPContent: React.FC = () => {
                                 <span className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black text-xs font-bold rounded-full shadow-lg animate-pulse border border-yellow-400/30 font-roboto">
                                   <Star className="w-3 h-3 mr-1" />
                                   NEW
+                                </span>
+                              )}
+                              {link.contentType && link.contentType !== 'vip' && (
+                                <span className={`inline-flex items-center px-3 py-1 text-xs font-bold rounded-full ${
+                                  link.contentType === 'asian' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' :
+                                  link.contentType === 'western' ? 'bg-orange-500/20 text-orange-300 border border-orange-500/30' :
+                                  link.contentType === 'banned' ? 'bg-red-500/20 text-red-300 border border-red-500/30' :
+                                  link.contentType === 'unknown' ? 'bg-gray-500/20 text-gray-300 border border-gray-500/30' : ''
+                                }`}>
+                                  {link.contentType.toUpperCase()}
                                 </span>
                               )}
                               <span className="inline-flex items-center px-4 py-2 bg-yellow-500/20 text-yellow-300 text-sm font-medium rounded-full border border-yellow-500/30 backdrop-blur-sm font-roboto">

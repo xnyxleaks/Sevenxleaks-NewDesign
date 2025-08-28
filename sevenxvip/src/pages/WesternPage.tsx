@@ -12,6 +12,7 @@ type LinkItem = {
   slug: string;
   thumbnail?: string;
   createdAt: string;
+  contentType?: string;
 };
 
 type Category = {
@@ -60,22 +61,44 @@ const WesternPage: React.FC = () => {
 
       const params = new URLSearchParams({
         page: page.toString(),
-        search: searchName,
-        category: selectedCategory,
         sortBy: "postDate",
         sortOrder: "DESC",
         limit: "24",
       });
 
+      if (searchName) {
+        params.append('search', searchName);
+      }
+      if (selectedCategory) {
+        params.append('category', selectedCategory);
+      }
+      if (dateFilter !== 'all') {
+        const today = new Date();
+        let targetDate = new Date();
+        
+        switch (dateFilter) {
+          case 'today':
+            break;
+          case 'yesterday':
+            targetDate.setDate(today.getDate() - 1);
+            break;
+          case '7days':
+            targetDate.setDate(today.getDate() - 7);
+            break;
+        }
+        
+        params.append('month', (targetDate.getMonth() + 1).toString().padStart(2, '0'));
+      }
+
+      const endpoint = searchName ? '/westerncontent/search' : '/westerncontent';
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/westerncontent`,
+        `${import.meta.env.VITE_BACKEND_URL}${endpoint}?${params}`,
         {
           headers: {
             "x-api-key": `${import.meta.env.VITE_FRONTEND_API_KEY}`,
           },
         }
       );
-
       if (!response.data?.data) {
         throw new Error("Invalid server response");
       }
@@ -275,10 +298,36 @@ const WesternPage: React.FC = () => {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.05 }}
                           className="group bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700/50 hover:border-orange-500/50 rounded-xl p-3 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl hover:shadow-orange-500/10 transform hover:scale-[1.01]"
-                          onClick={() => navigate(`/western/${link.slug}`)}
+                          onClick={() => {
+                            const contentType = link.contentType || 'western';
+                            switch (contentType) {
+                              case 'asian':
+                                navigate(`/asian/${link.slug}`);
+                                break;
+                              case 'banned':
+                                navigate(`/banned/${link.slug}`);
+                                break;
+                              case 'unknown':
+                                navigate(`/unknown/${link.slug}`);
+                                break;
+                              case 'vip':
+                                navigate(`/vip/${link.slug}`);
+                                break;
+                              default:
+                                navigate(`/western/${link.slug}`);
+                            }
+                          }}
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4 flex-1">
+                              {link.contentType && link.contentType !== 'western' && (
+                                <div className={`w-2 h-2 rounded-full ${
+                                  link.contentType === 'asian' ? 'bg-purple-400' :
+                                  link.contentType === 'banned' ? 'bg-red-400' :
+                                  link.contentType === 'unknown' ? 'bg-gray-400' :
+                                  link.contentType === 'vip' ? 'bg-yellow-400' : 'bg-orange-400'
+                                }`}></div>
+                              )}
                               <h3 className="text-lg font-bold text-white group-hover:text-orange-300 transition-colors duration-300 font-orbitron relative">
                                 {link.name}
                                 <div className="absolute -bottom-1 left-0 w-16 h-0.5 bg-gradient-to-r from-orange-500 to-orange-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -290,6 +339,16 @@ const WesternPage: React.FC = () => {
                                 <span className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-xs font-bold rounded-full shadow-lg animate-pulse border border-orange-400/30 font-roboto">
                                   <i className="fa-solid fa-star mr-1 text-xs"></i>
                                   NEW
+                                </span>
+                              )}
+                              {link.contentType && link.contentType !== 'western' && (
+                                <span className={`inline-flex items-center px-3 py-1 text-xs font-bold rounded-full ${
+                                  link.contentType === 'asian' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' :
+                                  link.contentType === 'banned' ? 'bg-red-500/20 text-red-300 border border-red-500/30' :
+                                  link.contentType === 'unknown' ? 'bg-gray-500/20 text-gray-300 border border-gray-500/30' :
+                                  link.contentType === 'vip' ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30' : ''
+                                }`}>
+                                  {link.contentType.toUpperCase()}
                                 </span>
                               )}
                               <span className="inline-flex items-center px-4 py-2 bg-gray-700/70 text-gray-300 text-sm font-medium rounded-full border border-gray-600/50 backdrop-blur-sm font-roboto">

@@ -5,6 +5,7 @@ import { ArrowLeft, Calendar, Tag, Download, Crown, Star, Shield, Sparkles } fro
 import Loading from "../../components/Loading/Loading";
 import DownloadOptions from "../../components/DownloadOptions";
 import { motion } from "framer-motion";
+import LoadingVip from "../Loaders/LoadingVip";
 
 type ContentItem = {
   id: number;
@@ -76,7 +77,7 @@ const VIPContentDetails = () => {
   };
 
   if (loading) {
-    return <Loading />;
+    return <LoadingVip />;
   }
 
   if (error) {

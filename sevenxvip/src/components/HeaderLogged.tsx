@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import UserMenu from "../components/HeaderLogged/UserMenu";
 import { motion, AnimatePresence } from "framer-motion";
-import ThemeToggle from "./ThemeToggle";
 
 const HeaderLogged: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -266,7 +265,7 @@ const HeaderLogged: React.FC = () => {
               setIsMenuOpen={setIsMenuOpen}
             />
 
-            <ThemeToggle />
+            
 
             {/* Mobile Menu Toggle */}
             <button

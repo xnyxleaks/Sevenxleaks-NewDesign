@@ -20,6 +20,7 @@ type LinkItem = {
   thumbnail?: string;
   createdAt: string;
   region: string;
+  contentType?: string;
 };
 
 const months = [
@@ -68,19 +69,22 @@ const BannedContent: React.FC = () => {
 
       const params = new URLSearchParams({
         page: page.toString(),
-        search: searchName,
-        region: region,
         sortBy: "postDate",
         sortOrder: "DESC",
         limit: "24",
       });
 
+      if (searchName) {
+        params.append('search', searchName);
+      }
+      if (region) params.append('region', region);
       if (selectedMonth) {
         params.append('month', selectedMonth);
       }
 
+      const endpoint = searchName ? '/bannedcontent/search' : '/bannedcontent';
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/bannedcontent`,
+        `${import.meta.env.VITE_BACKEND_URL}${endpoint}?${params}`,
         {
           headers: {
             "x-api-key": `${import.meta.env.VITE_FRONTEND_API_KEY}`,
@@ -291,10 +295,36 @@ const BannedContent: React.FC = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.05 }}
                             className="group bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700/50 hover:border-red-500/50 rounded-xl p-3 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl hover:shadow-red-500/10 transform hover:scale-[1.01]"
-                            onClick={() => navigate(`/banned/${link.slug}`)}
+                            onClick={() => {
+                              const contentType = link.contentType || 'banned';
+                              switch (contentType) {
+                                case 'asian':
+                                  navigate(`/asian/${link.slug}`);
+                                  break;
+                                case 'western':
+                                  navigate(`/western/${link.slug}`);
+                                  break;
+                                case 'unknown':
+                                  navigate(`/unknown/${link.slug}`);
+                                  break;
+                                case 'vip':
+                                  navigate(`/vip/${link.slug}`);
+                                  break;
+                                default:
+                                  navigate(`/banned/${link.slug}`);
+                              }
+                            }}
                           >
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-4 flex-1">
+                                {link.contentType && link.contentType !== 'banned' && (
+                                  <div className={`w-2 h-2 rounded-full ${
+                                    link.contentType === 'asian' ? 'bg-purple-400' :
+                                    link.contentType === 'western' ? 'bg-orange-400' :
+                                    link.contentType === 'unknown' ? 'bg-gray-400' :
+                                    link.contentType === 'vip' ? 'bg-yellow-400' : 'bg-red-400'
+                                  }`}></div>
+                                )}
                                 <AlertTriangle className="w-5 h-5 text-red-400" />
                                 <h3 className="text-lg font-bold text-white group-hover:text-red-300 transition-colors duration-300 font-orbitron relative">
                                   {link.name}
@@ -307,6 +337,16 @@ const BannedContent: React.FC = () => {
                                   <span className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold rounded-full shadow-lg animate-pulse border border-red-400/30 font-roboto">
                                     <i className="fa-solid fa-star mr-1 text-xs"></i>
                                     NEW
+                                  </span>
+                                )}
+                                {link.contentType && link.contentType !== 'banned' && (
+                                  <span className={`inline-flex items-center px-3 py-1 text-xs font-bold rounded-full ${
+                                    link.contentType === 'asian' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' :
+                                    link.contentType === 'western' ? 'bg-orange-500/20 text-orange-300 border border-orange-500/30' :
+                                    link.contentType === 'unknown' ? 'bg-gray-500/20 text-gray-300 border border-gray-500/30' :
+                                    link.contentType === 'vip' ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30' : ''
+                                  }`}>
+                                    {link.contentType.toUpperCase()}
                                   </span>
                                 )}
                                 <span className="inline-flex items-center px-4 py-2 bg-gray-700/70 text-gray-300 text-sm font-medium rounded-full border border-gray-600/50 backdrop-blur-sm font-roboto">
