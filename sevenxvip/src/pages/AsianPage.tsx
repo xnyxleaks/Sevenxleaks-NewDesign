@@ -191,8 +191,8 @@ const AsianPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
       <Helmet>
-        <title>Sevenxleaks Western - Free Content</title>
-        <link rel="canonical" href="https://sevenxleaks.com/western" />
+        <title>Sevenxleaks Asian - Free Content</title>
+        <link rel="canonical" href="https://sevenxleaks.com/Asian" />
       </Helmet>
 
       {/* Filter Bar */}
@@ -260,7 +260,7 @@ const AsianPage: React.FC = () => {
               <button 
                 className="p-2 bg-gray-700/50 hover:bg-purple-500/20 text-gray-300 hover:text-purple-300 rounded-lg transition-all duration-300 border border-gray-600/50" 
                 title="Switch to Asian"
-                onClick={() => navigate('/western')}
+                onClick={() => navigate('/asian')}
               >
                 <i className="fa-solid fa-repeat text-sm"></i>
               </button>
@@ -287,14 +287,14 @@ const AsianPage: React.FC = () => {
                     <h2 className="text-xl font-bold text-gray-300 mb-4 pb-2 border-b border-gray-700/50 font-orbitron flex items-center gap-3">
                       <div
                         className={`w-3 h-8 rounded-full shadow-lg ${
-                          posts.every(p => (p.contentType || 'western') === 'western')
+                          posts.every(p => (p.contentType || 'asian') === 'asian')
                             ? 'bg-gradient-to-b from-purple-500 to-puple-600 shadow-purple-500/30'
                             : 'bg-gradient-to-b from-purple-500 to-purple-600 shadow-purple-500/30'
                         }`}
                       ></div>
                       <span
                         className={`bg-clip-text text-transparent ${
-                          posts.every(p => (p.contentType || 'western') === 'western')
+                          posts.every(p => (p.contentType || 'asian') === 'asian')
                             ? 'bg-gradient-to-r from-purple-400 to-purple-300'
                             : 'bg-gradient-to-r from-purple-400 to-purple-300'
                         }`}
@@ -312,12 +312,12 @@ const AsianPage: React.FC = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.05 }}
                             className={`group bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700/50 rounded-xl p-3 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl transform hover:scale-[1.01] ${
-                              (link.contentType || 'western') === 'western'
+                              (link.contentType || 'asian') === 'asian'
                                 ? 'hover:border-purple-500/50 hover:shadow-purple-500/10'
                                 : 'hover:border-purple-500/50 hover:shadow-purple-500/10'
                             }`}
                             onClick={() => {
-                              const contentType = link.contentType || 'western';
+                              const contentType = link.contentType || 'asian';
                               switch (contentType) {
                                 case 'asian':
                                   navigate(`/asian/${link.slug}`);
@@ -336,9 +336,8 @@ const AsianPage: React.FC = () => {
                               }
                             }}
                           >
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-4 flex-1">
-                                {/* Indicador (inclui western em laranja) */}
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                              <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
                                 {link.contentType && (
                                   <div
                                     className={`w-2 h-2 rounded-full ${
@@ -352,14 +351,14 @@ const AsianPage: React.FC = () => {
                                 )}
 
                                 <h3
-                                  className={`text-lg font-bold text-white transition-colors duration-300 font-orbitron relative group-hover:${
-                                    (link.contentType || 'western') === 'western' ? 'text-purple-300' : 'text-purple-300'
-                                  }`}
+                                  className={`text-sm sm:text-lg font-bold text-white transition-colors duration-300 font-orbitron relative group-hover:${
+                                    (link.contentType || 'asian') === 'asian' ? 'text-purple-300' : 'text-purple-300'
+                                  } truncate`}
                                 >
                                   {link.name}
                                   <div
                                     className={`absolute -bottom-1 left-0 w-16 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
-                                      (link.contentType || 'western') === 'western'
+                                      (link.contentType || 'asian') === 'asian'
                                         ? 'bg-gradient-to-r from-purple-500 to-purple-300'
                                         : 'bg-gradient-to-r from-purple-500 to-purple-300'
                                     }`}
@@ -367,22 +366,22 @@ const AsianPage: React.FC = () => {
                                 </h3>
 
                                 <div
-                                  className={`h-px flex-1 max-w-20 transition-all duration-300 ${
-                                    (link.contentType || 'western') === 'western'
+                                  className={`hidden sm:block h-px flex-1 max-w-20 transition-all duration-300 ${
+                                    (link.contentType || 'asian') === 'asian'
                                       ? 'bg-gradient-to-r from-purple-500/50 to-transparent group-hover:from-purple-400/70'
                                       : 'bg-gradient-to-r from-purple-500/50 to-transparent group-hover:from-purple-400/70'
                                   }`}
                                 ></div>
                               </div>
 
-                              <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                                 {recentLinks.includes(link) && (
-                                  <span className={`inline-flex items-center px-4 py-2 text-white text-xs font-bold rounded-full shadow-lg animate-pulse border font-roboto ${
-                                    (link.contentType || 'western') === 'western'
+                                  <span className={`inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 text-white text-xs font-bold rounded-full shadow-lg animate-pulse border font-roboto ${
+                                    (link.contentType || 'asian') === 'asian'
                                       ? 'bg-gradient-to-r from-purple-500 to-purple-600 border-purple-400/30'
                                       : 'bg-gradient-to-r from-purple-500 to-purple-600 border-purple-400/30'
                                   }`}>
-                                    <i className="fa-solid fa-star mr-1 text-xs"></i>
+                                    <i className="fa-solid fa-star mr-1 text-xs hidden sm:inline"></i>
                                     NEW
                                   </span>
                                 )}
@@ -390,7 +389,7 @@ const AsianPage: React.FC = () => {
                                 {/* Badge do tipo de conteúdo (inclui western em laranja) */}
                                 {link.contentType && (
                                   <span
-                                    className={`inline-flex items-center px-3 py-1 text-xs font-bold rounded-full ${
+                                    className={`inline-flex items-center px-2 sm:px-3 py-1 text-xs font-bold rounded-full ${
                                       link.contentType === 'asian'
                                         ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
                                         : link.contentType === 'banned'
@@ -408,8 +407,8 @@ const AsianPage: React.FC = () => {
                                   </span>
                                 )}
 
-                                <span className="inline-flex items-center px-4 py-2 bg-gray-700/70 text-gray-300 text-sm font-medium rounded-full border border-gray-600/50 backdrop-blur-sm font-roboto">
-                                  <i className="fa-solid fa-tag mr-2 text-xs"></i>
+                                <span className="inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 bg-gray-700/70 text-gray-300 text-xs sm:text-sm font-medium rounded-full border border-gray-600/50 backdrop-blur-sm font-roboto">
+                                  <i className="fa-solid fa-tag mr-1 sm:mr-2 text-xs"></i>
                                   {link.category}
                                 </span>
                               </div>
