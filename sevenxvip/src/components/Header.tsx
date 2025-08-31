@@ -84,7 +84,7 @@ const Header: React.FC = () => {
   const theme = getThemeClasses();
 
   return (
-    <header className="w-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b border-gray-700/30 sticky top-0 z-50 backdrop-blur-xl shadow-2xl">
+    <header className="w-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b border-gray-700/30 sticky top-0 z-[9999] backdrop-blur-xl shadow-2xl">
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="flex items-center justify-between h-16 sm:h-18 lg:h-20">
           {/* Logo Section */}
@@ -168,6 +168,14 @@ const Header: React.FC = () => {
               <span className="relative z-10 font-medium font-roboto text-sm">Login</span>
               <div className={`absolute inset-0 bg-gradient-to-r ${theme.gradient} opacity-0 group-hover:opacity-10 rounded-xl transition-opacity duration-300`}></div>
             </Link>
+            
+            <Link 
+              to="/register" 
+              className={`relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:${theme.border} hover:${theme.glow}`}
+            >
+              <span className="relative z-10 font-medium font-roboto text-sm">Register</span>
+              <div className={`absolute inset-0 bg-gradient-to-r ${theme.gradient} opacity-0 group-hover:opacity-10 rounded-xl transition-opacity duration-300`}></div>
+            </Link>
           </nav>
 
           {/* Actions Section */}
@@ -204,7 +212,7 @@ const Header: React.FC = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+                className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9998] md:hidden"
                 onClick={toggleMenu}
               />
               
@@ -214,7 +222,7 @@ const Header: React.FC = () => {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed top-0 left-0 right-0 bottom-0 md:hidden bg-gray-900/98 backdrop-blur-xl z-50 overflow-y-auto"
+              className="fixed top-0 left-0 right-0 bottom-0 md:hidden bg-gray-900/98 backdrop-blur-xl z-[9999] overflow-y-auto"
             >
               {/* Header do menu mobile */}
               <div className="flex items-center justify-between p-6 border-b border-gray-700/50">
