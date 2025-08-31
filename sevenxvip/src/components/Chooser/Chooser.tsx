@@ -63,24 +63,24 @@ const Chooser: React.FC = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
           >
-            <div className="relative bg-gray-800/70 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-10 w-80 h-72 overflow-hidden shadow-2xl group-hover:shadow-purple-500/20 transition-all duration-500">
+            <div className="relative bg-gray-800/70 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-6 sm:p-10 w-72 sm:w-80 h-56 sm:h-72 overflow-hidden shadow-2xl group-hover:shadow-purple-500/20 transition-all duration-500">
               {/* Background Gradient */}
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               
               {/* Glow Effect */}
-              <div className="absolute -top-20 -left-20 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="absolute -top-10 sm:-top-20 -left-10 sm:-left-20 w-32 sm:w-40 h-32 sm:h-40 bg-purple-500/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               
               <div className="relative z-10 h-full flex flex-col justify-center items-center text-center">
-                <div className="mb-8">
-                  <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-3xl flex items-center justify-center shadow-xl group-hover:shadow-purple-500/50 transition-all duration-300 group-hover:rotate-6 border border-purple-400/30">
-                    <i className="fa-solid fa-yin-yang text-white text-3xl"></i>
+                <div className="mb-4 sm:mb-8">
+                  <div className="w-14 sm:w-20 h-14 sm:h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl sm:rounded-3xl flex items-center justify-center shadow-xl group-hover:shadow-purple-500/50 transition-all duration-300 group-hover:rotate-6 border border-purple-400/30">
+                    <i className="fa-solid fa-yin-yang text-white text-xl sm:text-3xl"></i>
                   </div>
                 </div>
                 
-                <h2 className="text-2xl font-bold text-white mb-4 font-['Orbitron']">
-                  SEVENXLEAKS <span className="text-purple-400 group-hover:text-purple-300 transition-colors duration-300 block text-xl mt-1">ASIAN</span>
+                <h2 className="text-lg sm:text-2xl font-bold text-white mb-2 sm:mb-4 font-orbitron">
+                  SEVENXLEAKS <span className="text-purple-400 group-hover:text-purple-300 transition-colors duration-300 block text-base sm:text-xl mt-1">ASIAN</span>
                 </h2>
-                <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300 font-['Roboto'] text-base">
+                <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300 font-roboto text-sm sm:text-base px-2">
                   Enter the world of Asian content
                 </p>
                 
@@ -100,24 +100,24 @@ const Chooser: React.FC = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.6, duration: 0.6 }}
           >
-            <div className="relative bg-gray-800/70 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-10 w-80 h-72 overflow-hidden shadow-2xl group-hover:shadow-orange-500/20 transition-all duration-500">
+            <div className="relative bg-gray-800/70 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-6 sm:p-10 w-72 sm:w-80 h-56 sm:h-72 overflow-hidden shadow-2xl group-hover:shadow-orange-500/20 transition-all duration-500">
               {/* Background Gradient */}
               <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 via-transparent to-orange-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               
               {/* Glow Effect */}
-              <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-orange-500/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="absolute -bottom-10 sm:-bottom-20 -right-10 sm:-right-20 w-32 sm:w-40 h-32 sm:h-40 bg-orange-500/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               
               <div className="relative z-10 h-full flex flex-col justify-center items-center text-center">
-                <div className="mb-8">
-                  <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-3xl flex items-center justify-center shadow-xl group-hover:shadow-orange-500/50 transition-all duration-300 group-hover:rotate-6 border border-orange-400/30">
-                    <i className="fa-solid fa-globe-americas text-white text-3xl"></i>
+                <div className="mb-4 sm:mb-8">
+                  <div className="w-14 sm:w-20 h-14 sm:h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl sm:rounded-3xl flex items-center justify-center shadow-xl group-hover:shadow-orange-500/50 transition-all duration-300 group-hover:rotate-6 border border-orange-400/30">
+                    <i className="fa-solid fa-globe-americas text-white text-xl sm:text-3xl"></i>
                   </div>
                 </div>
                 
-                <h2 className="text-2xl font-bold text-white mb-4 font-['Orbitron']">
-                  SEVENXLEAKS <span className="text-orange-400 group-hover:text-orange-300 transition-colors duration-300 block text-xl mt-1">WESTERN</span>
+                <h2 className="text-lg sm:text-2xl font-bold text-white mb-2 sm:mb-4 font-orbitron">
+                  SEVENXLEAKS <span className="text-orange-400 group-hover:text-orange-300 transition-colors duration-300 block text-base sm:text-xl mt-1">WESTERN</span>
                 </h2>
-                <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300 font-['Roboto'] text-base">
+                <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300 font-roboto text-sm sm:text-base px-2">
                   Explore our Western collection
                 </p>
                 
@@ -135,7 +135,7 @@ const Chooser: React.FC = () => {
           transition={{ delay: 0.8, duration: 0.8 }}
           className="mt-16 text-center"
         >
-          <p className="text-gray-500 text-base font-['Roboto']">
+          <p className="text-gray-500 text-sm sm:text-base font-roboto px-4">
             Select your preferred content category to continue
           </p>
         </motion.div>

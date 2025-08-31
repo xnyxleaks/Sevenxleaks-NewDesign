@@ -17,49 +17,56 @@ import {
   Tag,
   Settings,
   ToggleLeft,
-  ToggleRight
+  ToggleRight,
+  Shield,
+  Database,
+  Activity,
+  Globe,
+  Crown,
+  Ban,
+  HelpCircle
 } from "lucide-react";
-
-interface LinkItem {
-  id: number;
-  name: string;
-  link: string;
-  linkP?: string;
-  linkG?: string;
-  linkMV1?: string;
-  linkMV2?: string;
-  linkMV3?: string;
-  slug?: string;
-  category: string;
-  postDate?: string;
-  createdAt: string;
-  updatedAt?: string;
-}
+import AdminLinkForm from "../components/Admin/AdminLinkForm";
+import AdminLinkList from "../components/Admin/AdminLinkList";
+import { LinkItem } from "../utils/index";
 
 interface ApiResponse {
   page: number;
   perPage: number;
   data: LinkItem[];
+  totalPages: number;
 }
 
 const AdminPanel: React.FC = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<"free" | "vip">("free");
+  const [activeTab, setActiveTab] = useState<"asian" | "western" | "vip" | "banned" | "unknown">("asian");
   const [links, setLinks] = useState<LinkItem[]>([]);
-  const [newLink, setNewLink] = useState({
+  const [newLink, setNewLink] = useState<LinkItem>({
+    id: 0,
     name: "",
-    link: "",
+    mega: "",
+    mega2: "",
+    pixeldrain: "",
+    AdmavenMega: "",
+    AdmavenMega2: "",
+    AdmavenPixeldrain: "",
     category: "",
+    postDate: new Date().toISOString().split('T')[0],
     createdAt: "",
+    updatedAt: "",
+    slug: "",
+    thumbnail: ""
   });
   const [categories] = useState<string[]>([
     "Asian",
-    "Teen",
+    "Teen", 
     "Big Tits",
     "Tiktok",
     "Instagram",
     "Banned",
-    "Conteúdo Gratuito"
+    "Unknown",
+    "Western",
+    "VIP Content"
   ]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isEditing, setIsEditing] = useState<number | null>(null);
@@ -68,7 +75,43 @@ const AdminPanel: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [linkvertiseAccount, setLinkvertiseAccount] = useState<string>('518238');
   const [isUpdatingAccount, setIsUpdatingAccount] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [totalPages, setTotalPages] = useState(1);
   const token = localStorage.getItem('Token');
+
+  const tabConfig = {
+    asian: {
+      endpoint: "/asiancontent",
+      icon: Globe,
+      color: "purple",
+      gradient: "from-purple-500 to-purple-600"
+    },
+    western: {
+      endpoint: "/westerncontent", 
+      icon: Globe,
+      color: "orange",
+      gradient: "from-orange-500 to-orange-600"
+    },
+    vip: {
+      endpoint: "/vipcontent",
+      icon: Crown,
+      color: "yellow", 
+      gradient: "from-yellow-500 to-yellow-600"
+    },
+    banned: {
+      endpoint: "/bannedcontent",
+      icon: Ban,
+      color: "red",
+      gradient: "from-red-500 to-red-600"
+    },
+    unknown: {
+      endpoint: "/unknowncontent",
+      icon: HelpCircle,
+      color: "gray",
+      gradient: "from-gray-500 to-gray-600"
+    }
+  };
 
   // Carrega a configuração global da conta do Linkvertise
   useEffect(() => {
@@ -89,7 +132,6 @@ const AdminPanel: React.FC = () => {
       }
     } catch (error) {
       console.error('Erro ao buscar configuração do Linkvertise:', error);
-      // Fallback para account1 se não conseguir buscar
       setLinkvertiseAccount('518238');
     }
   };
@@ -121,19 +163,28 @@ const AdminPanel: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchLinks();
+    setCurrentPage(1);
+    setLinks([]);
+    fetchLinks(1);
   }, [activeTab]);
 
-  const fetchLinks = async () => {
+  const fetchLinks = async (page: number = 1, isLoadMore = false) => {
     try {
-      setIsLoading(true);
+      setIsLoading(!isLoadMore);
       setError(null);
-      const endpoint = activeTab === "free" ? "/freecontent" : "/vipcontent";
+      
+      const config = tabConfig[activeTab];
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: "20"
+      });
+
       const response = await axios.get<{ data: string }>(
-        `${import.meta.env.VITE_BACKEND_URL}${endpoint}`,
+        `${import.meta.env.VITE_BACKEND_URL}${config.endpoint}?${params}`,
         {
           headers: {
-            'x-api-key': `${import.meta.env.VITE_FRONTEND_API_KEY}`
+            'x-api-key': `${import.meta.env.VITE_FRONTEND_API_KEY}`,
+            'Authorization': `Bearer ${token}`
           }
         }
       );
@@ -141,10 +192,18 @@ const AdminPanel: React.FC = () => {
       let base64Data = response.data.data;
       base64Data = base64Data.slice(0, 2) + base64Data.slice(3);
       const jsonString = atob(base64Data);
-      const dataObject = JSON.parse(jsonString);
-      setLinks(dataObject.data || []);
+      const dataObject: ApiResponse = JSON.parse(jsonString);
+      
+      if (isLoadMore) {
+        setLinks(prev => [...prev, ...(dataObject.data || [])]);
+      } else {
+        setLinks(dataObject.data || []);
+      }
+      
+      setTotalPages(dataObject.totalPages || 1);
+      setHasMore(page < (dataObject.totalPages || 1));
     } catch (err) {
-      setError("Failed to fetch links. Please try again later.");
+      setError("Failed to fetch content. Please try again later.");
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -152,21 +211,45 @@ const AdminPanel: React.FC = () => {
   };
 
   const handleAddLink = async () => {
-    if (!newLink.name || !newLink.link || !newLink.category) {
-      setError("Please fill in all required fields");
+    if (!newLink.name || !newLink.mega || !newLink.category) {
+      setError("Please fill in all required fields (name, mega link, category)");
       return;
     }
 
     setIsLoading(true);
     setError(null);
     try {
-      const endpoint = activeTab === "free" ? "/freecontent" : "/vipcontent";
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}${endpoint}`, newLink);
-      setNewLink({ name: "", link: "", category: "", createdAt: "" });
-      fetchLinks();
+      const config = tabConfig[activeTab];
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}${config.endpoint}`, newLink, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'x-api-key': `${import.meta.env.VITE_FRONTEND_API_KEY}`,
+          'x-admin-key': `${import.meta.env.VITE_ADMIN_KEY}`
+        }
+      });
+      
+      setNewLink({
+        id: 0,
+        name: "",
+        mega: "",
+        mega2: "",
+        pixeldrain: "",
+        AdmavenMega: "",
+        AdmavenMega2: "",
+        AdmavenPixeldrain: "",
+        category: "",
+        postDate: new Date().toISOString().split('T')[0],
+        createdAt: "",
+        updatedAt: "",
+        slug: "",
+        thumbnail: ""
+      });
+      
+      setCurrentPage(1);
+      fetchLinks(1);
     } catch (error) {
-      setError("Failed to add link. Please try again.");
-      console.error("Error adding link:", error);
+      setError("Failed to add content. Please try again.");
+      console.error("Error adding content:", error);
     } finally {
       setIsLoading(false);
     }
@@ -175,12 +258,7 @@ const AdminPanel: React.FC = () => {
   const handleEditLink = (id: number) => {
     const linkToEdit = links.find((link) => link.id === id);
     if (linkToEdit) {
-      setNewLink({
-        name: linkToEdit.name,
-        link: linkToEdit.link,
-        category: linkToEdit.category,
-        createdAt: linkToEdit.createdAt,
-      });
+      setNewLink(linkToEdit);
       setIsEditing(id);
     }
   };
@@ -189,10 +267,9 @@ const AdminPanel: React.FC = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const endpoint = activeTab === "free" ? "/freecontent" : "/vipcontent";
-
+      const config = tabConfig[activeTab];
       await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}${endpoint}/${isEditing}`,
+        `${import.meta.env.VITE_BACKEND_URL}${config.endpoint}/${isEditing}`,
         newLink,
         {
           headers: {
@@ -204,65 +281,109 @@ const AdminPanel: React.FC = () => {
       );
 
       setIsEditing(null);
-      setNewLink({ name: "", link: "", category: "", createdAt: "" });
-      fetchLinks();
+      setNewLink({
+        id: 0,
+        name: "",
+        mega: "",
+        mega2: "",
+        pixeldrain: "",
+        AdmavenMega: "",
+        AdmavenMega2: "",
+        AdmavenPixeldrain: "",
+        category: "",
+        postDate: new Date().toISOString().split('T')[0],
+        createdAt: "",
+        updatedAt: "",
+        slug: "",
+        thumbnail: ""
+      });
+      
+      fetchLinks(1);
     } catch (error) {
-      setError("Failed to update link. Please try again.");
-      console.error("Error updating link:", error);
+      setError("Failed to update content. Please try again.");
+      console.error("Error updating content:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleDeleteLink = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this content?")) return;
+    
     setIsLoading(true);
     setError(null);
     try {
-      const endpoint = activeTab === "free" ? "/freecontent" : "/vipcontent";
-      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}${endpoint}/${id}`, {
+      const config = tabConfig[activeTab];
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}${config.endpoint}/${id}`, {
         headers: {
           "x-api-key": import.meta.env.VITE_FRONTEND_API_KEY,
           "x-admin-key": `${import.meta.env.VITE_ADMIN_KEY}`,
           Authorization: `Bearer ${token}`
         }
       });
-      fetchLinks();
+      
+      fetchLinks(1);
     } catch (error) {
-      setError("Failed to delete link. Please try again.");
-      console.error("Error deleting link:", error);
+      setError("Failed to delete content. Please try again.");
+      console.error("Error deleting content:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const filteredLinks = links
-    .filter((link) =>
-      link.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (!selectedCategory || link.category === selectedCategory)
-    )
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  const loadMore = () => {
+    if (hasMore && !isLoading) {
+      const nextPage = currentPage + 1;
+      setCurrentPage(nextPage);
+      fetchLinks(nextPage, true);
+    }
+  };
+
+  const filteredLinks = links.filter((link) =>
+    link.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    (!selectedCategory || link.category === selectedCategory)
+  );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => navigate("/admin-vip-users")}
-            className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg transition-colors"
-          >
-            <Users className="w-5 h-5" />
-            Manage VIP Users
-          </motion.button>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+          <div>
+            <h1 className="text-3xl font-bold font-orbitron bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              Admin Dashboard
+            </h1>
+            <p className="text-gray-400 mt-2 font-roboto">Manage content across all platforms</p>
+          </div>
+          <div className="flex gap-3">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate("/admin-vip-users")}
+              className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-xl transition-colors shadow-lg"
+            >
+              <Users className="w-5 h-5" />
+              <span className="hidden sm:inline">Manage VIP Users</span>
+              <span className="sm:hidden">VIP Users</span>
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate("/admin/stats")}
+              className="flex items-center gap-2 bg-green-600 hover:bg-green-700 px-4 py-2 rounded-xl transition-colors shadow-lg"
+            >
+              <Activity className="w-5 h-5" />
+              <span className="hidden sm:inline">Statistics</span>
+              <span className="sm:hidden">Stats</span>
+            </motion.button>
+          </div>
         </div>
 
         {error && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-red-500/10 border border-red-500 text-red-500 p-4 rounded-lg mb-6 flex items-center gap-2"
+            className="bg-red-500/10 border border-red-500 text-red-500 p-4 rounded-xl mb-6 flex items-center gap-2"
           >
             <AlertCircle className="w-5 h-5" />
             {error}
@@ -270,17 +391,26 @@ const AdminPanel: React.FC = () => {
         )}
 
         {/* Configurações do Linkvertise */}
-        <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6 mb-6">
-          <div className="flex items-center gap-3 mb-4">
-            <Settings className="w-6 h-6 text-blue-400" />
-            <h2 className="text-xl font-semibold">Configurações Globais do Linkvertise</h2>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-gray-800/60 backdrop-blur-xl border border-gray-700 rounded-2xl p-6 mb-8 shadow-xl"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+              <Settings className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h2 className="text-xl font-semibold font-orbitron">Global Linkvertise Settings</h2>
+              <p className="text-gray-400 text-sm">Configure active account for all content</p>
+            </div>
           </div>
           
-          <div className="flex items-center justify-between p-4 bg-gray-700/30 rounded-lg">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-gray-700/30 rounded-xl border border-gray-600/30">
             <div className="flex flex-col">
-              <span className="font-medium text-white">Conta Ativa Global</span>
+              <span className="font-medium text-white">Active Global Account</span>
               <span className="text-sm text-gray-400">
-                {linkvertiseAccount === '518238' ? 'Conta 1 (ID: 518238)' : 'Conta 2 (ID: 1329936)'}
+                {linkvertiseAccount === '518238' ? 'Account 1 (ID: 518238)' : 'Account 2 (ID: 1329936)'}
               </span>
             </div>
             
@@ -301,7 +431,7 @@ const AdminPanel: React.FC = () => {
                     : 'bg-gray-600 text-gray-300 hover:bg-gray-500 disabled:opacity-50'
                 }`}
               >
-                Conta 1
+                Account 1
               </motion.button>
               
               <motion.div
@@ -331,185 +461,105 @@ const AdminPanel: React.FC = () => {
                     : 'bg-gray-600 text-gray-300 hover:bg-gray-500 disabled:opacity-50'
                 }`}
               >
-                Conta 2
+                Account 2
               </motion.button>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6 mb-8">
-          <div className="flex flex-col md:flex-row gap-4 mb-6">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Search links..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
-                />
-              </div>
-            </div>
-            <div className="flex gap-4">
-              <div className="relative">
-                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="pl-10 pr-8 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white appearance-none"
-                >
-                  <option value="">All Categories</option>
-                  {categories.map((category) => (
-                    <option key={category} value={category}>{category}</option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              </div>
-              <button
-                onClick={() => setActiveTab(activeTab === "free" ? "vip" : "free")}
-                className={`px-4 py-2 rounded-lg transition-colors ${
-                  activeTab === "vip"
-                    ? "bg-yellow-600 hover:bg-yellow-700"
-                    : "bg-blue-600 hover:bg-blue-700"
+        {/* Content Type Tabs */}
+        <div className="flex flex-wrap gap-2 mb-8">
+          {Object.entries(tabConfig).map(([key, config]) => {
+            const IconComponent = config.icon;
+            return (
+              <motion.button
+                key={key}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setActiveTab(key as any)}
+                className={`flex items-center gap-2 px-4 py-3 rounded-xl font-medium transition-all duration-300 ${
+                  activeTab === key
+                    ? `bg-gradient-to-r ${config.gradient} text-white shadow-lg`
+                    : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 border border-gray-600/30'
                 }`}
               >
-                {activeTab === "vip" ? "VIP Content" : "Free Content"}
-              </button>
+                <IconComponent className="w-4 h-4" />
+                <span className="capitalize font-roboto">{key}</span>
+              </motion.button>
+            );
+          })}
+        </div>
+
+        {/* Main Content Area */}
+        <div className="bg-gray-800/60 backdrop-blur-xl border border-gray-700 rounded-2xl overflow-hidden shadow-xl">
+          {/* Filter Bar */}
+          <div className="p-6 border-b border-gray-700/50">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex-1">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <input
+                    type="text"
+                    placeholder="Search content..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
+                  />
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <div className="relative">
+                  <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="pl-10 pr-8 py-3 bg-gray-700/50 border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-white appearance-none min-w-[150px]"
+                  >
+                    <option value="">All Categories</option>
+                    {categories.map((category) => (
+                      <option key={category} value={category}>{category}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="grid gap-4 mb-6">
-            <div className="flex gap-4 items-center">
-              <div className="relative flex-1">
-                <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Link Name"
-                  value={newLink.name}
-                  onChange={(e) => setNewLink({ ...newLink, name: e.target.value })}
-                  className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
-                />
-              </div>
-              <div className="relative flex-1">
-                <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Link URL"
-                  value={newLink.link}
-                  onChange={(e) => setNewLink({ ...newLink, link: e.target.value })}
-                  className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
-                />
-              </div>
-            </div>
-            <div className="flex gap-4 items-center">
-              <div className="relative flex-1">
-                <Tag className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <select
-                  value={newLink.category}
-                  onChange={(e) => setNewLink({ ...newLink, category: e.target.value })}
-                  className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white appearance-none"
-                >
-                  <option value="">Select Category</option>
-                  {categories.map((category) => (
-                    <option key={category} value={category}>{category}</option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              </div>
-              <div className="relative flex-1">
-                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="date"
-                  value={newLink.createdAt}
-                  onChange={(e) => setNewLink({ ...newLink, createdAt: e.target.value })}
-                  className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
-                />
-              </div>
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={isEditing ? handleUpdateLink : handleAddLink}
-              disabled={isLoading}
-              className={`flex items-center justify-center gap-2 w-full py-2 rounded-lg transition-colors ${
-                isLoading
-                  ? "bg-gray-600 cursor-not-allowed"
-                  : isEditing
-                  ? "bg-yellow-600 hover:bg-yellow-700"
-                  : "bg-green-600 hover:bg-green-700"
-              }`}
-            >
-              {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <Plus className="w-5 h-5" />
-              )}
-              {isEditing ? "Update Link" : "Add New Link"}
-            </motion.button>
+          {/* Add/Edit Form */}
+          <div className="p-6 border-b border-gray-700/50">
+            <AdminLinkForm
+              newLink={newLink}
+              setNewLink={setNewLink}
+              isLoading={isLoading}
+              isEditing={isEditing}
+              handleAddLink={handleAddLink}
+              handleUpdateLink={handleUpdateLink}
+              categories={categories}
+            />
           </div>
 
-          <AnimatePresence>
-            {isLoading ? (
-              <div className="flex items-center justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+          {/* Content List */}
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold font-orbitron">
+                {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Content ({filteredLinks.length})
+              </h3>
+              <div className="flex items-center gap-2 text-sm text-gray-400">
+                <Database className="w-4 h-4" />
+                <span>Page {currentPage} of {totalPages}</span>
               </div>
-            ) : (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="space-y-4"
-              >
-                {filteredLinks.length > 0 ? (
-                  filteredLinks.map((link) => (
-                    <motion.div
-                      key={link.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      className="bg-gray-700/30 border border-gray-600 rounded-lg p-4 flex items-center justify-between gap-4"
-                    >
-                      <div className="flex-1">
-                        <h3 className="font-medium text-lg">{link.name}</h3>
-                        <p className="text-gray-400 text-sm truncate">{link.link}</p>
-                        <div className="flex items-center gap-2 mt-2">
-                          <span className="px-2 py-1 bg-gray-700 rounded-full text-xs">
-                            {link.category}
-                          </span>
-                          <span className="text-gray-400 text-xs">
-                            {new Date(link.createdAt).toLocaleDateString()}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          onClick={() => handleEditLink(link.id)}
-                          className="p-2 bg-yellow-600 hover:bg-yellow-700 rounded-lg transition-colors"
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </motion.button>
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          onClick={() => handleDeleteLink(link.id)}
-                          className="p-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </motion.button>
-                      </div>
-                    </motion.div>
-                  ))
-                ) : (
-                  <div className="text-center py-12 text-gray-400">
-                    No links found
-                  </div>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
+            </div>
+            
+            <AdminLinkList
+              links={filteredLinks}
+              isLoading={isLoading}
+              handleEditLink={handleEditLink}
+              handleDeleteLink={handleDeleteLink}
+              hasMore={hasMore}
+              loadMore={loadMore}
+            />
+          </div>
         </div>
       </div>
     </div>

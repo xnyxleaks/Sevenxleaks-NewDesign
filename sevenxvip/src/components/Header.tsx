@@ -198,56 +198,88 @@ const Header: React.FC = () => {
         {/* Mobile Menu */}
         <AnimatePresence>
           {isMenuOpen && (
+            <>
+              {/* Overlay */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+                onClick={toggleMenu}
+              />
+              
+              {/* Menu */}
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden border-t border-gray-700/50 bg-gray-800/95 backdrop-blur-xl rounded-b-2xl"
+              className="fixed top-0 left-0 right-0 bottom-0 md:hidden bg-gray-900/98 backdrop-blur-xl z-50 overflow-y-auto"
             >
-              <div className="px-6 py-8 space-y-4">
+              {/* Header do menu mobile */}
+              <div className="flex items-center justify-between p-6 border-b border-gray-700/50">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <i className="fa-solid fa-crown text-white text-sm"></i>
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-white font-orbitron">SEVENXLEAKS</h2>
+                    <p className="text-xs text-gray-400">Navigation Menu</p>
+                  </div>
+                </div>
+                <button
+                  onClick={toggleMenu}
+                  className="p-3 text-gray-300 hover:text-white hover:bg-gray-700/50 rounded-xl transition-all duration-300"
+                >
+                  <i className="fa-solid fa-times text-lg"></i>
+                </button>
+              </div>
+
+              <div className="px-6 py-8 space-y-6">
+                {/* Navigation Links */}
+                <div className="space-y-3">
                 <Link 
                   to="/" 
                   onClick={toggleMenu} 
-                  className={`flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white ${theme.bg} hover:bg-gray-700/50 rounded-2xl transition-all duration-300 font-medium border border-gray-700/30 hover:${theme.border} backdrop-blur-sm`}
+                  className="flex items-center gap-4 px-4 py-3 text-gray-300 hover:text-white bg-gray-800/50 hover:bg-gray-700/70 rounded-xl transition-all duration-300 font-medium border border-gray-700/30 hover:border-purple-500/30"
                 >
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${theme.gradient} flex items-center justify-center shadow-lg`}>
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-md">
                     <i className="fa-solid fa-home text-white text-sm"></i>
                   </div>
-                  <span className="font-roboto">Home</span>
+                  <span className="font-roboto text-sm">Home</span>
                 </Link>
                 
                 <Link 
                   to="/banned" 
                   onClick={toggleMenu} 
-                  className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-red-500/10 hover:bg-red-500/20 rounded-2xl transition-all duration-300 font-medium border border-red-500/20 hover:border-red-500/30 backdrop-blur-sm"
+                  className="flex items-center gap-4 px-4 py-3 text-gray-300 hover:text-white bg-red-500/10 hover:bg-red-500/20 rounded-xl transition-all duration-300 font-medium border border-red-500/20 hover:border-red-500/30"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-md">
                     <i className="fa-solid  text-white text-sm"></i>
                   </div>
-                  <span className="font-roboto">Banned Content</span>
+                  <span className="font-roboto text-sm">Banned</span>
                 </Link>
                 
                 <Link 
                   to="/unknown" 
                   onClick={toggleMenu} 
-                  className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-gray-500/10 hover:bg-gray-500/20 rounded-2xl transition-all duration-300 font-medium border border-gray-500/20 hover:border-gray-500/30 backdrop-blur-sm"
+                  className="flex items-center gap-4 px-4 py-3 text-gray-300 hover:text-white bg-gray-500/10 hover:bg-gray-500/20 rounded-xl transition-all duration-300 font-medium border border-gray-500/20 hover:border-gray-500/30"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center shadow-lg">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center shadow-md">
                     <i className="fa-solid  text-white text-sm"></i>
                   </div>
-                  <span className="font-roboto">Unknown Content</span>
+                  <span className="font-roboto text-sm">Unknown</span>
                 </Link>
                 
                 <Link 
                   to="/plans" 
                   onClick={toggleMenu} 
-                  className={`flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-yellow-500/10 hover:bg-yellow-500/20 rounded-2xl transition-all duration-300 font-medium border border-yellow-500/20 hover:border-yellow-500/30 backdrop-blur-sm`}
+                  className="flex items-center gap-4 px-4 py-3 text-gray-300 hover:text-white bg-yellow-500/10 hover:bg-yellow-500/20 rounded-xl transition-all duration-300 font-medium border border-yellow-500/20 hover:border-yellow-500/30"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-500 flex items-center justify-center shadow-lg">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-yellow-400 to-yellow-500 flex items-center justify-center shadow-md">
                     <i className="fa-solid fa-crown text-black text-sm"></i>
                   </div>
-                  <span className="font-roboto">Plans</span>
+                  <span className="font-roboto text-sm">Plans</span>
                 </Link>
                 
                 <a 
@@ -255,26 +287,61 @@ const Header: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={toggleMenu} 
-                  className={`flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-purple-500/10 hover:bg-purple-500/20 rounded-2xl transition-all duration-300 font-medium border border-purple-500/20 hover:border-purple-500/30 backdrop-blur-sm`}
+                  className="flex items-center gap-4 px-4 py-3 text-gray-300 hover:text-white bg-purple-500/10 hover:bg-purple-500/20 rounded-xl transition-all duration-300 font-medium border border-purple-500/20 hover:border-purple-500/30"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-md">
                     <i className="fab fa-discord text-white text-sm"></i>
                   </div>
-                  <span className="font-roboto">Discord</span>
+                  <span className="font-roboto text-sm">Discord</span>
                 </a>
-                
-                <Link 
-                  to="/login" 
-                  onClick={toggleMenu} 
-                  className={`flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white ${theme.bg} hover:bg-gray-700/50 rounded-2xl transition-all duration-300 font-medium border border-gray-700/30 hover:${theme.border} backdrop-blur-sm`}
-                >
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${theme.gradient} flex items-center justify-center shadow-lg`}>
-                    <i className="fa-solid fa-sign-in-alt text-white text-sm"></i>
+                </div>
+
+                {/* Auth Section */}
+                <div className="border-t border-gray-700/50 pt-6">
+                  <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider px-3 py-2 font-orbitron">
+                    Account Access
+                  </h3>
+                  <div className="space-y-3">
+                    <Link 
+                      to="/login" 
+                      onClick={toggleMenu} 
+                      className="flex items-center gap-4 px-4 py-3 text-gray-300 hover:text-white bg-blue-500/10 hover:bg-blue-500/20 rounded-xl transition-all duration-300 font-medium border border-blue-500/20 hover:border-blue-500/30"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md">
+                        <i className="fa-solid fa-sign-in-alt text-white text-sm"></i>
+                      </div>
+                      <span className="font-roboto text-sm">Login</span>
+                    </Link>
+                    
+                    <Link 
+                      to="/register" 
+                      onClick={toggleMenu} 
+                      className="flex items-center gap-4 px-4 py-3 text-gray-300 hover:text-white bg-green-500/10 hover:bg-green-500/20 rounded-xl transition-all duration-300 font-medium border border-green-500/20 hover:border-green-500/30"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-md">
+                        <i className="fa-solid fa-user-plus text-white text-sm"></i>
+                      </div>
+                      <span className="font-roboto text-sm">Register</span>
+                    </Link>
                   </div>
-                  <span className="font-roboto">Login</span>
-                </Link>
+                </div>
+                
+                {/* VIP Access Button */}
+                <div className="border-t border-gray-700/50 pt-6">
+                  <Link
+                    to="/plans"
+                    onClick={toggleMenu}
+                    className="flex items-center justify-center gap-3 w-full px-6 py-4 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-black font-bold rounded-xl shadow-lg transition-all duration-300 border border-yellow-400/30"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-black/20 flex items-center justify-center relative">
+                      <i className="fa-solid fa-crown text-yellow-300 text-sm animate-pulse"></i>
+                    </div>
+                    <span className="font-orbitron tracking-wide text-sm">GET VIP ACCESS</span>
+                  </Link>
+                </div>
               </div>
             </motion.div>
+            </>
           )}
         </AnimatePresence>
       </div>
