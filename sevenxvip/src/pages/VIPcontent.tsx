@@ -282,13 +282,14 @@ const VIPContent: React.FC = () => {
                 })
                 .map(([date, posts]) => (
                   <div key={date} className="mb-12">
-                    <h2 className="text-2xl font-bold text-gray-300 mb-8 pb-4 border-b border-gray-700/50 font-orbitron flex items-center gap-4">
-                      <div className="w-3 h-8 bg-gradient-to-b from-yellow-500 to-yellow-600 rounded-full shadow-lg shadow-yellow-500/30"></div>
-                      <Crown className="w-6 h-6 text-yellow-400" />
-                      <span className="bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent">
-                        VIP Content - {date}
-                      </span>
-                    </h2>
+<h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-300 mb-6 sm:mb-8 pb-3 sm:pb-4 border-b border-gray-700/50 font-orbitron flex items-center gap-2 sm:gap-4">
+  <div className="w-2 h-6 sm:w-3 sm:h-8 bg-gradient-to-b from-yellow-500 to-yellow-600 rounded-full shadow-lg shadow-yellow-500/30"></div>
+  <Crown className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-yellow-400" />
+  <span className="bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent">
+    VIP Content - {date}
+  </span>
+</h2>
+
                     <div className="space-y-4">
                       {posts
                         .sort(
