@@ -83,15 +83,16 @@ const Header: React.FC = () => {
 
   const theme = getThemeClasses();
 
-  const menuItems = [
-    { name: 'Home', path: '/', icon: 'fa-home' },
-    { name: 'Banned', path: '/banned', icon: 'fa-ban' },
-    { name: 'Unknown', path: '/unknown', icon: 'fa-question' },
-    { name: 'Plans', path: '/plans', icon: 'fa-crown' },
-    { name: 'Discord', path: 'https://discord.gg/95BKaYTPPS', icon: 'fab fa-discord', external: true },
-    { name: 'Login', path: '/login', icon: 'fa-sign-in-alt' },
-    { name: 'Register', path: '/register', icon: 'fa-registered' }
-  ];
+const menuItems = [
+  { name: 'Home',     path: '/',        icon: 'fa-solid fa-house' },
+  { name: 'Banned',   path: '/banned',  icon: 'fa-solid fa-ban' },
+  { name: 'Unknown',  path: '/unknown', icon: 'fa-regular fa-circle-question' },
+  { name: 'Plans',    path: '/plans',   icon: 'fa-solid fa-crown' },
+  { name: 'Discord',  path: 'https://discord.gg/95BKaYTPPS', icon: 'fa-brands fa-discord', external: true },
+  { name: 'Login',    path: '/login',   icon: 'fa-solid fa-right-to-bracket' },   // substitui fa-sign-in-alt
+  { name: 'Register', path: '/register',icon: 'fa-regular fa-registered' }
+];
+
 
   return (
     <header className="w-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b border-gray-700/30 sticky top-0 z-50 backdrop-blur-xl shadow-2xl">

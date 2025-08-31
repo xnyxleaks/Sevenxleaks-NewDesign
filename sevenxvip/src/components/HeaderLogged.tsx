@@ -111,38 +111,39 @@ const HeaderLogged: React.FC = () => {
   const theme = getThemeClasses();
 
   const getMenuItems = (): MenuItem[] => {
-    const baseItems: MenuItem[] = [
-      { name: "Home", path: "/", icon: "fa-home" },
-      { name: "Banned", path: "/banned", icon: "fa-ban" },
-      { name: "Unknown", path: "/unknown", icon: "fa-question" },
-    ];
+  const baseItems: MenuItem[] = [
+    { name: "Home", path: "/", icon: "fa-solid fa-house" },
+    { name: "Banned", path: "/banned", icon: "fa-solid fa-ban" },
+    { name: "Unknown", path: "/unknown", icon: "fa-regular fa-circle-question" },
+  ];
 
-    const vipItems: MenuItem[] = isVip
-      ? [
-          { name: "VIP Content", path: "/vip", icon: "fa-crown" },
-          { name: "Recommend", path: "/recommend", icon: "fa-lightbulb" },
-        ]
-      : [{ name: "Plans", path: "/plans", icon: "fa-crown" }];
+  const vipItems: MenuItem[] = isVip
+    ? [
+        { name: "VIP Content", path: "/vip", icon: "fa-solid fa-crown" },
+        { name: "Recommend", path: "/recommend", icon: "fa-regular fa-lightbulb" },
+      ]
+    : [{ name: "Plans", path: "/plans", icon: "fa-solid fa-crown" }];
 
-    const adminItems: MenuItem[] = isAdmin
-      ? [
-          { name: "Admin Panel", path: "/admin/settings", icon: "fa-shield" },
-          { name: "Statistics", path: "/admin/stats", icon: "fa-chart-line" },
-          { name: "Requests", path: "/admin/requests", icon: "fa-clipboard-list" },
-        ]
-      : [];
+  const adminItems: MenuItem[] = isAdmin
+    ? [
+        { name: "Admin Panel", path: "/admin/settings", icon: "fa-solid fa-shield-halved" }, // substitui fa-shield
+        { name: "Statistics", path: "/admin/stats", icon: "fa-solid fa-chart-line" },
+        { name: "Requests", path: "/admin/requests", icon: "fa-solid fa-clipboard-list" },
+      ]
+    : [];
 
-    const socialItems: MenuItem[] = [
-      {
-        name: "Discord",
-        path: "https://discord.gg/95BKaYTPPS",
-        icon: "fab fa-discord",
-        external: true,
-      },
-    ];
+  const socialItems: MenuItem[] = [
+    {
+      name: "Discord",
+      path: "https://discord.gg/95BKaYTPPS",
+      icon: "fa-brands fa-discord",
+      external: true,
+    },
+  ];
 
-    return [...baseItems, ...vipItems, ...adminItems, ...socialItems];
-  };
+  return [...baseItems, ...vipItems, ...adminItems, ...socialItems];
+};
+
 
   const allMenuItems: MenuItem[] = getMenuItems();
 
