@@ -194,7 +194,7 @@ const menuItems = [
               </motion.button>
             </Link>
             
-            <ThemeToggle />
+            {/* <ThemeToggle /> */}
 
             {/* Simple Mobile Menu Toggle */}
             <motion.button
