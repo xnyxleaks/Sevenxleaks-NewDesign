@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
 import Chooser from "./components/Chooser/Chooser";
 import AsianPage from "./pages/AsianPage";
 import WesternPage from "./pages/WesternPage";
@@ -34,30 +33,10 @@ import UnknownContentDetails from "./pages/UnknownContentDetails";
 import WesternContentDetails from "./pages/WesternContentDetails";
 import AsianContentDetails from "./components/AsianContentDetails";
 
-const AppContent = () => {
-  const location = useLocation();
+const App = () => {
   const [hasPermission, setHasPermission] = useState({ vip: false, admin: false });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoadingDetails, setIsLoadingDetails] = useState(false);
   const token = localStorage.getItem("Token");
-
-  // Check if current route is a content details page
-  const isDetailsPage = location.pathname.includes('/asian/') || 
-                       location.pathname.includes('/western/') || 
-                       location.pathname.includes('/vip/') || 
-                       location.pathname.includes('/banned/') || 
-                       location.pathname.includes('/unknown/');
-
-  useEffect(() => {
-    if (isDetailsPage) {
-      setIsLoadingDetails(true);
-      // Simulate loading time for details pages
-      const timer = setTimeout(() => {
-        setIsLoadingDetails(false);
-      }, 1500);
-      return () => clearTimeout(timer);
-    }
-  }, [location.pathname, isDetailsPage]);
 
   useEffect(() => {
     const checkPermissions = async () => {
@@ -89,115 +68,109 @@ const AppContent = () => {
   }, [token]);
 
   return (
-    <div className="flex flex-col min-h-screen">
-      {!isLoadingDetails && (isAuthenticated ? <HeaderLogged /> : <Header />)}
-      <main className="flex-grow">
-        <Routes>
-          <Route path="/" element={<Chooser />} />
-          <Route path="/asian" element={<AsianPage />} />
-          <Route path="/asian/:slug" element={<AsianContentDetails />} />
-          <Route path="/western" element={<WesternPage />} />
-          <Route path="/western/:slug" element={<WesternContentDetails />} />
-          <Route path="/banned" element={<BannedContent />} />
-          <Route path="/banned/:slug" element={<BannedContentDetails />} />
-          <Route path="/unknown" element={<UnknownContent />} />
-          <Route path="/unknown/:slug" element={<UnknownContentDetails />} />
-          
-          <Route 
-            path="/vip" 
-            element={
-              hasPermission.vip ? (
-                <VIPcontent />
-              ) : (
-                <AccessDenied message="You are not a VIP to access this page." />
-              )
-            } 
-          />
-          
-          <Route 
-            path="/vip/:slug" 
-            element={
-              hasPermission.vip ? (
-                <VIPContentDetails />
-              ) : (
-                <AccessDenied message="You are not a VIP to access this page." />
-              )
-            } 
-          />
-          
-          <Route 
-            path="/admin/settings" 
-            element={
-              hasPermission.admin ? (
-                <AdminPainel />
-              ) : (
-                <AccessDenied message="You are not an administrator to access this page." />
-              )
-            } 
-          />
-          <Route 
-            path="/admin/stats" 
-            element={
-              hasPermission.admin ? (
-                <ViewStats />
-              ) : (
-                <AccessDenied message="You are not an administrator to access this page." />
-              )
-            } 
-          />
-          <Route 
-            path="/admin/requests" 
-            element={
-              hasPermission.admin ? (
-                <ViewRequests />
-              ) : (
-                <AccessDenied message="You are not an administrator to access this page." />
-              )
-            } 
-          />
-          <Route 
-            path="/admin-vip-users" 
-            element={
-              hasPermission.admin ? (
-                <AdminVipUsers />
-              ) : (
-                <AccessDenied message="You are not an administrator to access this page." />
-              )
-            } 
-          />
-          <Route 
-            path="/admin-vip-disabled" 
-            element={
-              hasPermission.admin ? (
-                <AdminDisabledVipUsers />
-              ) : (
-                <AccessDenied message="You are not an administrator to access this page." />
-              )
-            } 
-          />
-          
-          <Route path="/chooser" element={<Chooser />} />
-          <Route path="/plans" element={<Plans />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/account" element={<YourAccount />} />
-          <Route path="/success" element={<Success />} />
-          <Route path="/cancel" element={<Cancel />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/support" element={<SupportPage />} />
-          <Route path="/recommend" element={<RecommendContent />} />
-        </Routes>
-      </main>
-      {!isLoadingDetails && <Footer />}
-    </div>
-  );
-};
-
-const App = () => {
-  return (
     <Router>
-      <AppContent />
+      <div className="flex flex-col min-h-screen">
+        {isAuthenticated ? <HeaderLogged /> : <Header />}
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Chooser />} />
+            <Route path="/asian" element={<AsianPage />} />
+            <Route path="/asian/:slug" element={<AsianContentDetails />} />
+            <Route path="/western" element={<WesternPage />} />
+            <Route path="/western/:slug" element={<WesternContentDetails />} />
+            <Route path="/banned" element={<BannedContent />} />
+            <Route path="/banned/:slug" element={<BannedContentDetails />} />
+            <Route path="/unknown" element={<UnknownContent />} />
+            <Route path="/unknown/:slug" element={<UnknownContentDetails />} />
+            
+            <Route 
+              path="/vip" 
+              element={
+                hasPermission.vip ? (
+                  <VIPcontent />
+                ) : (
+                  <AccessDenied message="You are not a VIP to access this page." />
+                )
+              } 
+            />
+            
+            <Route 
+              path="/vip/:slug" 
+              element={
+                hasPermission.vip ? (
+                  <VIPContentDetails />
+                ) : (
+                  <AccessDenied message="You are not a VIP to access this page." />
+                )
+              } 
+            />
+            
+            <Route 
+              path="/admin/settings" 
+              element={
+                hasPermission.admin ? (
+                  <AdminPainel />
+                ) : (
+                  <AccessDenied message="You are not an administrator to access this page." />
+                )
+              } 
+            />
+            <Route 
+              path="/admin/stats" 
+              element={
+                hasPermission.admin ? (
+                  <ViewStats />
+                ) : (
+                  <AccessDenied message="You are not an administrator to access this page." />
+                )
+              } 
+            />
+            <Route 
+              path="/admin/requests" 
+              element={
+                hasPermission.admin ? (
+                  <ViewRequests />
+                ) : (
+                  <AccessDenied message="You are not an administrator to access this page." />
+                )
+              } 
+            />
+            <Route 
+              path="/admin-vip-users" 
+              element={
+                hasPermission.admin ? (
+                  <AdminVipUsers />
+                ) : (
+                  <AccessDenied message="You are not an administrator to access this page." />
+                )
+              } 
+            />
+            <Route 
+              path="/admin-vip-disabled" 
+              element={
+                hasPermission.admin ? (
+                  <AdminDisabledVipUsers />
+                ) : (
+                  <AccessDenied message="You are not an administrator to access this page." />
+                )
+              } 
+            />
+            
+            <Route path="/chooser" element={<Chooser />} />
+            <Route path="/plans" element={<Plans />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/account" element={<YourAccount />} />
+            <Route path="/success" element={<Success />} />
+            <Route path="/cancel" element={<Cancel />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/support" element={<SupportPage />} />
+            <Route path="/recommend" element={<RecommendContent />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
     </Router>
   );
 };

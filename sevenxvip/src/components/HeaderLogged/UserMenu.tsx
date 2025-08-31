@@ -38,7 +38,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
   };
 
   return (
-    <nav className="relative z-[9999]">
+    <nav className="relative z-50">
       <motion.div
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
@@ -85,7 +85,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            className="absolute right-0 mt-4 w-64 bg-gray-900/95 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-700/50 overflow-hidden z-[9999]"
+            className="absolute right-0 mt-4 w-64 bg-gray-900/95 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-700/50 overflow-hidden"
             initial={{ opacity: 0, scale: 0.95, y: -10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}

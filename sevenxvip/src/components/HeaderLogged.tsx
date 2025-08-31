@@ -117,7 +117,7 @@ const HeaderLogged: React.FC = () => {
   const theme = getThemeClasses();
 
   return (
-    <header className="w-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b border-gray-700/50 sticky top-0 z-[9999] backdrop-blur-xl shadow-2xl">
+    <header className="w-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b border-gray-700/50 sticky top-0 z-50 backdrop-blur-xl shadow-2xl">
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="flex items-center justify-between h-16 sm:h-18 lg:h-20">
           {/* Logo Section */}
@@ -285,7 +285,7 @@ const HeaderLogged: React.FC = () => {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="lg:hidden border-t border-gray-700/50 bg-gray-800/95 backdrop-blur-xl rounded-b-2xl z-[9998]"
+              className="lg:hidden border-t border-gray-700/50 bg-gray-800/95 backdrop-blur-xl rounded-b-2xl"
             >
               <div className="px-6 py-8 space-y-4">
                 <Link 
