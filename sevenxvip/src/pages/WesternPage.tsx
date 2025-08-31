@@ -260,7 +260,7 @@ const WesternPage: React.FC = () => {
             <button 
               className="p-2 bg-gray-700/50 hover:bg-orange-500/20 text-gray-300 hover:text-orange-300 rounded-lg transition-all duration-300 border border-gray-600/50" 
               title="Switch to Asian"
-              onClick={() => navigate('/western')}
+              onClick={() => navigate('/asian')}
             >
               <i className="fa-solid fa-repeat text-sm"></i>
             </button>

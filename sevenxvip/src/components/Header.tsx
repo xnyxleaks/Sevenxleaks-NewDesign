@@ -89,7 +89,8 @@ const Header: React.FC = () => {
     { name: 'Unknown', path: '/unknown', icon: 'fa-question' },
     { name: 'Plans', path: '/plans', icon: 'fa-crown' },
     { name: 'Discord', path: 'https://discord.gg/95BKaYTPPS', icon: 'fab fa-discord', external: true },
-    { name: 'Login', path: '/login', icon: 'fa-sign-in-alt' }
+    { name: 'Login', path: '/login', icon: 'fa-sign-in-alt' },
+    { name: 'Register', path: '/register', icon: 'fa-registered' }
   ];
 
   return (

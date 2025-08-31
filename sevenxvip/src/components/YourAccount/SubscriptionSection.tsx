@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Crown, Calendar, CheckCircle, XCircle, Sparkles, AlertTriangle, Settings, ExternalLink } from "lucide-react";
 import { Userdatatypes } from "../../../types/Userdatatypes";
-import { useTheme } from "../../contexts/ThemeContext";
 import { motion } from "framer-motion";
 
 
