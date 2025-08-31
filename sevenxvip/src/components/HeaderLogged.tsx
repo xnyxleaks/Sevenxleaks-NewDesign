@@ -116,6 +116,35 @@ const HeaderLogged: React.FC = () => {
 
   const theme = getThemeClasses();
 
+  const getMenuItems = () => {
+    const baseItems = [
+      { name: 'Home', path: '/', icon: 'fa-home' },
+      { name: 'Banned', path: '/banned', icon: 'fa-ban' },
+      { name: 'Unknown', path: '/unknown', icon: 'fa-question' }
+    ];
+
+    const vipItems = isVip ? [
+      { name: 'VIP Content', path: '/vip', icon: 'fa-crown' },
+      { name: 'Recommend', path: '/recommend', icon: 'fa-lightbulb' }
+    ] : [
+      { name: 'Plans', path: '/plans', icon: 'fa-crown' }
+    ];
+
+    const adminItems = isAdmin ? [
+      { name: 'Admin Panel', path: '/admin/settings', icon: 'fa-shield' },
+      { name: 'Statistics', path: '/admin/stats', icon: 'fa-chart-line' },
+      { name: 'Requests', path: '/admin/requests', icon: 'fa-clipboard-list' }
+    ] : [];
+
+    const socialItems = [
+      { name: 'Discord', path: 'https://discord.gg/95BKaYTPPS', icon: 'fab fa-discord', external: true }
+    ];
+
+    return [...baseItems, ...vipItems, ...adminItems, ...socialItems];
+  };
+
+  const allMenuItems = getMenuItems();
+
   return (
     <header className="w-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b border-gray-700/50 sticky top-0 z-50 backdrop-blur-xl shadow-2xl">
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
@@ -156,7 +185,7 @@ const HeaderLogged: React.FC = () => {
               className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:border-red-500/20 hover:shadow-red-500/20"
             >
               <span className="relative z-10 font-medium font-['Roboto'] text-sm flex items-center gap-2">
-                <i className="fa-solid  text-red-400 text-xs"></i>
+                <i className="fa-solid fa-ban text-red-400 text-xs"></i>
                 Banned
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-red-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
@@ -167,7 +196,7 @@ const HeaderLogged: React.FC = () => {
               className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:border-gray-500/20 hover:shadow-gray-500/20"
             >
               <span className="relative z-10 font-medium font-['Roboto'] text-sm flex items-center gap-2">
-                <i className="fa-solid  text-gray-400 text-xs"></i>
+                <i className="fa-solid fa-question text-gray-400 text-xs"></i>
                 Unknown
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-gray-500 to-gray-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
@@ -265,132 +294,106 @@ const HeaderLogged: React.FC = () => {
               setIsMenuOpen={setIsMenuOpen}
             />
 
-            
-
-            {/* Mobile Menu Toggle */}
-            <button
-              className="lg:hidden p-3 text-gray-300 hover:text-white hover:bg-gray-700/50 rounded-xl transition-all duration-300 border border-gray-700/50 hover:border-gray-600"
+            {/* Simple Mobile Menu Toggle */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="lg:hidden p-2 text-gray-300 hover:text-white transition-colors duration-200"
               onClick={handleMobileMenuToggle}
             >
-              <i className={`fa-solid ${isMobileMenuOpen ? 'fa-times' : 'fa-bars'} text-lg`}></i>
-            </button>
+              <div className="w-6 h-6 flex flex-col justify-center items-center">
+                <motion.span
+                  animate={isMobileMenuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+                  className="w-6 h-0.5 bg-current block transition-all duration-300 origin-center"
+                />
+                <motion.span
+                  animate={isMobileMenuOpen ? { opacity: 0 } : { opacity: 1 }}
+                  className="w-6 h-0.5 bg-current block mt-1.5 transition-all duration-300"
+                />
+                <motion.span
+                  animate={isMobileMenuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+                  className="w-6 h-0.5 bg-current block mt-1.5 transition-all duration-300 origin-center"
+                />
+              </div>
+            </motion.button>
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="lg:hidden border-t border-gray-700/50 bg-gray-800/95 backdrop-blur-xl rounded-b-2xl"
-            >
-              <div className="px-6 py-8 space-y-4">
-                <Link 
-                  to="/" 
-                  onClick={handleMobileMenuToggle} 
-                  className={`flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white ${theme.bg} hover:bg-gray-700/50 rounded-2xl transition-all duration-300 font-medium border border-gray-700/30 hover:${theme.border} backdrop-blur-sm`}
-                >
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${theme.gradient} flex items-center justify-center shadow-lg`}>
-                    <i className="fa-solid fa-home text-white text-sm"></i>
-                  </div>
-                  <span className="font-['Roboto']">Home</span>
-                </Link>
-                
-                <Link 
-                  to="/banned" 
-                  onClick={handleMobileMenuToggle} 
-                  className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-red-500/10 hover:bg-red-500/20 rounded-2xl transition-all duration-300 font-medium border border-red-500/20 hover:border-red-500/30 backdrop-blur-sm"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg">
-                    <i className="fa-solid  text-white text-sm"></i>
-                  </div>
-                  <span className="font-roboto">Banned Content</span>
-                </Link>
-                
-                <Link 
-                  to="/unknown" 
-                  onClick={handleMobileMenuToggle} 
-                  className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-gray-500/10 hover:bg-gray-500/20 rounded-2xl transition-all duration-300 font-medium border border-gray-500/20 hover:border-gray-500/30 backdrop-blur-sm"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center shadow-lg">
-                    <i className="fa-solid  text-white text-sm"></i>
-                  </div>
-                  <span className="font-roboto">Unknown Content</span>
-                </Link>
-                
-                {!isVip && (
-                  <Link 
-                    to="/plans" 
-                    onClick={handleMobileMenuToggle} 
-                    className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-yellow-500/10 hover:bg-yellow-500/20 rounded-2xl transition-all duration-300 font-medium border border-yellow-500/20 hover:border-yellow-500/30 backdrop-blur-sm"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-500 flex items-center justify-center shadow-lg">
-                      <i className="fa-solid fa-crown text-black text-sm"></i>
-                    </div>
-                    <span className="font-roboto">Plans</span>
-                  </Link>
-                )}
-                
-                <a 
-                  href="https://discord.gg/95BKaYTPPS"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={handleMobileMenuToggle} 
-                  className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-purple-500/10 hover:bg-purple-500/20 rounded-2xl transition-all duration-300 font-medium border border-purple-500/20 hover:border-purple-500/30 backdrop-blur-sm"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg">
-                    <i className="fab fa-discord text-white text-sm"></i>
-                  </div>
-                  <span className="font-roboto">Discord</span>
-                </a>
-                
-                {isAdmin && (
-                  <>
-                    <Link
-                      to="/admin/settings"
-                      onClick={handleMobileMenuToggle}
-                      className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-red-500/10 hover:bg-red-500/20 rounded-2xl transition-all duration-300 font-medium border border-red-500/20 hover:border-red-500/30 backdrop-blur-sm"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg">
-                        <i className="fa-solid fa-shield text-white text-sm"></i>
-                      </div>
-                      <span className="font-['Roboto']">Admin Panel</span>
-                    </Link>
-                    <Link 
-                      to="/admin/stats" 
-                      onClick={handleMobileMenuToggle}
-                      className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white bg-green-500/10 hover:bg-green-500/20 rounded-2xl transition-all duration-300 font-medium border border-green-500/20 hover:border-green-500/30 backdrop-blur-sm"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-lg">
-                        <i className="fa-solid fa-chart-line text-white text-sm"></i>
-                      </div>
-                      <span className="font-['Roboto']">Statistics</span>
-                    </Link>
-                  </>
-                )}
-                {isVip && (
-                  <Link
-                    to="/vip"
-                    onClick={handleMobileMenuToggle}
-                    className="flex items-center gap-4 px-6 py-4 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-black font-bold rounded-2xl shadow-lg transition-all duration-300 border border-yellow-400/30 mt-4"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-black/20 flex items-center justify-center relative">
-                      <i className="fa-solid fa-crown text-yellow-300 text-sm animate-pulse"></i>
-                      <div className="absolute inset-0 animate-ping">
-                        <i className="fa-solid fa-crown text-yellow-600/50 text-sm"></i>
-                      </div>
-                    </div>
-                    <span className="font-['Orbitron'] tracking-wide">VIP ACCESS</span>
-                  </Link>
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
+
+      {/* Simple Mobile Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="lg:hidden bg-gray-800/95 backdrop-blur-xl border-t border-gray-700/50 overflow-hidden"
+          >
+            <div className="px-4 py-6 space-y-2">
+              {allMenuItems.map((item, index) => (
+                <motion.div
+                  key={item.name}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  {item.external ? (
+                    <a
+                      href={item.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={handleMobileMenuToggle}
+                      className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-700/50 rounded-lg transition-all duration-200"
+                    >
+                      <i className={`${item.icon} w-5 text-center`}></i>
+                      <span className="font-medium">{item.name}</span>
+                      <i className="fa-solid fa-external-link text-xs ml-auto"></i>
+                    </a>
+                  ) : (
+                    <Link
+                      to={item.path}
+                      onClick={handleMobileMenuToggle}
+                      className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-700/50 rounded-lg transition-all duration-200"
+                    >
+                      <i className={`${item.icon} w-5 text-center`}></i>
+                      <span className="font-medium">{item.name}</span>
+                    </Link>
+                  )}
+                </motion.div>
+              ))}
+              
+              {/* Account and Logout for Mobile */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                className="pt-4 border-t border-gray-700/50 space-y-2"
+              >
+                <Link to="/account" onClick={handleMobileMenuToggle}>
+                  <div className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-700/50 rounded-lg transition-all duration-200">
+                    <i className="fa-solid fa-user w-5 text-center"></i>
+                    <span className="font-medium">My Account</span>
+                  </div>
+                </Link>
+                
+                <button
+                  onClick={() => {
+                    localStorage.removeItem("Token");
+                    localStorage.removeItem("name");
+                    localStorage.removeItem("email");
+                    window.location.href = '/';
+                  }}
+                  className="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all duration-200"
+                >
+                  <i className="fa-solid fa-sign-out-alt w-5 text-center"></i>
+                  <span className="font-medium">Logout</span>
+                </button>
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

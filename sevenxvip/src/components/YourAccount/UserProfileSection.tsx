@@ -1,12 +1,13 @@
 import React, { useRef, useState, useEffect } from "react";
-import { User, Mail, Calendar, Edit } from "lucide-react";
+import { User, Mail, Calendar, Edit, Crown, Shield } from "lucide-react";
 import { Userdatatypes } from "../../../types/Userdatatypes";
 import { useTheme } from "../../contexts/ThemeContext";
+import { motion } from "framer-motion";
 import axios from "axios";
 
 interface UserProfileSectionProps {
   userData: Userdatatypes;
-  setUserData: (updatedData: Userdatatypes) => void; // Para atualizar a imagem após envio
+  setUserData: (updatedData: Userdatatypes) => void; 
 }
 
 const UserProfileSection: React.FC<UserProfileSectionProps> = ({ userData, setUserData }) => {
@@ -16,7 +17,7 @@ const UserProfileSection: React.FC<UserProfileSectionProps> = ({ userData, setUs
   const isDark = theme === "dark";
 
   useEffect(() => {
-    // Busca imagem de perfil do backend ao montar o componente
+ 
     const fetchProfileImage = async () => {
       try {
         const token = localStorage.getItem("Token");
@@ -83,18 +84,31 @@ const UserProfileSection: React.FC<UserProfileSectionProps> = ({ userData, setUs
   };
 
   return (
-    <div className={`overflow-hidden rounded-2xl transition-all duration-300 ${
-      isDark
-        ? "bg-gray-800/60 border border-gray-700 shadow-lg shadow-indigo-500/10"
-        : "bg-white border border-gray-200 shadow-lg shadow-indigo-500/5"
-    }`}>
-      <div className={`w-full h-32 ${isDark ? "bg-gradient-to-r from-indigo-500/30 to-purple-500/30" : "bg-gradient-to-r from-indigo-100 to-purple-100"}`}></div>
+    <div className="bg-gray-800/60 backdrop-blur-xl border border-gray-700 rounded-2xl overflow-hidden shadow-2xl">
+      {/* Header Background */}
+      <div className="relative w-full h-32 bg-gradient-to-r from-purple-900/40 to-blue-900/40 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20"></div>
+        <div className="absolute top-4 right-4 flex gap-2">
+          {userData.isVip && (
+            <motion.div
+              animate={{ rotate: [0, 10, -10, 0] }}
+              transition={{ duration: 3, repeat: Infinity }}
+              className="w-8 h-8 bg-yellow-500/20 rounded-full flex items-center justify-center border border-yellow-500/30"
+            >
+              <Crown className="w-4 h-4 text-yellow-400" />
+            </motion.div>
+          )}
+          {userData.isAdmin && (
+            <div className="w-8 h-8 bg-red-500/20 rounded-full flex items-center justify-center border border-red-500/30">
+              <Shield className="w-4 h-4 text-red-400" />
+            </div>
+          )}
+        </div>
+      </div>
 
-      <div className="p-6 -mt-16">
+      <div className="p-6 -mt-16 relative">
         <div className="flex flex-col sm:flex-row items-start sm:items-end gap-4">
-          <div className={`relative rounded-full w-24 h-24 overflow-hidden border-4 ${
-            isDark ? "border-gray-800" : "border-white"
-          }`}>
+          <div className="relative rounded-full w-24 h-24 overflow-hidden border-4 border-gray-800 shadow-xl">
             {userData.profileImage ? (
               <img
                 src={userData.profileImage}
@@ -102,21 +116,15 @@ const UserProfileSection: React.FC<UserProfileSectionProps> = ({ userData, setUs
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className={`w-full h-full flex items-center justify-center ${
-                isDark ? "bg-gray-700" : "bg-gray-200"
-              }`}>
-                <User className={`w-12 h-12 ${isDark ? "text-gray-500" : "text-gray-400"}`} />
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-700 to-gray-800">
+                <User className="w-12 h-12 text-gray-400" />
               </div>
             )}
 
             <button
               type="button"
               onClick={handleEditClick}
-              className={`absolute bottom-0 right-0 w-8 h-8 rounded-full flex items-center justify-center ${
-                isDark
-                  ? "bg-indigo-500 hover:bg-indigo-600"
-                  : "bg-indigo-600 hover:bg-indigo-700"
-              } text-white transition-colors duration-200`}
+              className="absolute bottom-0 right-0 w-8 h-8 rounded-full flex items-center justify-center bg-purple-500 hover:bg-purple-600 text-white transition-colors duration-200 shadow-lg"
               disabled={loading}
             >
               <Edit className="w-4 h-4" />
@@ -132,35 +140,43 @@ const UserProfileSection: React.FC<UserProfileSectionProps> = ({ userData, setUs
           </div>
 
           <div className="flex-1 pt-2 sm:pt-0">
-            <h2 className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
-              {userData.username}
-            </h2>
-            <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+            <div className="flex items-center gap-3 mb-2">
+              <h2 className="text-2xl font-bold text-white font-orbitron">
+                {userData.name}
+              </h2>
+              {userData.isVip && (
+                <div className="flex items-center gap-1 px-2 py-1 bg-yellow-500/20 border border-yellow-500/30 rounded-full">
+                  <Crown className="w-3 h-3 text-yellow-400" />
+                  <span className="text-xs font-bold text-yellow-400">VIP</span>
+                </div>
+              )}
+            </div>
+            <p className="text-sm text-gray-400 font-roboto">
               Member since {new Date(userData.createdAt).toLocaleDateString()}
             </p>
           </div>
         </div>
 
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className={`flex items-center gap-3 p-3 rounded-lg ${
-            isDark ? "bg-gray-700/50" : "bg-gray-100"
-          }`}>
-            <Mail className={isDark ? "text-indigo-400" : "text-indigo-600"} size={18} />
+          <div className="flex items-center gap-3 p-4 bg-gray-700/50 rounded-xl border border-gray-600/30">
+            <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+              <Mail className="text-purple-400 w-5 h-5" />
+            </div>
             <div>
-              <p className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>Email Address</p>
-              <p className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
+              <p className="text-xs text-gray-400 font-roboto">Email Address</p>
+              <p className="text-sm font-medium text-white">
                 {userData.email || "No email provided"}
               </p>
             </div>
           </div>
 
-          <div className={`flex items-center gap-3 p-3 rounded-lg ${
-            isDark ? "bg-gray-700/50" : "bg-gray-100"
-          }`}>
-            <Calendar className={isDark ? "text-indigo-400" : "text-indigo-600"} size={18} />
+          <div className="flex items-center gap-3 p-4 bg-gray-700/50 rounded-xl border border-gray-600/30">
+            <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+              <Calendar className="text-blue-400 w-5 h-5" />
+            </div>
             <div>
-              <p className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>Account Status</p>
-              <p className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
+              <p className="text-xs text-gray-400 font-roboto">Account Status</p>
+              <p className="text-sm font-medium text-white">
                 {userData.isVip ? "VIP Member" : "Free Member"}
               </p>
             </div>

@@ -17,6 +17,7 @@ export interface Userdatatypes {
   isVip: boolean;
   vipExpirationDate: number;
   lastLogin: string;
+  isAdmin: boolean;
   recentlyViewed: string[];
   transactions: Transaction[];
   favorites: FavoriteContent[];

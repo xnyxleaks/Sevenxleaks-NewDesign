@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { Crown, Calendar, CheckCircle, XCircle, Sparkles, AlertTriangle, Settings, ExternalLink } from "lucide-react";
 import { Userdatatypes } from "../../../types/Userdatatypes";
 import { useTheme } from "../../contexts/ThemeContext";
+import { motion } from "framer-motion";
+
 
 interface SubscriptionSectionProps {
   userData: Userdatatypes;
@@ -17,10 +19,6 @@ const SubscriptionSection: React.FC<SubscriptionSectionProps> = ({
   isCanceling,
   setShowCancelModal,
 }) => {
-  const { theme } = useTheme();
-  
-  const isDark = theme === "dark";
-  
   const handleManageSubscription = async () => {
     try {
       const token = localStorage.getItem('Token');
@@ -48,49 +46,44 @@ const SubscriptionSection: React.FC<SubscriptionSectionProps> = ({
   };
   
   return (
-    <div className={`overflow-hidden rounded-2xl transition-colors duration-300 ${
-      isDark 
-        ? "bg-gray-800/60 border border-gray-700" 
-        : "bg-white border border-gray-200"
-    }`}>
-      <div className={`px-6 py-4 border-b ${
-        isDark ? "border-gray-700" : "border-gray-200"
-      }`}>
+    <div className="bg-gray-800/60 backdrop-blur-xl border border-gray-700 rounded-2xl overflow-hidden shadow-xl">
+      <div className="bg-gradient-to-r from-gray-800/80 to-gray-900/80 px-6 py-4 border-b border-gray-700">
         <div className="flex items-center gap-3">
-          <div className={`flex items-center justify-center w-10 h-10 rounded-lg ${
+          <div className={`flex items-center justify-center w-12 h-12 rounded-xl shadow-lg ${
             userData.isVip 
-              ? isDark ? "bg-amber-500/20 text-amber-400" : "bg-amber-100 text-amber-600"
-              : isDark ? "bg-gray-700 text-gray-400" : "bg-gray-100 text-gray-500"
+              ? "bg-gradient-to-br from-yellow-400 to-yellow-500 text-black"
+              : "bg-gradient-to-br from-gray-600 to-gray-700 text-gray-400"
           }`}>
-            <Crown size={20} />
+            <Crown className="w-6 h-6" />
           </div>
-          <h3 className="text-xl font-semibold">Subscription Management</h3>
+          <div>
+            <h3 className="text-xl font-semibold text-white font-orbitron">Subscription Management</h3>
+            <p className="text-sm text-gray-400">Manage your VIP subscription</p>
+          </div>
         </div>
       </div>
       
       <div className="p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div className={`p-4 rounded-lg flex items-start gap-3 ${
-            isDark ? "bg-gray-700/50" : "bg-gray-100"
-          }`}>
-            <div className={`mt-1 ${
+          <div className="p-4 bg-gray-700/50 rounded-xl border border-gray-600/30 flex items-start gap-3">
+            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
               userData.isVip 
-                ? isDark ? "text-amber-400" : "text-amber-600"
-                : isDark ? "text-gray-400" : "text-gray-500"
+                ? "bg-green-500/20 text-green-400"
+                : "bg-gray-600/20 text-gray-400"
             }`}>
-              {userData.isVip ? <CheckCircle size={20} /> : <XCircle size={20} />}
+              {userData.isVip ? <CheckCircle className="w-5 h-5" /> : <XCircle className="w-5 h-5" />}
             </div>
             <div>
-              <h4 className="font-medium mb-1">Current Plan</h4>
-              <p className={`text-lg font-semibold ${
+              <h4 className="font-medium mb-1 text-white">Current Plan</h4>
+              <p className={`text-lg font-semibold font-orbitron ${
                 userData.isVip
-                  ? isDark ? "text-amber-400" : "text-amber-600"
-                  : isDark ? "text-gray-400" : "text-gray-500"
+                  ? "text-yellow-400"
+                  : "text-gray-400"
               }`}>
                 {userData.isVip ? "VIP Subscription" : "Free Account"}
               </p>
               {userData.isVip && (
-                <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                <p className="text-sm text-gray-400">
                   Full access to all premium content
                 </p>
               )}
@@ -98,18 +91,16 @@ const SubscriptionSection: React.FC<SubscriptionSectionProps> = ({
           </div>
           
           {userData.isVip && (
-            <div className={`p-4 rounded-lg flex items-start gap-3 ${
-              isDark ? "bg-gray-700/50" : "bg-gray-100"
-            }`}>
-              <div className={`mt-1 ${isDark ? "text-indigo-400" : "text-indigo-600"}`}>
-                <Calendar size={20} />
+            <div className="p-4 bg-gray-700/50 rounded-xl border border-gray-600/30 flex items-start gap-3">
+              <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                <Calendar className="w-5 h-5 text-blue-400" />
               </div>
               <div>
-                <h4 className="font-medium mb-1">Next Billing Date</h4>
-                <p className="text-lg font-semibold">
+                <h4 className="font-medium mb-1 text-white">Next Billing Date</h4>
+                <p className="text-lg font-semibold text-blue-400 font-orbitron">
                   {new Date(userData.vipExpirationDate).toLocaleDateString()}
                 </p>
-                <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                <p className="text-sm text-gray-400">
                   {isCanceling ? "Subscription will not renew" : "Auto-renewal enabled"}
                 </p>
               </div>
@@ -118,17 +109,15 @@ const SubscriptionSection: React.FC<SubscriptionSectionProps> = ({
         </div>
         
         {isCanceling && (
-          <div className={`mb-6 p-4 rounded-lg flex items-start gap-3 ${
-            isDark ? "bg-amber-500/10 border border-amber-500/20" : "bg-amber-50 border border-amber-100"
-          }`}>
-            <div className={isDark ? "text-amber-400" : "text-amber-600"}>
-              <AlertTriangle size={20} />
+          <div className="mb-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-start gap-3">
+            <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
+              <AlertTriangle className="w-5 h-5 text-amber-400" />
             </div>
             <div>
-              <p className={`font-medium ${isDark ? "text-amber-400" : "text-amber-600"}`}>
+              <p className="font-medium text-amber-400">
                 Subscription Canceled
               </p>
-              <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+              <p className="text-sm text-gray-300">
                 You will retain VIP access until{" "}
                 <span className="font-medium">
                   {new Date(userData.vipExpirationDate).toLocaleDateString()}
@@ -139,17 +128,15 @@ const SubscriptionSection: React.FC<SubscriptionSectionProps> = ({
         )}
         
         {userData.isVip && !isSubscriptionActive && (
-          <div className={`mb-6 p-4 rounded-lg flex items-start gap-3 ${
-            isDark ? "bg-amber-500/10 border border-amber-500/20" : "bg-amber-50 border border-amber-100"
-          }`}>
-            <div className={isDark ? "text-amber-400" : "text-amber-600"}>
-              <AlertTriangle size={20} />
+          <div className="mb-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-start gap-3">
+            <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
+              <AlertTriangle className="w-5 h-5 text-amber-400" />
             </div>
             <div>
-              <p className={`font-medium ${isDark ? "text-amber-400" : "text-amber-600"}`}>
+              <p className="font-medium text-amber-400">
                 Subscription Expired
               </p>
-              <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+              <p className="text-sm text-gray-300">
                 Your VIP subscription has expired. You can renew it by upgrading your plan.
               </p>
             </div>
@@ -158,56 +145,50 @@ const SubscriptionSection: React.FC<SubscriptionSectionProps> = ({
         
         <div className="flex flex-wrap gap-3">
           <Link to="/plans">
-            <button className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all duration-200 ${
-              isDark
-                ? "bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white" 
-                : "bg-gradient-to-r from-indigo-600 to-purple-700 hover:from-indigo-700 hover:to-purple-800 text-white"
-            }`}>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-6 py-3 bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700 text-white rounded-xl text-sm font-bold flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-purple-500/30 font-orbitron"
+            >
               <Sparkles size={16} />
               {userData.isVip ? "Change Plan" : "Upgrade to VIP"}
-            </button>
+            </motion.button>
           </Link>
           
           {userData.isVip && userData.stripeSubscriptionId && (
             <>
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => setShowCancelModal(true)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all duration-200 ${
-                  isDark
-                    ? "bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20" 
-                    : "bg-red-50 text-red-600 border border-red-100 hover:bg-red-100"
-                }`}
+                className="px-6 py-3 bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 rounded-xl text-sm font-medium flex items-center gap-2 transition-all duration-300"
               >
                 <XCircle size={16} />
                 Cancel Subscription
-              </button>
+              </motion.button>
               
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={handleManageSubscription}
-                className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all duration-200 ${
-                  isDark
-                    ? "bg-blue-500/10 text-blue-400 border border-blue-500/20 hover:bg-blue-500/20" 
-                    : "bg-blue-50 text-blue-600 border border-blue-100 hover:bg-blue-100"
-                }`}
+                className="px-6 py-3 bg-blue-500/10 text-blue-400 border border-blue-500/20 hover:bg-blue-500/20 rounded-xl text-sm font-medium flex items-center gap-2 transition-all duration-300"
               >
                 <Settings size={16} />
                 Manage Subscription
                 <ExternalLink size={14} />
-              </button>
+              </motion.button>
             </>
           )}
           
           {isCanceling && (
-            <button
-              className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all duration-200 ${
-                isDark
-                  ? "bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20" 
-                  : "bg-indigo-50 text-indigo-600 border border-indigo-100 hover:bg-indigo-100"
-              }`}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-6 py-3 bg-green-500/10 text-green-400 border border-green-500/20 hover:bg-green-500/20 rounded-xl text-sm font-medium flex items-center gap-2 transition-all duration-300"
             >
               <CheckCircle size={16} />
               Reactivate Subscription
-            </button>
+            </motion.button>
           )}
         </div>
       </div>
