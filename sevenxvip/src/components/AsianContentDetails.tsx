@@ -5,15 +5,12 @@ import {
   ArrowLeft,
   Calendar,
   Tag,
-  Download,
   ExternalLink,
   Shield,
   Crown,
-  Star,
   ChevronDown,
   AlertTriangle,
 } from "lucide-react";
-import Loading from "../components/Loading/Loading";
 import DownloadOptions from "../components/DownloadOptions";
 import { linkvertise } from "../components/Linkvertise";
 import { Helmet } from "react-helmet";
@@ -56,16 +53,13 @@ const asianContentDetails = () => {
             },
           }
         );
-
         if (response.data && response.data.activeAccount) {
           setLinkvertiseAccount(response.data.activeAccount);
         }
-      } catch (error) {
-        console.error("Erro ao buscar configuração do Linkvertise:", error);
+      } catch {
         setLinkvertiseAccount("518238");
       }
     };
-
     fetchLinkvertiseConfig();
   }, []);
 
@@ -95,36 +89,24 @@ const asianContentDetails = () => {
             },
           }
         );
-
-        if (!response.data || !response.data.data) {
-          throw new Error("Resposta inválida do servidor");
-        }
-
+        if (!response.data || !response.data.data) throw new Error("Resposta inválida do servidor");
         const decodedContent = decodeModifiedBase64(response.data.data);
         setContent(decodedContent);
-      } catch (error) {
-        console.error("Error fetching content details:", error);
+      } catch (e) {
         setError("Failed to load content details. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
-
     if (slug) fetchContentDetails();
   }, [slug]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    return date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
   };
 
-  if (loading) {
-    return <LoadingAsian/>
-  }
+  if (loading) return <LoadingAsian />;
 
   if (error) {
     return (
@@ -179,24 +161,27 @@ const asianContentDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-x-hidden">
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-x-clip">
       <Helmet>
         <title>Sevenxleaks - {content.name} (asian)</title>
         <link rel="canonical" href={`https://sevenxleaks.com/asian/${content.slug}`} />
+        {/* Corte duro e correções de 100vw de terceiros */}
+        <style>{`
+          html, body, #root { max-width: 100%; overflow-x: hidden; }
+          .linkvertise-container, [data-ads], iframe { width: 100% !important; max-width: 100% !important; }
+          * { word-break: break-word; }
+        `}</style>
       </Helmet>
 
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-gray-900 to-gray-900"></div>
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+      {/* Background Effects contidos e centralizados */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-64 h-64 sm:w-96 sm:h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-64 h-64 sm:w-96 sm:h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
+      </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Button */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="mb-6"
-        >
+        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-6">
           <Link
             to="/asian"
             className="inline-flex items-center gap-2 px-4 py-2 bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700 hover:border-purple-500/50 rounded-xl text-gray-300 hover:text-white transition-all duration-300 backdrop-blur-sm shadow-lg hover:shadow-purple-500/10"
@@ -230,7 +215,7 @@ const asianContentDetails = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-4 leading-tight"
+              className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-4 leading-tight break-words"
             >
               {content.name}
             </motion.h1>
@@ -243,9 +228,7 @@ const asianContentDetails = () => {
                 className="flex items-center gap-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-gray-700/50 rounded-lg border border-gray-600/50 backdrop-blur-sm"
               >
                 <Calendar className="w-4 h-4 text-purple-400" />
-                <span className="text-gray-300 text-sm">
-                  {formatDate(content.postDate)}
-                </span>
+                <span className="text-gray-300 text-sm">{formatDate(content.postDate)}</span>
               </motion.div>
 
               <motion.div
@@ -255,33 +238,23 @@ const asianContentDetails = () => {
                 className="flex items-center gap-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-purple-500/20 text-purple-300 rounded-lg border border-purple-500/30 backdrop-blur-sm"
               >
                 <Tag className="w-4 h-4" />
-                <span className="font-medium text-sm">{content.category}</span>
+                <span className="font-medium text-sm break-words">{content.category}</span>
               </motion.div>
             </div>
           </div>
 
           {/* Download Section */}
           <div className="p-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="mb-6"
-            >
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-            >
-              <DownloadOptions
-                primaryLinks={{
-                  mega: content.mega,
-                  mega2: content.mega2,
-                  pixeldrain: content.pixeldrain,
-                }}
-              />
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
+              <div className="w-full max-w-full overflow-hidden">
+                <DownloadOptions
+                  primaryLinks={{
+                    mega: content.mega,
+                    mega2: content.mega2,
+                    pixeldrain: content.pixeldrain,
+                  }}
+                />
+              </div>
             </motion.div>
 
             {/* VIP Upgrade Section */}
@@ -289,7 +262,7 @@ const asianContentDetails = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
-              className="mt-6 bg-gradient-to-r from-yellow-500/10 to-yellow-600/10 border border-yellow-500/30 rounded-xl p-4"
+              className="mt-6 bg-gradient-to-r from-yellow-500/10 to-yellow-600/10 border border-yellow-500/30 rounded-xl p-4 w-full max-w-full"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
@@ -307,15 +280,13 @@ const asianContentDetails = () => {
                   className="inline-flex items-center gap-2 px-3 py-1.5 bg-yellow-500/15 border border-yellow-500/30 text-yellow-300 rounded-md text-xs font-medium transition-all"
                 >
                   {benefitsOpen ? "Hide benefits" : "Show benefits"}
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform ${benefitsOpen ? "rotate-180" : ""}`}
-                  />
+                  <ChevronDown className={`w-4 h-4 transition-transform ${benefitsOpen ? "rotate-180" : ""}`} />
                 </button>
               </div>
 
               <div
                 id="vip-benefits"
-                className={`grid grid-cols-2 gap-2 mb-4 overflow-hidden transition-all duration-300 ${
+                className={`grid grid-cols-2 gap-2 mb-4 overflow-hidden transition-all duration-300 w-full max-w-full ${
                   benefitsOpen ? "max-h-96 opacity-100 mt-1" : "max-h-0 opacity-0"
                 }`}
               >
@@ -329,7 +300,7 @@ const asianContentDetails = () => {
                     <div className="w-4 h-4 bg-green-500/20 rounded-full flex items-center justify-center">
                       <i className="fa-solid fa-check text-green-400 text-xs"></i>
                     </div>
-                    <span>{benefit}</span>
+                    <span className="break-words">{benefit}</span>
                   </div>
                 ))}
               </div>
