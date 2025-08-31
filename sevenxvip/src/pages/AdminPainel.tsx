@@ -390,7 +390,7 @@ const AdminPanel: React.FC = () => {
           </motion.div>
         )}
 
-        {/* Configurações do Linkvertise */}
+        {/* Configurações do Linkvertise
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -465,7 +465,7 @@ const AdminPanel: React.FC = () => {
               </motion.button>
             </div>
           </div>
-        </motion.div>
+        </motion.div> */}
 
         {/* Content Type Tabs */}
         <div className="flex flex-wrap gap-2 mb-8">

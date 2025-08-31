@@ -302,8 +302,10 @@ const VIPContent: React.FC = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.05 }}
-                            className="group bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700/50 hover:border-yellow-500/50 rounded-2xl p-6 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl hover:shadow-yellow-500/10 transform hover:scale-[1.02]"
-                            onClick={() => {
+ className="group bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700/50 
+  hover:border-yellow-500/50 rounded-xl p-3 transition-all duration-300 cursor-pointer 
+  backdrop-blur-sm shadow-lg hover:shadow-xl hover:shadow-yellow-500/10 
+  transform hover:scale-[1.01]" onClick={() => {
                               const contentType = link.contentType || "vip";
                               switch (contentType) {
                                 case "asian":
