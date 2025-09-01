@@ -114,53 +114,53 @@ const AdminPanel: React.FC = () => {
   };
 
   // Carrega a configuração global da conta do Linkvertise
-  useEffect(() => {
-    fetchLinkvertiseConfig();
-  }, []);
+  // useEffect(() => {
+  //   fetchLinkvertiseConfig();
+  // }, []);
 
-  // Busca a configuração global da conta do Linkvertise
-  const fetchLinkvertiseConfig = async () => {
-    try {
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/linkvertise-config`, {
-        headers: {
-          'x-api-key': `${import.meta.env.VITE_FRONTEND_API_KEY}`,
-        },
-      });
+  // // Busca a configuração global da conta do Linkvertise
+  // const fetchLinkvertiseConfig = async () => {
+  //   try {
+  //     const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/linkvertise-config`, {
+  //       headers: {
+  //         'x-api-key': `${import.meta.env.VITE_FRONTEND_API_KEY}`,
+  //       },
+  //     });
       
-      if (response.data && response.data.activeAccount) {
-        setLinkvertiseAccount(response.data.activeAccount);
-      }
-    } catch (error) {
-      console.error('Erro ao buscar configuração do Linkvertise:', error);
-      setLinkvertiseAccount('518238');
-    }
-  };
+  //     if (response.data && response.data.activeAccount) {
+  //       setLinkvertiseAccount(response.data.activeAccount);
+  //     }
+  //   } catch (error) {
+  //     console.error('Erro ao buscar configuração do Linkvertise:', error);
+  //     setLinkvertiseAccount('518238');
+  //   }
+  // };
 
-  // Salva a configuração global da conta do Linkvertise
-  const handleLinkvertiseAccountChange = async (account: string) => {
-    setIsUpdatingAccount(true);
-    try {
-      await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/linkvertise-config`,
-        { activeAccount: account },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'x-api-key': `${import.meta.env.VITE_FRONTEND_API_KEY}`,
-            'x-admin-key': `${import.meta.env.VITE_ADMIN_KEY}`
-          }
-        }
-      );
+  // // Salva a configuração global da conta do Linkvertise
+  // const handleLinkvertiseAccountChange = async (account: string) => {
+  //   setIsUpdatingAccount(true);
+  //   try {
+  //     await axios.put(
+  //       `${import.meta.env.VITE_BACKEND_URL}/linkvertise-config`,
+  //       { activeAccount: account },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           'x-api-key': `${import.meta.env.VITE_FRONTEND_API_KEY}`,
+  //           'x-admin-key': `${import.meta.env.VITE_ADMIN_KEY}`
+  //         }
+  //       }
+  //     );
       
-      setLinkvertiseAccount(account);
-      setError(null);
-    } catch (error) {
-      setError('Erro ao atualizar configuração do Linkvertise');
-      console.error('Erro ao atualizar configuração:', error);
-    } finally {
-      setIsUpdatingAccount(false);
-    }
-  };
+  //     setLinkvertiseAccount(account);
+  //     setError(null);
+  //   } catch (error) {
+  //     setError('Erro ao atualizar configuração do Linkvertise');
+  //     console.error('Erro ao atualizar configuração:', error);
+  //   } finally {
+  //     setIsUpdatingAccount(false);
+  //   }
+  // };
 
   useEffect(() => {
     setCurrentPage(1);

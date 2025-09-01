@@ -72,9 +72,7 @@ const Chooser: React.FC = () => {
               
               <div className="relative z-10 h-full flex flex-col justify-center items-center text-center">
                 <div className="mb-4 sm:mb-8">
-                  <div className="w-14 sm:w-20 h-14 sm:h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl sm:rounded-3xl flex items-center justify-center shadow-xl group-hover:shadow-purple-500/50 transition-all duration-300 group-hover:rotate-6 border border-purple-400/30">
-                    <i className="fa-solid fa-yin-yang text-white text-xl sm:text-3xl"></i>
-                  </div>
+                 
                 </div>
                 
                 <h2 className="text-lg sm:text-2xl font-bold text-white mb-2 sm:mb-4 font-orbitron">
@@ -109,9 +107,7 @@ const Chooser: React.FC = () => {
               
               <div className="relative z-10 h-full flex flex-col justify-center items-center text-center">
                 <div className="mb-4 sm:mb-8">
-                  <div className="w-14 sm:w-20 h-14 sm:h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl sm:rounded-3xl flex items-center justify-center shadow-xl group-hover:shadow-orange-500/50 transition-all duration-300 group-hover:rotate-6 border border-orange-400/30">
-                    <i className="fa-solid fa-globe-americas text-white text-xl sm:text-3xl"></i>
-                  </div>
+                 
                 </div>
                 
                 <h2 className="text-lg sm:text-2xl font-bold text-white mb-2 sm:mb-4 font-orbitron">

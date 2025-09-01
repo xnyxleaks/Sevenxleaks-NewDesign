@@ -16,8 +16,9 @@ import ForgotPassword from "./pages/Forgotpassword";
 import ResetPassword from "./pages/ResetPassword";
 import Plans from "./pages/Plans";
 import VIPcontent from "./pages/VIPcontent";
-import FreeContentDetails from "./components/AsianContentDetails";
-import VIPContentDetails from "./components/FreeContent/VIPContentDetails";
+// Removido import duplicado/ambíguo de FreeContentDetails/AsianContentDetails
+import WesternContentDetails from "./pages/WesternContentDetails";
+import AsianContentDetails from "./components/AsianContentDetails";
 import AdminPainel from "./pages/AdminPainel";
 import AdminVipUsers from "./pages/AdminVipUsers";
 import SupportPage from "./pages/SupportPage";
@@ -30,8 +31,16 @@ import BannedContent from "./pages/BannedContent";
 import UnknownContent from "./pages/UnknownContent";
 import BannedContentDetails from "./pages/BannedContentDetails";
 import UnknownContentDetails from "./pages/UnknownContentDetails";
-import WesternContentDetails from "./pages/WesternContentDetails";
-import AsianContentDetails from "./components/AsianContentDetails";
+import VIPChooser from "./components/VIP/VIPChooser";
+import VIPAsianPage from "./pages/VIPAsianPage";
+import VIPWesternPage from "./pages/VIPWesternPage";
+import VIPBannedPage from "./pages/VIPBannedPage";
+import VIPUnknownPage from "./pages/VIPUnknownPage";
+import VIPAsianContentDetails from "./components/VIP/VIPAsianContentDetails";
+import VIPWesternContentDetails from "./components/VIP/VIPWesternContentDetails";
+import VIPBannedContentDetails from "./pages/VIPBannedContentDetails";
+import VIPUnknownContentDetails from "./pages/VIPUnknownContentDetails";
+import VIPHeader from "./components/VIP/VIPHeader";
 
 const App = () => {
   const [hasPermission, setHasPermission] = useState({ vip: false, admin: false });
@@ -54,7 +63,7 @@ const App = () => {
         });
 
         const { isAdmin, isVip } = response.data;
-        setHasPermission({ vip: isVip, admin: isAdmin });
+        setHasPermission({ vip: Boolean(isVip), admin: Boolean(isAdmin) });
         setIsAuthenticated(true);
       } catch (error) {
         console.error("Erro ao verificar permissões:", error);
@@ -70,7 +79,15 @@ const App = () => {
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
-        {isAuthenticated ? <HeaderLogged /> : <Header />}
+        {/* Header: VIP > Logado > Padrão */}
+        {hasPermission.vip ? (
+          <VIPHeader />
+        ) : isAuthenticated ? (
+          <HeaderLogged />
+        ) : (
+          <Header />
+        )}
+
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Chooser />} />
@@ -82,80 +99,128 @@ const App = () => {
             <Route path="/banned/:slug" element={<BannedContentDetails />} />
             <Route path="/unknown" element={<UnknownContent />} />
             <Route path="/unknown/:slug" element={<UnknownContentDetails />} />
-            
-            <Route 
-              path="/vip" 
+
+            <Route
+              path="/vip"
+              element={
+                hasPermission.vip ? <VIPChooser /> : <AccessDenied message="You are not a VIP to access this page." />
+              }
+            />
+
+            <Route
+              path="/vip-asian"
+              element={
+                hasPermission.vip ? <VIPAsianPage /> : <AccessDenied message="You are not a VIP to access this page." />
+              }
+            />
+
+            <Route
+              path="/vip-western"
+              element={
+                hasPermission.vip ? <VIPWesternPage /> : <AccessDenied message="You are not a VIP to access this page." />
+              }
+            />
+
+            <Route
+              path="/vip-banned"
+              element={
+                hasPermission.vip ? <VIPBannedPage /> : <AccessDenied message="You are not a VIP to access this page." />
+              }
+            />
+
+            <Route
+              path="/vip-unknown"
+              element={
+                hasPermission.vip ? <VIPUnknownPage /> : <AccessDenied message="You are not a VIP to access this page." />
+              }
+            />
+
+            <Route
+              path="/vip-asian/:slug"
               element={
                 hasPermission.vip ? (
-                  <VIPcontent />
+                  <VIPAsianContentDetails />
                 ) : (
                   <AccessDenied message="You are not a VIP to access this page." />
                 )
-              } 
+              }
             />
-            
-            <Route 
-              path="/vip/:slug" 
+
+            <Route
+              path="/vip-western/:slug"
               element={
                 hasPermission.vip ? (
-                  <VIPContentDetails />
+                  <VIPWesternContentDetails />
                 ) : (
                   <AccessDenied message="You are not a VIP to access this page." />
                 )
-              } 
+              }
             />
-            
-            <Route 
-              path="/admin/settings" 
+
+            <Route
+              path="/vip-banned/:slug"
               element={
-                hasPermission.admin ? (
-                  <AdminPainel />
+                hasPermission.vip ? (
+                  <VIPBannedContentDetails />
                 ) : (
-                  <AccessDenied message="You are not an administrator to access this page." />
+                  <AccessDenied message="You are not a VIP to access this page." />
                 )
-              } 
+              }
             />
-            <Route 
-              path="/admin/stats" 
+
+            <Route
+              path="/vip-unknown/:slug"
               element={
-                hasPermission.admin ? (
-                  <ViewStats />
+                hasPermission.vip ? (
+                  <VIPUnknownContentDetails />
                 ) : (
-                  <AccessDenied message="You are not an administrator to access this page." />
+                  <AccessDenied message="You are not a VIP to access this page." />
                 )
-              } 
+              }
             />
-            <Route 
-              path="/admin/requests" 
+
+            <Route
+              path="/vip/:slug"
               element={
-                hasPermission.admin ? (
-                  <ViewRequests />
-                ) : (
-                  <AccessDenied message="You are not an administrator to access this page." />
-                )
-              } 
+                hasPermission.vip ? <VIPcontent /> : <AccessDenied message="You are not a VIP to access this page." />
+              }
             />
-            <Route 
-              path="/admin-vip-users" 
+
+            <Route
+              path="/admin/settings"
               element={
-                hasPermission.admin ? (
-                  <AdminVipUsers />
-                ) : (
-                  <AccessDenied message="You are not an administrator to access this page." />
-                )
-              } 
+                hasPermission.admin ? <AdminPainel /> : <AccessDenied message="You are not an administrator to access this page." />
+              }
             />
-            <Route 
-              path="/admin-vip-disabled" 
+            <Route
+              path="/admin/stats"
+              element={
+                hasPermission.admin ? <ViewStats /> : <AccessDenied message="You are not an administrator to access this page." />
+              }
+            />
+            <Route
+              path="/admin/requests"
+              element={
+                hasPermission.admin ? <ViewRequests /> : <AccessDenied message="You are not an administrator to access this page." />
+              }
+            />
+            <Route
+              path="/admin-vip-users"
+              element={
+                hasPermission.admin ? <AdminVipUsers /> : <AccessDenied message="You are not an administrator to access this page." />
+              }
+            />
+            <Route
+              path="/admin-vip-disabled"
               element={
                 hasPermission.admin ? (
                   <AdminDisabledVipUsers />
                 ) : (
                   <AccessDenied message="You are not an administrator to access this page." />
                 )
-              } 
+              }
             />
-            
+
             <Route path="/chooser" element={<Chooser />} />
             <Route path="/plans" element={<Plans />} />
             <Route path="/login" element={<Login />} />
@@ -169,6 +234,7 @@ const App = () => {
             <Route path="/recommend" element={<RecommendContent />} />
           </Routes>
         </main>
+
         <Footer />
       </div>
     </Router>

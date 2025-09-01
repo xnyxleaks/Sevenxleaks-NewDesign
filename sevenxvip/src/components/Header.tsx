@@ -226,19 +226,50 @@ const menuItems = [
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="md:hidden bg-gray-800/95 backdrop-blur-xl border-t border-gray-700/50 overflow-hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden fixed inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 backdrop-blur-xl z-50"
           >
-            <div className="px-4 py-6 space-y-2">
+            {/* Close Button */}
+            <div className="absolute top-6 right-6">
+              <motion.button
+                whileHover={{ scale: 1.1, rotate: 90 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={toggleMenu}
+                className="w-12 h-12 bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50 rounded-full flex items-center justify-center text-gray-300 hover:text-white transition-all duration-300"
+              >
+                <i className="fa-solid fa-times text-xl"></i>
+              </motion.button>
+            </div>
+
+            {/* Logo */}
+            <div className="text-center pt-16 pb-8">
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="flex items-center justify-center gap-4 mb-4"
+              >
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg ${
+                  theme.gradient.replace('bg-gradient-to-r', 'bg-gradient-to-br')
+                }`}>
+                  <i className="fa-solid fa-crown text-white text-xl"></i>
+                </div>
+                <h2 className="text-3xl font-bold text-white font-orbitron">MENU</h2>
+              </motion.div>
+              <div className={`w-32 h-1 mx-auto rounded-full ${theme.gradient}`}></div>
+            </div>
+
+            {/* Menu Items */}
+            <div className="px-8 py-6 space-y-3 max-h-[60vh] overflow-y-auto">
               {menuItems.map((item, index) => (
                 <motion.div
                   key={item.name}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: 0.3 + index * 0.1 }}
                 >
                   {item.external ? (
                     <a
@@ -246,36 +277,52 @@ const menuItems = [
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={toggleMenu}
-                      className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-700/50 rounded-lg transition-all duration-200"
+                      className={`flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white hover:${theme.bg} rounded-xl transition-all duration-300 border border-transparent hover:${theme.border} backdrop-blur-sm`}
                     >
-                      <i className={`${item.icon} w-5 text-center`}></i>
-                      <span className="font-medium">{item.name}</span>
-                      <i className="fa-solid fa-external-link text-xs ml-auto"></i>
+                      <div className={`w-12 h-12 ${theme.bg} rounded-xl flex items-center justify-center border ${theme.border}`}>
+                        <i className={`${item.icon} text-gray-300`}></i>
+                      </div>
+                      <div className="flex-1">
+                        <span className="font-medium text-lg">{item.name}</span>
+                        <p className="text-sm text-gray-400">External link</p>
+                      </div>
+                      <i className="fa-solid fa-external-link text-xs"></i>
                     </a>
                   ) : (
                     <Link
                       to={item.path}
                       onClick={toggleMenu}
-                      className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-700/50 rounded-lg transition-all duration-200"
+                      className={`flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white hover:${theme.bg} rounded-xl transition-all duration-300 border border-transparent hover:${theme.border} backdrop-blur-sm`}
                     >
-                      <i className={`${item.icon} w-5 text-center`}></i>
-                      <span className="font-medium">{item.name}</span>
+                      <div className={`w-12 h-12 ${theme.bg} rounded-xl flex items-center justify-center border ${theme.border}`}>
+                        <i className={`${item.icon} text-gray-300`}></i>
+                      </div>
+                      <div className="flex-1">
+                        <span className="font-medium text-lg">{item.name}</span>
+                        <p className="text-sm text-gray-400">Navigate to page</p>
+                      </div>
+                      <i className="fa-solid fa-chevron-right text-xs"></i>
                     </Link>
                   )}
                 </motion.div>
               ))}
               
-              {/* VIP Button for Mobile */}
+              {/* Special Actions for Mobile */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-                className="pt-4 border-t border-gray-700/50"
+                transition={{ delay: 0.8 }}
+                className={`pt-6 border-t ${theme.border} space-y-3`}
               >
                 <Link to="/plans" onClick={toggleMenu}>
-                  <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 border border-yellow-500/30 rounded-lg hover:bg-yellow-500/30 transition-all duration-200">
-                    <i className="fa-solid fa-crown text-yellow-400 w-5 text-center"></i>
-                    <span className="font-bold text-yellow-400">Get VIP Access</span>
+                  <div className={`flex items-center gap-4 px-6 py-4 ${theme.gradient.replace('bg-gradient-to-r', 'bg-gradient-to-r')} border ${theme.border} rounded-xl hover:opacity-90 transition-all duration-300`}>
+                    <div className="w-12 h-12 bg-yellow-500/30 rounded-xl flex items-center justify-center border border-yellow-500/40">
+                      <i className="fa-solid fa-crown text-yellow-400"></i>
+                    </div>
+                    <div className="flex-1">
+                      <span className="font-bold text-white text-lg">Get VIP Access</span>
+                      <p className="text-sm text-gray-200">Unlock premium features</p>
+                    </div>
                   </div>
                 </Link>
               </motion.div>

@@ -64,6 +64,10 @@ const unknownContentRouter = require('./routes/UnknownContent');
 const rateLimit = require('express-rate-limit');
 const checkApiKey = require('./Middleware/CheckapiKey');
 const WesternRouter = require('./routes/WesternContent')
+const VipAsianRouter = require('./routes/VipAsianContent');
+const VipWesternRouter = require('./routes/VipWesternContent');
+const VipBannedRouter = require('./routes/VipBannedContent');
+const VipUnknownRouter = require('./routes/VipUnknownContent');
 
 
 
@@ -93,6 +97,10 @@ app.use('/westerncontent', checkApiKey, WesternRouter);
 app.use('/asiancontent', checkApiKey, AsianRouter);
 app.use('/bannedcontent', checkApiKey, bannedContentRouter);
 app.use('/unknowncontent', checkApiKey, unknownContentRouter);
+app.use('/vip-asiancontent', checkApiKey, VipAsianRouter);
+app.use('/vip-westerncontent', checkApiKey, VipWesternRouter);
+app.use('/vip-bannedcontent', checkApiKey, VipBannedRouter);
+app.use('/vip-unknowncontent', checkApiKey, VipUnknownRouter);
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, 

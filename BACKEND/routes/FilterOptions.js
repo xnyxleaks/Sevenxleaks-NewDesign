@@ -3,7 +3,7 @@ const router = express.Router();
 const { Free } = require('../models');
 const { Sequelize } = require('sequelize');
 
-// Rota para obter categorias únicas dos conteúdos gratuitos
+
 router.get('/categories', async (req, res) => {
   try {
     const categories = await Free.findAll({
@@ -11,11 +11,10 @@ router.get('/categories', async (req, res) => {
         [Sequelize.fn('DISTINCT', Sequelize.col('category')), 'category']
       ],
       where: {
-        category: { [Sequelize.Op.ne]: null } // ignora categorias nulas
+        category: { [Sequelize.Op.ne]: null } 
       }
     });
 
-    // Formata como: [{ id: 1, name: 'Design', category: 'design' }, ...]
     const formattedCategories = categories.map((item, index) => ({
       id: String(index + 1),
       name: item.category,
