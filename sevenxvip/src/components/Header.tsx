@@ -222,25 +222,21 @@ const menuItems = [
         </div>
       </div>
 
-      {/* Simple Mobile Menu */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden fixed inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 backdrop-blur-xl z-50"
-          >
+<motion.div
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  exit={{ opacity: 0 }}
+  transition={{ duration: 0.3 }}
+  className="md:hidden inset-0 top-16 sm:top-18 lg:top-20 bg-slate-900 z-50"
+>
             {/* Close Button */}
             <div className="absolute top-6 right-6">
               <motion.button
                 whileHover={{ scale: 1.1, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
-                onClick={toggleMenu}
-                className="w-12 h-12 bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50 rounded-full flex items-center justify-center text-gray-300 hover:text-white transition-all duration-300"
-              >
-                <i className="fa-solid fa-times text-xl"></i>
+                onClick={toggleMenu}              >
               </motion.button>
             </div>
 

@@ -261,7 +261,7 @@ const VIPHeader: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="lg:hidden fixed inset-0 bg-gradient-to-br from-gray-900 via-yellow-900/20 to-gray-900 backdrop-blur-xl z-50"
+            className="lg:hidden fixed inset-0 bg-gray-900 z-50"
           >
             {/* Close Button */}
             <div className="absolute top-6 right-6">
