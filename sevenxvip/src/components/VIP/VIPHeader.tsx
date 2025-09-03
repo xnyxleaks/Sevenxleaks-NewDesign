@@ -56,8 +56,8 @@ const VIPHeader: React.FC = () => {
   const getVIPMenuItems = (): MenuItem[] => {
     const baseItems: MenuItem[] = [
       { name: "VIP Home", path: "/vip", icon: "fa-solid fa-crown" },
-      { name: "VIP Asian", path: "/vip-asian", icon: "fa-solid fa-yin-yang" },
-      { name: "VIP Western", path: "/vip-western", icon: "fa-solid fa-globe-americas" },
+      { name: "VIP Asian", path: "/vip-asian", icon: "fa-solid fa-crown" },
+      { name: "VIP Western", path: "/vip-western", icon: "fa-solid fa-crown" },
       { name: "VIP Banned", path: "/vip-banned", icon: "fa-solid fa-ban" },
       { name: "VIP Unknown", path: "/vip-unknown", icon: "fa-regular fa-circle-question" },
       { name: "Recommend", path: "/recommend", icon: "fa-regular fa-lightbulb" },
@@ -140,7 +140,7 @@ const VIPHeader: React.FC = () => {
               className="relative px-4 py-2 text-gray-300 hover:text-yellow-300 transition-all duration-300 group rounded-lg hover:bg-yellow-500/10 backdrop-blur-sm border border-transparent hover:border-yellow-500/30 hover:shadow-yellow-500/20"
             >
               <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
-                <i className="fa-solid fa-yin-yang text-yellow-400 text-xs"></i>
+                <i className="fa-solid fa-crown text-yellow-400 text-xs"></i>
                 VIP Asian
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300"></div>
@@ -151,7 +151,7 @@ const VIPHeader: React.FC = () => {
               className="relative px-4 py-2 text-gray-300 hover:text-yellow-300 transition-all duration-300 group rounded-lg hover:bg-yellow-500/10 backdrop-blur-sm border border-transparent hover:border-yellow-500/30 hover:shadow-yellow-500/20"
             >
               <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
-                <i className="fa-solid fa-globe-americas text-yellow-400 text-xs"></i>
+                <i className="fa-solid fa-crown text-yellow-400 text-xs"></i>
                 VIP Western
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300"></div>
@@ -162,7 +162,7 @@ const VIPHeader: React.FC = () => {
               className="relative px-4 py-2 text-gray-300 hover:text-yellow-300 transition-all duration-300 group rounded-lg hover:bg-yellow-500/10 backdrop-blur-sm border border-transparent hover:border-red-500/20 hover:shadow-red-500/20"
             >
               <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
-                <i className="fa-solid fa-ban text-red-400 text-xs"></i>
+                <i className="fa-solid fa-ban text-yellow-400 text-xs"></i>
                 VIP Banned
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-red-600/10 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300"></div>
@@ -173,7 +173,7 @@ const VIPHeader: React.FC = () => {
               className="relative px-4 py-2 text-gray-300 hover:text-yellow-300 transition-all duration-300 group rounded-lg hover:bg-yellow-500/10 backdrop-blur-sm border border-transparent hover:border-gray-500/20 hover:shadow-gray-500/20"
             >
               <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
-                <i className="fa-solid fa-question text-gray-400 text-xs"></i>
+                <i className="fa-solid fa-question text-yellow-400 text-xs"></i>
                 VIP Unknown
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-gray-500/10 to-gray-600/10 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300"></div>
@@ -186,7 +186,7 @@ const VIPHeader: React.FC = () => {
               className="relative px-4 py-2 text-gray-300 hover:text-yellow-300 transition-all duration-300 group rounded-lg hover:bg-yellow-500/10 backdrop-blur-sm border border-transparent hover:border-purple-500/20 hover:shadow-purple-500/20"
             >
               <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
-                <i className="fab fa-discord text-purple-400 text-xs"></i>
+                <i className="fab fa-discord text-yellow-400 text-xs"></i>
                 Discord VIP
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-purple-600/10 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300"></div>
@@ -336,42 +336,43 @@ const VIPHeader: React.FC = () => {
               ))}
               
               {/* Account Section for Mobile */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
-                className="pt-6 border-t border-yellow-500/30 space-y-3"
-              >
-                <Link to="/account" onClick={handleMobileMenuToggle}>
-                  <div className="flex items-center gap-4 px-6 py-4 bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 border border-yellow-500/40 rounded-xl hover:bg-yellow-500/30 transition-all duration-300">
-                    <div className="w-12 h-12 bg-yellow-500/30 rounded-xl flex items-center justify-center border border-yellow-500/40">
-                      <i className="fa-solid fa-user text-yellow-400"></i>
-                    </div>
-                    <div className="flex-1">
-                      <span className="font-bold text-yellow-400 text-lg">My VIP Account</span>
-                      <p className="text-sm text-yellow-300">Manage your premium account</p>
-                    </div>
-                  </div>
-                </Link>
-                
-                <button
-                  onClick={() => {
-                    localStorage.removeItem("Token");
-                    localStorage.removeItem("name");
-                    localStorage.removeItem("email");
-                    window.location.href = '/';
-                  }}
-                  className="w-full flex items-center gap-4 px-6 py-4 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-all duration-300 border border-transparent hover:border-red-500/30"
-                >
-                  <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center border border-red-500/30">
-                    <i className="fa-solid fa-sign-out-alt text-red-400"></i>
-                  </div>
-                  <div className="flex-1 text-left">
-                    <span className="font-medium text-lg">Logout</span>
-                    <p className="text-sm text-red-300">Sign out of VIP account</p>
-                  </div>
-                </button>
-              </motion.div>
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.8 }}
+  className="pt-6 border-t border-yellow-500/30 space-y-3"
+>
+  <Link to="/account" onClick={handleMobileMenuToggle}>
+    <div className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-yellow-300 hover:bg-yellow-500/10 rounded-xl transition-all duration-300 border border-transparent hover:border-yellow-500/30 backdrop-blur-sm">
+      <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center border border-yellow-500/30">
+        <i className="fa-solid fa-user text-yellow-400" />
+      </div>
+      <div className="flex-1">
+        <span className="font-medium text-lg">My VIP Account</span>
+        <p className="text-sm text-gray-400">Manage your premium account</p>
+      </div>
+      <i className="fa-solid fa-chevron-right text-xs" />
+    </div>
+  </Link>
+
+  <button
+    onClick={() => {
+      localStorage.removeItem("Token");
+      localStorage.removeItem("name");
+      localStorage.removeItem("email");
+      window.location.href = "/";
+    }}
+    className="w-full flex items-center gap-4 px-6 py-4 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-all duration-300 border border-transparent hover:border-red-500/30"
+  >
+    <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center border border-red-500/30">
+      <i className="fa-solid fa-sign-out-alt text-red-400" />
+    </div>
+    <div className="flex-1 text-left">
+      <span className="font-medium text-lg">Logout</span>
+      <p className="text-sm text-red-300">Sign out of VIP account</p>
+    </div>
+  </button>
+</motion.div>
             </div>
           </motion.div>
         )}

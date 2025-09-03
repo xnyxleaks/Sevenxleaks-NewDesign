@@ -164,33 +164,6 @@ const Footer = () => {
               <div className="flex items-start gap-3">
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center mt-0.5 ${
                   isDark 
-                    ? "bg-blue-500/20 text-blue-400" 
-                    : "bg-blue-100 text-blue-600"
-                }`}>
-                  <Mail className="w-4 h-4" />
-                </div>
-                <div>
-                  <p className={`text-sm font-medium mb-1 ${
-                    isDark ? "text-gray-300" : "text-gray-700"
-                  }`}>
-                    Support
-                  </p>
-                  <a 
-                    href="mailto:support@sevenxleaks.com"
-                    className={`text-sm transition-colors duration-300 ${
-                      isDark 
-                        ? "text-gray-400 hover:text-blue-400" 
-                        : "text-gray-600 hover:text-blue-600"
-                    }`}
-                  >
-                    support@sevenxleaks.com
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center mt-0.5 ${
-                  isDark 
                     ? "bg-red-500/20 text-red-400" 
                     : "bg-red-100 text-red-600"
                 }`}>

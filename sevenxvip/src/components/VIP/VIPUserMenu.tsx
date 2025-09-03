@@ -174,7 +174,7 @@ const VIPUserMenu: React.FC<VIPUserMenuProps> = ({
                     onClick={handleMenuToggle}
                   >
                     <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500/20 to-yellow-500/20 flex items-center justify-center group-hover:from-purple-500/30 group-hover:to-yellow-500/30 transition-all duration-200 border border-purple-500/20">
-                      <i className="fa-solid fa-yin-yang text-purple-400 text-sm"></i>
+                      <i className="fa-solid fa-crown text-purple-400 text-sm"></i>
                     </div>
                     <div className="flex-1">
                       <span className="text-sm font-bold text-yellow-200 group-hover:text-yellow-100 font-orbitron">VIP Asian</span>
@@ -189,7 +189,7 @@ const VIPUserMenu: React.FC<VIPUserMenuProps> = ({
                     onClick={handleMenuToggle}
                   >
                     <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500/20 to-yellow-500/20 flex items-center justify-center group-hover:from-orange-500/30 group-hover:to-yellow-500/30 transition-all duration-200 border border-orange-500/20">
-                      <i className="fa-solid fa-globe-americas text-orange-400 text-sm"></i>
+                      <i className="fa-solid fa-crown text-orange-400 text-sm"></i>
                     </div>
                     <div className="flex-1">
                       <span className="text-sm font-bold text-yellow-200 group-hover:text-yellow-100 font-orbitron">VIP Western</span>

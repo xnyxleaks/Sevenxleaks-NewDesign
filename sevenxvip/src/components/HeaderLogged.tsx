@@ -415,42 +415,45 @@ const HeaderLogged: React.FC = () => {
               ))}
 
               {/* Special Actions for Mobile */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
-                className={`pt-6 border-t  space-y-3`}
-              >
-                <Link to="/account" onClick={handleMobileMenuToggle}>
-                  <div className={`flex items-center gap-4 px-6 py-4 bg-gradient-to-r  border  rounded-xl hover:opacity-90 transition-all duration-300`}>
-                    <div className="w-12 h-12  rounded-xl flex items-center justify-center border ">
-                      <i className="fa-solid fa-user text-blue-400" />
-                    </div>
-                    <div className="flex-1">
-                      <span className="font-bold text-white text-lg">My Account</span>
-                      <p className="text-sm text-gray-200">Manage your profile</p>
-                    </div>
-                  </div>
-                </Link>
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.8 }}
+  className={`pt-6 border-t ${theme.border} space-y-3`}
+>
+  <Link to="/account" onClick={handleMobileMenuToggle}>
+    <div
+      className={`flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white rounded-xl transition-all duration-300 border border-transparent backdrop-blur-sm`}
+    >
+      <div className={`w-12 h-12 ${theme.bg} rounded-xl flex items-center justify-center border ${theme.border}`}>
+        <i className="fa-solid fa-user" />
+      </div>
+      <div className="flex-1">
+        <span className="font-medium text-lg">My Account</span>
+        <p className="text-sm text-gray-400">Manage your account</p>
+      </div>
+      <i className="fa-solid fa-chevron-right text-xs" />
+    </div>
+  </Link>
 
-                <button
-                  onClick={() => {
-                    localStorage.removeItem("Token");
-                    localStorage.removeItem("name");
-                    localStorage.removeItem("email");
-                    window.location.href = "/";
-                  }}
-                  className="w-full flex items-center gap-4 px-6 py-4 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-all duration-300 border border-transparent hover:border-red-500/30"
-                >
-                  <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center border border-red-500/30">
-                    <i className="fa-solid fa-right-from-bracket text-red-400" />
-                  </div>
-                  <div className="flex-1 text-left">
-                    <span className="font-medium text-lg">Logout</span>
-                    <p className="text-sm text-red-300">Sign out of account</p>
-                  </div>
-                </button>
-              </motion.div>
+  <button
+    onClick={() => {
+      localStorage.removeItem("Token");
+      localStorage.removeItem("name");
+      localStorage.removeItem("email");
+      window.location.href = "/";
+    }}
+    className="w-full flex items-center gap-4 px-6 py-4 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-all duration-300 border border-transparent hover:border-red-500/30"
+  >
+    <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center border border-red-500/30">
+      <i className="fa-solid fa-right-from-bracket text-red-400" />
+    </div>
+    <div className="flex-1 text-left">
+      <span className="font-medium text-lg">Logout</span>
+      <p className="text-sm text-red-300">Sign out of account</p>
+    </div>
+  </button>
+</motion.div>
             </div>
           </motion.div>
         )}
