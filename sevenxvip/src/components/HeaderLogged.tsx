@@ -101,9 +101,9 @@ const HeaderLogged: React.FC = () => {
     return {
       accent: "text-purple-400",
       accentHover: "hover:text-purple-300",
-      gradient: "from-purple-500 to-purple-600",
-      gradientHover: "hover:from-purple-600 hover:to-purple-700",
-      border: "border-purple-500/20",
+      gradient: "from-slate-500 to-slate-600",
+      gradientHover: "hover:from-slate-600 hover:to-slate-700",
+      border: "border-slate-500/20",
       bg: "bg-purple-500/10",
       glow: "shadow-purple-500/20",
     };
@@ -184,13 +184,13 @@ const HeaderLogged: React.FC = () => {
 
             <Link
               to="/banned"
-              className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:border-red-500/20 hover:shadow-red-500/20"
+              className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:border-slate-500/20 hover:shadow-slate-500/20"
             >
               <span className="relative z-10 font-medium font-['Roboto'] text-sm flex items-center gap-2">
-                <i className="fa-solid fa-ban text-red-400 text-xs" />
+                <i className="fa-solid fa-ban text-slate-400 text-xs" />
                 Banned
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-red-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-r from-slate-500 to-slate-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300" />
             </Link>
 
             <Link
@@ -207,13 +207,13 @@ const HeaderLogged: React.FC = () => {
             {!isVip && (
               <Link
                 to="/plans"
-                className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:border-yellow-500/20 hover:shadow-yellow-500/20"
+                className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:border-slate-500/20 hover:shadow-slate-500/20"
               >
                 <span className="relative z-10 font-medium font-['Roboto'] text-sm flex items-center gap-2">
-                  <i className="fa-solid fa-crown text-yellow-400 text-xs" />
+                  <i className="fa-solid fa-crown text-slate-400 text-xs" />
                   Plans
                 </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-yellow-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-500 to-slate-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300" />
               </Link>
             )}
 
@@ -221,13 +221,13 @@ const HeaderLogged: React.FC = () => {
               href="https://discord.gg/95BKaYTPPS"
               target="_blank"
               rel="noopener noreferrer"
-              className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:border-purple-500/20 hover:shadow-purple-500/20"
+              className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:border-slate-500/20 hover:shadow-slate-500/20"
             >
               <span className="relative z-10 font-medium font-['Roboto'] text-sm flex items-center gap-2">
-                <i className="fab fa-discord text-purple-400 text-xs" />
+                <i className="fab fa-discord text-slate-400 text-xs" />
                 Discord
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-purple-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-r from-slate-500 to-slate-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300" />
             </a>
 
             {isAdmin && (
