@@ -154,7 +154,7 @@ const SubscriptionSection: React.FC<SubscriptionSectionProps> = ({
             </motion.button>
           </Link>
           
-          {userData.isVip && userData.stripeSubscriptionId && (
+          {userData.isVip && (
             <>
               <motion.button
                 whileHover={{ scale: 1.05 }}

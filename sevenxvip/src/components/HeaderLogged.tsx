@@ -419,11 +419,11 @@ const HeaderLogged: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
-                className={`pt-6 border-t ${theme.border} space-y-3`}
+                className={`pt-6 border-t  space-y-3`}
               >
                 <Link to="/account" onClick={handleMobileMenuToggle}>
-                  <div className={`flex items-center gap-4 px-6 py-4 bg-gradient-to-r ${theme.gradient} border ${theme.border} rounded-xl hover:opacity-90 transition-all duration-300`}>
-                    <div className="w-12 h-12 bg-blue-500/30 rounded-xl flex items-center justify-center border border-blue-500/40">
+                  <div className={`flex items-center gap-4 px-6 py-4 bg-gradient-to-r  border  rounded-xl hover:opacity-90 transition-all duration-300`}>
+                    <div className="w-12 h-12  rounded-xl flex items-center justify-center border ">
                       <i className="fa-solid fa-user text-blue-400" />
                     </div>
                     <div className="flex-1">

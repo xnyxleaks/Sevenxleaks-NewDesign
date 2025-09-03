@@ -229,7 +229,7 @@ const menuItems = [
   animate={{ opacity: 1 }}
   exit={{ opacity: 0 }}
   transition={{ duration: 0.3 }}
-  className="md:hidden inset-0 top-16 sm:top-18 lg:top-20 bg-slate-900 z-50"
+  className="md:hidden inset-0 top-16 sm:top-18 lg:top-20 bg-slate-900 z-50 h-[800px]"
 >
             {/* Close Button */}
             <div className="absolute top-6 right-6">
