@@ -54,6 +54,7 @@ const BannedContent: React.FC = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const { theme } = useTheme();
+  const isDark = theme === "dark";
   const { region } = useRegion();
 
   function decodeModifiedBase64<T>(encodedStr: string): T {
@@ -166,7 +167,11 @@ const BannedContent: React.FC = () => {
   const groupedLinks = groupPostsByDate(filteredLinks);
 
   return (
-    <div className="dreamy-page">
+    <div className={`min-h-screen ${
+      isDark 
+        ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white' 
+        : 'bg-gradient-to-br from-gray-50 via-white to-gray-100 text-gray-900'
+    }`}>
       <Helmet>
         <title>Banned Content - Sevenxleaks</title>
         <link rel="canonical" href="https://sevenxleaks.com/banned" />
@@ -215,20 +220,36 @@ const BannedContent: React.FC = () => {
 
         {/* Filter Bar */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="bg-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-6 shadow-2xl">
-            <div className="flex flex-col lg:flex-row items-center gap-4 bg-gray-700/50 rounded-2xl px-6 py-4 border border-gray-600/30 shadow-inner">
+          <div className={`backdrop-blur-xl border rounded-3xl p-6 shadow-2xl ${
+            isDark 
+              ? 'bg-gray-800/60 border-gray-700/50' 
+              : 'bg-white/80 border-gray-200/50'
+          }`}>
+            <div className={`flex flex-col lg:flex-row items-center gap-4 rounded-2xl px-6 py-4 border shadow-inner ${
+              isDark 
+                ? 'bg-gray-700/50 border-gray-600/30' 
+                : 'bg-gray-100/50 border-gray-300/30'
+            }`}>
               {/* Search Bar */}
               <div className="flex items-center gap-3 flex-1 min-w-0">
-                <AlertTriangle className="text-red-400 w-5 h-5" />
+                <AlertTriangle className={`w-5 h-5 ${
+                  isDark ? 'text-red-400' : 'text-red-600'
+                }`} />
                 <input
                   type="text"
-                  className="flex-1 bg-transparent border-none outline-none text-white placeholder-gray-400 text-lg"
+                  className={`flex-1 bg-transparent border-none outline-none text-lg ${
+                    isDark 
+                      ? 'text-white placeholder-gray-400' 
+                      : 'text-gray-900 placeholder-gray-500'
+                  }`}
                   placeholder="Search banned content..."
                   value={searchName}
                   onChange={(e) => setSearchName(e.target.value)}
                 />
                 {searchLoading && (
-                  <div className="w-4 h-4 border-2 border-red-400 border-t-transparent rounded-full animate-spin"></div>
+                  <div className={`w-4 h-4 border-2 border-t-transparent rounded-full animate-spin ${
+                    isDark ? 'border-red-400' : 'border-red-600'
+                  }`}></div>
                 )}
               </div>
 
@@ -237,7 +258,11 @@ const BannedContent: React.FC = () => {
                 <select
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(e.target.value)}
-                  className="px-3 py-1.5 bg-gray-700/50 border border-gray-600/50 rounded-lg text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-red-500/50 transition-all duration-300 hover:bg-gray-600/50 min-w-[120px]"
+                  className={`px-3 py-1.5 border rounded-lg text-xs focus:outline-none focus:ring-1 transition-all duration-300 min-w-[120px] ${
+                    isDark 
+                      ? 'bg-gray-700/50 border-gray-600/50 text-gray-300 focus:ring-red-500/50 hover:bg-gray-600/50'
+                      : 'bg-gray-200/50 border-gray-300/50 text-gray-700 focus:ring-red-600/50 hover:bg-gray-300/50'
+                  }`}
                 >
                   {months.map((month) => (
                     <option key={month.value} value={month.value}>
@@ -249,14 +274,22 @@ const BannedContent: React.FC = () => {
                 <select
                   value={sortOption}
                   onChange={(e) => setSortOption(e.target.value)}
-                  className="px-3 py-1.5 bg-gray-700/50 border border-gray-600/50 rounded-lg text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-red-500/50 transition-all duration-300 hover:bg-gray-600/50 min-w-[120px]"
+                  className={`px-3 py-1.5 border rounded-lg text-xs focus:outline-none focus:ring-1 transition-all duration-300 min-w-[120px] ${
+                    isDark 
+                      ? 'bg-gray-700/50 border-gray-600/50 text-gray-300 focus:ring-red-500/50 hover:bg-gray-600/50'
+                      : 'bg-gray-200/50 border-gray-300/50 text-gray-700 focus:ring-red-600/50 hover:bg-gray-300/50'
+                  }`}
                 >
                   <option value="mostRecent">Most Recent</option>
                   <option value="oldest">Oldest</option>
                 </select>
 
                 <button 
-                  className="p-2 bg-gray-700/50 hover:bg-red-500/20 text-gray-300 hover:text-red-300 rounded-lg transition-all duration-300 border border-gray-600/50" 
+                  className={`p-2 rounded-lg transition-all duration-300 border ${
+                    isDark 
+                      ? 'bg-gray-700/50 hover:bg-red-500/20 text-gray-300 hover:text-red-300 border-gray-600/50'
+                      : 'bg-gray-200/50 hover:bg-red-100 text-gray-700 hover:text-red-700 border-gray-300/50'
+                  }`}
                   title="Calendar View"
                 >
                   <Calendar className="w-5 h-5" />
@@ -281,7 +314,11 @@ const BannedContent: React.FC = () => {
                   })
                   .map(([date, posts]) => (
                     <div key={date} className="mb-6">
-                      <h2 className="text-xl font-bold text-gray-300 mb-4 pb-2 border-b border-gray-700/50 font-orbitron flex items-center gap-3">
+                      <h2 className={`text-xl font-bold mb-4 pb-2 border-b font-orbitron flex items-center gap-3 ${
+                        isDark 
+                          ? 'text-gray-300 border-gray-700/50' 
+                          : 'text-gray-700 border-gray-300/50'
+                      }`}>
                         <div className="w-3 h-8 bg-gradient-to-b from-red-500 to-red-600 rounded-full shadow-lg shadow-red-500/30"></div>
                         <span className="bg-gradient-to-r from-red-400 to-red-300 bg-clip-text text-transparent">{date}</span>
                       </h2>
@@ -294,7 +331,11 @@ const BannedContent: React.FC = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.05 }}
-                            className="group bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700/50 hover:border-red-500/50 rounded-xl p-3 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl hover:shadow-red-500/10 transform hover:scale-[1.01]"
+                            className={`group rounded-xl p-3 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl transform hover:scale-[1.01] ${
+                              isDark 
+                                ? 'bg-gray-800/60 hover:bg-gray-700/80 border-gray-700/50 hover:border-red-500/50 hover:shadow-red-500/10'
+                                : 'bg-white/60 hover:bg-gray-50/80 border-gray-200/50 hover:border-red-400/50 hover:shadow-red-400/10'
+                            } border`}
                             onClick={() => {
                               const contentType = link.contentType || 'banned';
                               switch (contentType) {
@@ -326,15 +367,25 @@ const BannedContent: React.FC = () => {
                                   }`}></div>
                                 )}
                                 <AlertTriangle className="w-5 h-5 text-red-400" />
-                                <h3 className="text-sm sm:text-lg font-bold text-white group-hover:text-red-300 transition-colors duration-300 font-orbitron relative truncate">
+                                <h3 className={`text-sm sm:text-lg font-bold transition-colors duration-300 font-orbitron relative truncate ${
+                                  isDark ? 'text-white group-hover:text-red-300' : 'text-gray-900 group-hover:text-red-600'
+                                }`}>
                                   {link.name}
                                   <div className="absolute -bottom-1 left-0 w-16 h-0.5 bg-gradient-to-r from-red-500 to-red-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                 </h3>
-                                <div className="hidden sm:block h-px bg-gradient-to-r from-red-500/50 to-transparent flex-1 max-w-20 group-hover:from-red-400/70 transition-all duration-300"></div>
+                                <div className={`hidden sm:block h-px bg-gradient-to-r to-transparent flex-1 max-w-20 transition-all duration-300 ${
+                                  isDark 
+                                    ? 'from-red-500/50 group-hover:from-red-400/70'
+                                    : 'from-red-400/50 group-hover:from-red-500/70'
+                                }`}></div>
                               </div>
                               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                                 {recentLinks.includes(link) && (
-                                  <span className="inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold rounded-full shadow-lg animate-pulse border border-red-400/30 font-roboto">
+                                  <span className={`inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 text-white text-xs font-bold rounded-full shadow-lg animate-pulse border font-roboto ${
+                                    isDark 
+                                      ? 'bg-gradient-to-r from-red-500 to-red-600 border-red-400/30'
+                                      : 'bg-gradient-to-r from-red-600 to-red-700 border-red-500/30'
+                                  }`}>
                                     <i className="fa-solid fa-star mr-1 text-xs hidden sm:inline"></i>
                                     NEW
                                   </span>
@@ -349,7 +400,11 @@ const BannedContent: React.FC = () => {
                                     {link.contentType.toUpperCase()}
                                   </span>
                                 )}
-                                <span className="inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 bg-gray-700/70 text-gray-300 text-xs sm:text-sm font-medium rounded-full border border-gray-600/50 backdrop-blur-sm font-roboto">
+                                <span className={`inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm font-medium rounded-full border backdrop-blur-sm font-roboto ${
+                                  isDark 
+                                    ? 'bg-gray-700/70 text-gray-300 border-gray-600/50'
+                                    : 'bg-gray-200/70 text-gray-700 border-gray-300/50'
+                                }`}>
                                   <i className="fa-solid fa-tag mr-1 sm:mr-2 text-xs"></i>
                                   {link.category}
                                 </span>
@@ -368,7 +423,11 @@ const BannedContent: React.FC = () => {
                       whileTap={{ scale: 0.95 }}
                       onClick={handleLoadMore}
                       disabled={loadingMore}
-                      className="px-10 py-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl hover:shadow-red-500/30 transition-all duration-300 transform disabled:opacity-50 disabled:cursor-not-allowed border border-red-400/30 backdrop-blur-sm font-orbitron"
+                      className={`px-10 py-4 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform disabled:opacity-50 disabled:cursor-not-allowed border backdrop-blur-sm font-orbitron ${
+                        isDark 
+                          ? 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 hover:shadow-red-500/30 border-red-400/30'
+                          : 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 hover:shadow-red-500/20 border-red-500/30'
+                      }`}
                     >
                       {loadingMore ? (
                         <>
@@ -390,10 +449,14 @@ const BannedContent: React.FC = () => {
                 <div className="mb-8">
                   <i className="fa-solid fa-search text-6xl text-gray-500"></i>
                 </div>
-                <h3 className="text-3xl font-bold mb-4 text-white font-orbitron">
+                <h3 className={`text-3xl font-bold mb-4 font-orbitron ${
+                  isDark ? 'text-white' : 'text-gray-900'
+                }`}>
                   No Banned Content Found
                 </h3>
-                <p className="text-gray-400 text-lg font-roboto">
+                <p className={`text-lg font-roboto ${
+                  isDark ? 'text-gray-400' : 'text-gray-600'
+                }`}>
                   Try adjusting your search or filters to find what you're looking for.
                 </p>
               </div>

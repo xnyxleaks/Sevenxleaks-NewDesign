@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
 import { Crown, Calendar, Plus, Star, Sparkles } from "lucide-react";
 import VIPHeader from "../components/VIP/VIPHeader";
+import { useTheme } from "../contexts/ThemeContext";
 
 type LinkItem = {
   id: string;
@@ -37,6 +38,8 @@ const LoadingSpinner = () => (
 
 const VIPWesternPage: React.FC = () => {
   const navigate = useNavigate();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [links, setLinks] = useState<LinkItem[]>([]);
   const [filteredLinks, setFilteredLinks] = useState<LinkItem[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -193,7 +196,11 @@ const VIPWesternPage: React.FC = () => {
   const groupedLinks = groupPostsByDate(filteredLinks);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-yellow-900/10 to-gray-900 text-white">
+    <div className={`min-h-screen ${
+      isDark 
+        ? 'bg-gradient-to-br from-gray-900 via-yellow-900/10 to-gray-900 text-white' 
+        : 'bg-gradient-to-br from-gray-50 via-yellow-100/20 to-gray-100 text-gray-900'
+    }`}>
       <Helmet>
         <title>VIP Western Content - Sevenxleaks</title>
         <link rel="canonical" href="https://sevenxleaks.com/vip-western" />
@@ -202,20 +209,34 @@ const VIPWesternPage: React.FC = () => {
 
       {/* Filter Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-gray-800/60 backdrop-blur-xl border border-yellow-500/30 rounded-3xl p-6 shadow-2xl shadow-yellow-500/10">
-          <div className="flex flex-col lg:flex-row items-center gap-4 bg-gray-700/50 rounded-2xl px-6 py-4 border border-yellow-500/20 shadow-inner">
+        <div className={`backdrop-blur-xl border rounded-3xl p-6 shadow-2xl ${
+          isDark 
+            ? 'bg-gray-800/60 border-yellow-500/30 shadow-yellow-500/10'
+            : 'bg-white/80 border-yellow-400/40 shadow-yellow-400/10'
+        }`}>
+          <div className={`flex flex-col lg:flex-row items-center gap-4 rounded-2xl px-6 py-4 border shadow-inner ${
+            isDark 
+              ? 'bg-gray-700/50 border-yellow-500/20'
+              : 'bg-gray-100/50 border-yellow-400/30'
+          }`}>
             {/* Search Bar */}
             <div className="flex items-center gap-3 flex-1 min-w-0">
               <Crown className="text-yellow-400 w-5 h-5 animate-pulse" />
               <input
                 type="text"
-                className="flex-1 bg-transparent border-none outline-none text-white placeholder-yellow-300/60 text-lg"
+                className={`flex-1 bg-transparent border-none outline-none text-lg ${
+                  isDark 
+                    ? 'text-white placeholder-yellow-300/60' 
+                    : 'text-gray-900 placeholder-yellow-600/60'
+                }`}
                 placeholder="Search VIP Western content..."
                 value={searchName}
                 onChange={(e) => setSearchName(e.target.value)}
               />
               {searchLoading && (
-                <div className="w-4 h-4 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
+                <div className={`w-4 h-4 border-2 border-t-transparent rounded-full animate-spin ${
+                  isDark ? 'border-yellow-400' : 'border-yellow-600'
+                }`}></div>
               )}
             </div>
 
@@ -226,8 +247,12 @@ const VIPWesternPage: React.FC = () => {
                   key={filter}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 border whitespace-nowrap ${
                     dateFilter === filter
-                      ? "bg-yellow-500 text-black border-yellow-400 shadow-lg shadow-yellow-500/30"
-                      : "bg-gray-700/50 text-gray-300 hover:bg-yellow-500/20 border-gray-600/50 hover:text-yellow-300"
+                      ? isDark
+                        ? "bg-yellow-500 text-black border-yellow-400 shadow-lg shadow-yellow-500/30"
+                        : "bg-yellow-600 text-white border-yellow-500 shadow-lg shadow-yellow-500/20"
+                      : isDark
+                        ? "bg-gray-700/50 text-gray-300 hover:bg-yellow-500/20 border-gray-600/50 hover:text-yellow-300"
+                        : "bg-gray-200/50 text-gray-700 hover:bg-yellow-100 border-gray-300/50 hover:text-yellow-700"
                   }`}
                   onClick={() => setDateFilter(filter)}
                 >
@@ -245,7 +270,11 @@ const VIPWesternPage: React.FC = () => {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-3 py-1.5 bg-gray-700/50 border border-yellow-500/30 rounded-lg text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-yellow-500/50 transition-all duration-300 hover:bg-gray-600/50 min-w-[120px]"
+                className={`px-3 py-1.5 border rounded-lg text-xs focus:outline-none focus:ring-1 transition-all duration-300 min-w-[120px] ${
+                  isDark 
+                    ? 'bg-gray-700/50 border-yellow-500/30 text-gray-300 focus:ring-yellow-500/50 hover:bg-gray-600/50'
+                    : 'bg-gray-200/50 border-yellow-400/40 text-gray-700 focus:ring-yellow-600/50 hover:bg-gray-300/50'
+                }`}
               >
                 <option value="">All Categories</option>
                 {categories.map((category) => (
@@ -256,14 +285,22 @@ const VIPWesternPage: React.FC = () => {
               </select>
 
               <button 
-                className="p-2 bg-gray-700/50 hover:bg-yellow-500/20 text-gray-300 hover:text-yellow-300 rounded-lg transition-all duration-300 border border-yellow-500/30" 
+                className={`p-2 rounded-lg transition-all duration-300 border ${
+                  isDark 
+                    ? 'bg-gray-700/50 hover:bg-yellow-500/20 text-gray-300 hover:text-yellow-300 border-yellow-500/30'
+                    : 'bg-gray-200/50 hover:bg-yellow-100 text-gray-700 hover:text-yellow-700 border-yellow-400/40'
+                }`}
                 title="Calendar View"
               >
                 <Calendar className="w-5 h-5" />
               </button>
               
               <button 
-                className="p-2 bg-gray-700/50 hover:bg-yellow-500/20 text-gray-300 hover:text-yellow-300 rounded-lg transition-all duration-300 border border-yellow-500/30" 
+                className={`p-2 rounded-lg transition-all duration-300 border ${
+                  isDark 
+                    ? 'bg-gray-700/50 hover:bg-yellow-500/20 text-gray-300 hover:text-yellow-300 border-yellow-500/30'
+                    : 'bg-gray-200/50 hover:bg-yellow-100 text-gray-700 hover:text-yellow-700 border-yellow-400/40'
+                }`}
                 title="Switch to VIP Asian"
                 onClick={() => navigate('/vip-asian')}
               >
@@ -289,7 +326,11 @@ const VIPWesternPage: React.FC = () => {
                 })
                 .map(([date, posts]) => (
                   <div key={date} className="mb-8">
-                    <h2 className="text-xl font-bold text-gray-300 mb-4 pb-2 border-b border-yellow-500/30 font-orbitron flex items-center gap-3">
+                    <h2 className={`text-xl font-bold mb-4 pb-2 border-b font-orbitron flex items-center gap-3 ${
+                      isDark 
+                        ? 'text-gray-300 border-yellow-500/30' 
+                        : 'text-gray-700 border-yellow-400/40'
+                    }`}>
                       <div className="w-3 h-8 bg-gradient-to-b from-yellow-500 to-orange-600 rounded-full shadow-lg shadow-yellow-500/30"></div>
                       <Crown className="w-5 h-5 text-yellow-400 animate-pulse" />
                       <span className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
@@ -306,26 +347,44 @@ const VIPWesternPage: React.FC = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.05 }}
-                            className="group bg-gray-800/60 hover:bg-gray-700/80 border border-yellow-500/30 hover:border-yellow-400/60 rounded-xl p-3 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl hover:shadow-yellow-500/20 transform hover:scale-[1.01]"
+                            className={`group rounded-xl p-3 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl transform hover:scale-[1.01] ${
+                              isDark 
+                                ? 'bg-gray-800/60 hover:bg-gray-700/80 border-yellow-500/30 hover:border-yellow-400/60 hover:shadow-yellow-500/20'
+                                : 'bg-white/60 hover:bg-gray-50/80 border-yellow-400/40 hover:border-yellow-500/60 hover:shadow-yellow-400/20'
+                            } border`}
                             onClick={() => navigate(`/vip-western/${link.slug}`)}
                           >
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                               <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
                                 <Crown className="w-5 h-5 text-yellow-400 animate-pulse" />
-                                <h3 className="text-sm sm:text-lg font-bold text-white group-hover:text-yellow-300 transition-colors duration-300 font-orbitron relative truncate">
+                                <h3 className={`text-sm sm:text-lg font-bold transition-colors duration-300 font-orbitron relative truncate ${
+                                  isDark ? 'text-white group-hover:text-yellow-300' : 'text-gray-900 group-hover:text-yellow-600'
+                                }`}>
                                   {link.name}
                                   <div className="absolute -bottom-1 left-0 w-16 h-0.5 bg-gradient-to-r from-yellow-500 to-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                 </h3>
-                                <div className="hidden sm:block h-px bg-gradient-to-r from-yellow-500/50 to-transparent flex-1 max-w-20 group-hover:from-yellow-400/70 transition-all duration-300"></div>
+                                <div className={`hidden sm:block h-px bg-gradient-to-r to-transparent flex-1 max-w-20 transition-all duration-300 ${
+                                  isDark 
+                                    ? 'from-yellow-500/50 group-hover:from-yellow-400/70'
+                                    : 'from-yellow-400/50 group-hover:from-yellow-500/70'
+                                }`}></div>
                               </div>
                               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                                 {recentLinks.includes(link) && (
-                                  <span className="inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 bg-gradient-to-r from-yellow-500 to-orange-600 text-black text-xs font-bold rounded-full shadow-lg animate-pulse border border-yellow-400/30 font-roboto">
+                                  <span className={`inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 text-xs font-bold rounded-full shadow-lg animate-pulse border font-roboto ${
+                                    isDark 
+                                      ? 'bg-gradient-to-r from-yellow-500 to-orange-600 text-black border-yellow-400/30'
+                                      : 'bg-gradient-to-r from-yellow-600 to-orange-700 text-white border-yellow-500/30'
+                                  }`}>
                                     <Star className="w-3 h-3 mr-1" />
                                     NEW VIP
                                   </span>
                                 )}
-                                <span className="inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-300 text-xs sm:text-sm font-medium rounded-full border border-yellow-500/30 backdrop-blur-sm font-roboto">
+                                <span className={`inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm font-medium rounded-full border backdrop-blur-sm font-roboto ${
+                                  isDark 
+                                    ? 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-300 border-yellow-500/30'
+                                    : 'bg-gradient-to-r from-yellow-200/40 to-orange-200/30 text-yellow-700 border-yellow-400/40'
+                                }`}>
                                   <Crown className="w-3 h-3 mr-2" />
                                   {link.category}
                                 </span>
@@ -344,7 +403,11 @@ const VIPWesternPage: React.FC = () => {
                     whileTap={{ scale: 0.95 }}
                     onClick={handleLoadMore}
                     disabled={loadingMore}
-                    className="px-10 py-4 bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl hover:shadow-yellow-500/30 transition-all duration-300 transform disabled:opacity-50 disabled:cursor-not-allowed border border-yellow-400/30 backdrop-blur-sm font-orbitron"
+                    className={`px-10 py-4 font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform disabled:opacity-50 disabled:cursor-not-allowed border backdrop-blur-sm font-orbitron ${
+                      isDark 
+                        ? 'bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white hover:shadow-yellow-500/30 border-yellow-400/30'
+                        : 'bg-gradient-to-r from-yellow-600 to-orange-700 hover:from-yellow-700 hover:to-orange-800 text-white hover:shadow-yellow-500/20 border-yellow-500/30'
+                    }`}
                   >
                     {loadingMore ? (
                       <>
@@ -366,10 +429,14 @@ const VIPWesternPage: React.FC = () => {
               <div className="mb-8">
                 <Crown className="w-16 h-16 text-yellow-500 mx-auto animate-pulse" />
               </div>
-              <h3 className="text-3xl font-bold mb-4 text-white font-orbitron">
+              <h3 className={`text-3xl font-bold mb-4 font-orbitron ${
+                isDark ? 'text-white' : 'text-gray-900'
+              }`}>
                 No VIP Western Content Found
               </h3>
-              <p className="text-gray-400 text-lg font-roboto">
+              <p className={`text-lg font-roboto ${
+                isDark ? 'text-gray-400' : 'text-gray-600'
+              }`}>
                 Try adjusting your search or filters to find premium content.
               </p>
             </div>

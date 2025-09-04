@@ -4,6 +4,7 @@ import axios from "axios";
 import UserMenu from "../components/HeaderLogged/UserMenu";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "../contexts/ThemeContext";
+import ThemeToggle from "./ThemeToggle";
 
 type MenuItem = {
   name: string;
@@ -151,11 +152,13 @@ const HeaderLogged: React.FC = () => {
   const allMenuItems: MenuItem[] = getMenuItems();
 
   return (
-    <header className={`w-full sticky top-0 shadow-2xl bg-opacity-100 z-50 border-b ${
-      isDark 
-        ? 'bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-gray-700/50' 
-        : 'bg-gradient-to-r from-white via-gray-50 to-white border-gray-200/50'
-    }`}>
+    <header
+      className={`w-full sticky top-0 shadow-2xl bg-opacity-100 z-50 border-b ${
+        isDark
+          ? "bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-gray-700/50"
+          : "bg-gradient-to-r from-white via-gray-50 to-white border-gray-200/50"
+      }`}
+    >
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="flex items-center justify-between h-16 sm:h-18 lg:h-20">
           {/* Logo Section */}
@@ -173,10 +176,15 @@ const HeaderLogged: React.FC = () => {
                   </div>
                 </div>
               )}
-              <div className={`text-base sm:text-lg lg:text-xl font-bold tracking-wide font-['Orbitron'] ${
-                isDark ? 'text-white' : 'text-gray-900'
-              }`}>
-                SEVENXLEAKS<span className={`${theme.accent} drop-shadow-lg`}>{getLogoText()}</span>
+              <div
+                className={`text-base sm:text-lg lg:text-xl font-bold tracking-wide font-['Orbitron'] ${
+                  isDark ? "text-white" : "text-gray-900"
+                }`}
+              >
+                SEVENXLEAKS
+                <span className={`${themeClasses.accent} drop-shadow-lg`}>
+                  {getLogoText()}
+                </span>
               </div>
             </motion.div>
           </Link>
@@ -307,6 +315,8 @@ const HeaderLogged: React.FC = () => {
 
           {/* Actions Section */}
           <div className="flex items-center space-x-4">
+            <ThemeToggle />
+            
             {isVip ? (
               <Link to="/vip">
                 <motion.button

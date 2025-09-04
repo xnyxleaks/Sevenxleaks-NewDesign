@@ -32,10 +32,7 @@ const Chooser: React.FC = () => {
         isDark ? 'bg-orange-500/10' : 'bg-orange-200/30'
       }`}></div>
       
-      {/* Theme Toggle */}
-      <div className="absolute top-6 right-6 z-10">
-        <ThemeToggle />
-      </div>
+
       
       <motion.div
         initial={{ opacity: 0, y: 30 }}

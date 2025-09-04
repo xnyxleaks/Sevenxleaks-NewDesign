@@ -4,6 +4,7 @@ import axios from "axios";
 import VIPUserMenu from "./VIPUserMenu";
 import { motion, AnimatePresence } from "framer-motion";
 import { Crown, Sparkles, X } from "lucide-react";
+import ThemeToggle from "../ThemeToggle";
 
 type MenuItem = {
   name: string;
@@ -208,6 +209,8 @@ const VIPHeader: React.FC = () => {
 
           {/* Actions Section */}
           <div className="flex items-center space-x-4">
+            <ThemeToggle />
+            
             <motion.div
               animate={{ scale: [1, 1.05, 1] }}
               transition={{ duration: 3, repeat: Infinity }}

@@ -2,97 +2,102 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "../contexts/ThemeContext";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };
 
   const getLogoText = () => {
-    if (location.pathname.includes('western')) return ' WESTERN';
-    if (location.pathname.includes('asian')) return ' ASIAN';
-    if (location.pathname.includes('banned')) return ' BANNED'
-    if (location.pathname.includes('unknown')) return ' UNKNOWN'
-    if (location.pathname.includes('vip')) return ' VIP';
-    if (location.pathname.includes('plans')) return ' PLANS';
-    if (location.pathname.includes('login')) return ' LOGIN';
-    if (location.pathname.includes('register')) return ' REGISTER';
-    return '';
+    if (location.pathname.includes("western")) return " WESTERN";
+    if (location.pathname.includes("asian")) return " ASIAN";
+    if (location.pathname.includes("banned")) return " BANNED";
+    if (location.pathname.includes("unknown")) return " UNKNOWN";
+    if (location.pathname.includes("vip")) return " VIP";
+    if (location.pathname.includes("plans")) return " PLANS";
+    if (location.pathname.includes("login")) return " LOGIN";
+    if (location.pathname.includes("register")) return " REGISTER";
+    return "";
   };
 
   const getThemeClasses = () => {
-    if (location.pathname === '/western') {
+    if (location.pathname === "/western") {
       return {
-        accent: 'text-orange-400',
-        accentHover: 'hover:text-orange-300',
-        gradient: 'from-orange-500 to-orange-600',
-        gradientHover: 'hover:from-orange-600 hover:to-orange-700',
-        border: 'border-orange-500/20',
-        bg: 'bg-orange-500/10',
-        glow: 'shadow-orange-500/20'
+        accent: "text-orange-400",
+        accentHover: "hover:text-orange-300",
+        gradient: "bg-gradient-to-r from-orange-500 to-orange-600",
+        gradientHover: "hover:from-orange-600 hover:to-orange-700",
+        border: "border-orange-500/20",
+        bg: "bg-orange-500/10",
+        glow: "shadow-orange-500/20",
       };
     }
-    if (location.pathname.includes('vip')) {
+    if (location.pathname.includes("vip")) {
       return {
-        accent: 'text-yellow-400',
-        accentHover: 'hover:text-yellow-300',
-        gradient: 'from-yellow-500 to-yellow-600',
-        gradientHover: 'hover:from-yellow-600 hover:to-yellow-700',
-        border: 'border-yellow-500/20',
-        bg: 'bg-yellow-500/10',
-        glow: 'shadow-yellow-500/20'
+        accent: "text-yellow-400",
+        accentHover: "hover:text-yellow-300",
+        gradient: "bg-gradient-to-r from-yellow-500 to-yellow-600",
+        gradientHover: "hover:from-yellow-600 hover:to-yellow-700",
+        border: "border-yellow-500/20",
+        bg: "bg-yellow-500/10",
+        glow: "shadow-yellow-500/20",
       };
     }
-
-     if (location.pathname.includes('banned')) {
+    if (location.pathname.includes("banned")) {
       return {
-        accent: 'text-red-400',
-        accentHover: 'hover:text-red-300',
-        gradient: 'from-red-500 to-red-600',
-        gradientHover: 'hover:from-red-600 hover:to-red-700',
-        border: 'border-red-500/20',
-        bg: 'bg-red-500/10',
-        glow: 'shadow-red-500/20'
+        accent: "text-red-400",
+        accentHover: "hover:text-red-300",
+        gradient: "bg-gradient-to-r from-red-500 to-red-600",
+        gradientHover: "hover:from-red-600 hover:to-red-700",
+        border: "border-red-500/20",
+        bg: "bg-red-500/10",
+        glow: "shadow-red-500/20",
       };
     }
-
-      if (location.pathname.includes('unknown')) {
+    if (location.pathname.includes("unknown")) {
       return {
-        accent: 'text-slate-400',
-        accentHover: 'hover:text-slate-300',
-        gradient: 'from-slate-500 to-slate-600',
-        gradientHover: 'hover:from-slate-600 hover:to-slate-700',
-        border: 'border-slate-500/20',
-        bg: 'bg-slate-500/10',
-        glow: 'shadow-slate-500/20'
+        accent: "text-slate-400",
+        accentHover: "hover:text-slate-300",
+        gradient: "bg-gradient-to-r from-slate-500 to-slate-600",
+        gradientHover: "hover:from-slate-600 hover:to-slate-700",
+        border: "border-slate-500/20",
+        bg: "bg-slate-500/10",
+        glow: "shadow-slate-500/20",
       };
     }
     return {
-      accent: 'text-purple-400',
-      accentHover: 'hover:text-purple-300',
-      gradient: 'from-slate-500 to-slate-600',
-      gradientHover: 'hover:from-slate-600 hover:to-slate-700',
-      border: 'border-slate-500/20',
-      bg: 'bg-purple-500/10',
-      glow: 'shadow-purple-500/20'
+      accent: "text-purple-400",
+      accentHover: "hover:text-purple-300",
+      gradient: "bg-gradient-to-r from-slate-500 to-slate-600",
+      gradientHover: "hover:from-slate-600 hover:to-slate-700",
+      border: "border-slate-500/20",
+      bg: "bg-purple-500/10",
+      glow: "shadow-purple-500/20",
     };
   };
 
-  const theme = getThemeClasses();
+  const themeClasses = getThemeClasses();
 
-const menuItems = [
-  { name: 'Home',     path: '/',        icon: 'fa-solid fa-house' },
-  { name: 'Banned',   path: '/banned',  icon: 'fa-solid fa-ban' },
-  { name: 'Unknown',  path: '/unknown', icon: 'fa-regular fa-circle-question' },
-  { name: 'Plans',    path: '/plans',   icon: 'fa-solid fa-crown' },
-  { name: 'Discord',  path: 'https://discord.gg/95BKaYTPPS', icon: 'fa-brands fa-discord', external: true },
-  { name: 'Login',    path: '/login',   icon: 'fa-solid fa-right-to-bracket' },   // substitui fa-sign-in-alt
-  { name: 'Register', path: '/register',icon: 'fa-regular fa-registered' }
-];
-
+  const menuItems = [
+    { name: "Home", path: "/", icon: "fa-solid fa-house" },
+    { name: "Banned", path: "/banned", icon: "fa-solid fa-ban" },
+    { name: "Unknown", path: "/unknown", icon: "fa-regular fa-circle-question" },
+    { name: "Plans", path: "/plans", icon: "fa-solid fa-crown" },
+    {
+      name: "Discord",
+      path: "https://discord.gg/95BKaYTPPS",
+      icon: "fa-brands fa-discord",
+      external: true,
+    },
+    { name: "Login", path: "/login", icon: "fa-solid fa-right-to-bracket" },
+    { name: "Register", path: "/register", icon: "fa-regular fa-registered" },
+  ];
 
   return (
     <header className="w-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b border-gray-700/30 sticky top-0 z-50 backdrop-blur-xl shadow-2xl">
@@ -107,8 +112,8 @@ const menuItems = [
             >
               <div className="text-sm sm:text-base lg:text-lg font-bold text-white tracking-wide font-orbitron">
                 <span>SEVENXLEAKS</span>
-                {location.pathname !== '/' && (
-                  <span className={`ml-2 ${theme.accent} drop-shadow-lg`}>
+                {location.pathname !== "/" && (
+                  <span className={`ml-2 ${themeClasses.accent} drop-shadow-lg`}>
                     {getLogoText()}
                   </span>
                 )}
@@ -118,17 +123,17 @@ const menuItems = [
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-4">
-            <Link 
-              to="/" 
-              className={`relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:${theme.border} hover:${theme.glow}`}
+            <Link
+              to="/"
+              className={`relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent ${themeClasses.border} ${themeClasses.glow}`}
             >
               <span className="relative z-10 font-medium font-roboto text-sm">Home</span>
-              <div className={`absolute inset-0 bg-gradient-to-r ${theme.gradient} opacity-0 group-hover:opacity-10 rounded-xl transition-opacity duration-300`}></div>
+              <div className={`absolute inset-0 ${themeClasses.gradient} opacity-0 group-hover:opacity-10 rounded-xl transition-opacity duration-300`}></div>
             </Link>
-            
+
             <Link 
               to="/banned" 
-              className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:border-slate-500/20 hover:shadow-slate-500/20"
+              className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent border-slate-500/20 shadow-slate-500/20"
             >
               <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
                 <i className="fa-solid fa-ban text-slate-400 text-xs"></i>
@@ -136,10 +141,10 @@ const menuItems = [
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-slate-500 to-slate-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
             </Link>
-            
+
             <Link 
               to="/unknown" 
-              className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:border-gray-500/20 hover:shadow-gray-500/20"
+              className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent border-gray-500/20 shadow-gray-500/20"
             >
               <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
                 <i className="fa-solid fa-question text-gray-400 text-xs"></i>
@@ -147,10 +152,10 @@ const menuItems = [
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-gray-500 to-gray-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
             </Link>
-            
+
             <Link 
               to="/plans" 
-              className={`relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:border-slate-500/20 hover:shadow-slate-500/20`}
+              className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent border-slate-500/20 shadow-slate-500/20"
             >
               <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
                 <i className="fa-solid fa-crown text-slate-400 text-xs"></i>
@@ -158,12 +163,12 @@ const menuItems = [
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-slate-500 to-slate-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
             </Link>
-            
+
             <a 
               href="https://discord.gg/95BKaYTPPS"
               target="_blank"
               rel="noopener noreferrer"
-              className={`relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:border-slate-500/20 hover:shadow-slate-500/20`}
+              className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent border-slate-500/20 shadow-slate-500/20"
             >
               <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
                 <i className="fab fa-discord text-slate-400 text-xs"></i>
@@ -171,18 +176,20 @@ const menuItems = [
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-slate-500 to-slate-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
             </a>
-            
+
             <Link 
               to="/login" 
-              className={`relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent hover:${theme.border} hover:${theme.glow}`}
+              className={`relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent ${themeClasses.border} ${themeClasses.glow}`}
             >
               <span className="relative z-10 font-medium font-roboto text-sm">Login</span>
-              <div className={`absolute inset-0 bg-gradient-to-r ${theme.gradient} opacity-0 group-hover:opacity-10 rounded-xl transition-opacity duration-300`}></div>
+              <div className={`absolute inset-0 ${themeClasses.gradient} opacity-0 group-hover:opacity-10 rounded-xl transition-opacity duration-300`}></div>
             </Link>
           </nav>
 
           {/* Actions Section */}
           <div className="flex items-center space-x-3">
+            <ThemeToggle />
+            
             <Link to="/plans">
               <motion.button
                 whileHover={{ scale: 1.05, y: -2 }}
@@ -193,8 +200,6 @@ const menuItems = [
                 <span>VIP ACCESS</span>
               </motion.button>
             </Link>
-            
-            {/* <ThemeToggle /> */}
 
             {/* Simple Mobile Menu Toggle */}
             <motion.button
@@ -224,20 +229,20 @@ const menuItems = [
 
       <AnimatePresence>
         {isMenuOpen && (
-<motion.div
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  exit={{ opacity: 0 }}
-  transition={{ duration: 0.3 }}
-  className="md:hidden inset-0 top-16 sm:top-18 lg:top-20 bg-slate-900 z-50 h-[800px]"
->
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden inset-0 top-16 sm:top-18 lg:top-20 bg-slate-900 z-50 h-[800px]"
+          >
             {/* Close Button */}
             <div className="absolute top-6 right-6">
               <motion.button
                 whileHover={{ scale: 1.1, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
-                onClick={toggleMenu}              >
-              </motion.button>
+                onClick={toggleMenu}
+              />
             </div>
 
             {/* Logo */}
@@ -248,14 +253,16 @@ const menuItems = [
                 transition={{ delay: 0.2 }}
                 className="flex items-center justify-center gap-4 mb-4"
               >
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg ${
-                  theme.gradient.replace('bg-gradient-to-r', 'bg-gradient-to-br')
-                }`}>
+                <div
+                  className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg ${
+                    themeClasses.gradient.replace("bg-gradient-to-r", "bg-gradient-to-br")
+                  }`}
+                >
                   <i className="fa-solid fa-crown text-white text-xl"></i>
                 </div>
                 <h2 className="text-3xl font-bold text-white font-orbitron">MENU</h2>
               </motion.div>
-              <div className={`w-32 h-1 mx-auto rounded-full ${theme.gradient}`}></div>
+              <div className={`w-32 h-1 mx-auto rounded-full ${themeClasses.gradient}`}></div>
             </div>
 
             {/* Menu Items */}
@@ -273,9 +280,9 @@ const menuItems = [
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={toggleMenu}
-                      className={`flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white hover:${theme.bg} rounded-xl transition-all duration-300 border border-transparent hover:${theme.border} backdrop-blur-sm`}
+                      className={`flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white ${themeClasses.bg} rounded-xl transition-all duration-300 border border-transparent ${themeClasses.border} backdrop-blur-sm`}
                     >
-                      <div className={`w-12 h-12 ${theme.bg} rounded-xl flex items-center justify-center border ${theme.border}`}>
+                      <div className={`w-12 h-12 ${themeClasses.bg} rounded-xl flex items-center justify-center border ${themeClasses.border}`}>
                         <i className={`${item.icon} text-gray-300`}></i>
                       </div>
                       <div className="flex-1">
@@ -288,9 +295,9 @@ const menuItems = [
                     <Link
                       to={item.path}
                       onClick={toggleMenu}
-                      className={`flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white hover:${theme.bg} rounded-xl transition-all duration-300 border border-transparent hover:${theme.border} backdrop-blur-sm`}
+                      className={`flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white ${themeClasses.bg} rounded-xl transition-all duration-300 border border-transparent ${themeClasses.border} backdrop-blur-sm`}
                     >
-                      <div className={`w-12 h-12 ${theme.bg} rounded-xl flex items-center justify-center border ${theme.border}`}>
+                      <div className={`w-12 h-12 ${themeClasses.bg} rounded-xl flex items-center justify-center border ${themeClasses.border}`}>
                         <i className={`${item.icon} text-gray-300`}></i>
                       </div>
                       <div className="flex-1">
@@ -302,16 +309,16 @@ const menuItems = [
                   )}
                 </motion.div>
               ))}
-              
+
               {/* Special Actions for Mobile */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
-                className={`pt-6 border-t ${theme.border} space-y-3`}
+                className={`pt-6 border-t ${themeClasses.border} space-y-3`}
               >
                 <Link to="/plans" onClick={toggleMenu}>
-                  <div className={`flex items-center gap-4 px-6 py-4 ${theme.gradient.replace('bg-gradient-to-r', 'bg-gradient-to-r')} border ${theme.border} rounded-xl hover:opacity-90 transition-all duration-300`}>
+                  <div className={`flex items-center gap-4 px-6 py-4 ${themeClasses.gradient} border ${themeClasses.border} rounded-xl hover:opacity-90 transition-all duration-300`}>
                     <div className="w-12 h-12 bg-yellow-500/30 rounded-xl flex items-center justify-center border border-yellow-500/40">
                       <i className="fa-solid fa-crown text-yellow-400"></i>
                     </div>
