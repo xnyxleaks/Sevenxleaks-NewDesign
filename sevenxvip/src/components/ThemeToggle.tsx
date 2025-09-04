@@ -9,10 +9,10 @@ const ThemeToggle: React.FC = () => {
   return (
     <motion.button
       onClick={toggleTheme}
-      className={`p-3 transition-all duration-300 group border backdrop-blur-sm shadow-lg hover:shadow-xl rounded-2xl ${
+      className={`p-2 sm:p-3 transition-all duration-300 group border backdrop-blur-sm shadow-lg hover:shadow-xl rounded-xl ${
         isDark 
           ? 'text-gray-300 hover:text-white hover:bg-gray-700/50 border-gray-700/40 hover:border-gray-600/60' 
-          : 'text-gray-600 hover:text-gray-800 hover:bg-gray-200/50 border-gray-300/40 hover:border-gray-400/60'
+          : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100/50 border-gray-300/40 hover:border-gray-400/60'
       }`}
       title="Toggle Theme"
       whileHover={{ scale: 1.05 }}
@@ -20,8 +20,12 @@ const ThemeToggle: React.FC = () => {
       aria-label="Toggle theme"
     >
       <div className="relative">
-        <i className={`fa-solid ${isDark ? 'fa-sun' : 'fa-moon'} text-lg transition-all duration-300 group-hover:rotate-12 ${isDark ? 'text-yellow-400' : 'text-indigo-500'}`}></i>
-        <div className={`absolute inset-0 ${isDark ? 'bg-yellow-400/20' : 'bg-indigo-500/20'} rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm animate-pulse`}></div>
+        <i className={`fa-solid ${isDark ? 'fa-sun' : 'fa-moon'} text-sm sm:text-lg transition-all duration-300 group-hover:rotate-12 ${
+          isDark ? 'text-yellow-400' : 'text-indigo-600'
+        }`}></i>
+        <div className={`absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm animate-pulse ${
+          isDark ? 'bg-yellow-400/20' : 'bg-indigo-600/20'
+        }`}></div>
       </div>
     </motion.button>
   );

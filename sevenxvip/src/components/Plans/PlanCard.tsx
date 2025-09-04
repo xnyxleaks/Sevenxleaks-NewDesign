@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Crown } from "lucide-react";
 import { motion } from "framer-motion";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface PlanCardProps {
   title: string;
@@ -24,6 +25,8 @@ const PlanCard: React.FC<PlanCardProps> = ({
   unPopular,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   const handleButtonClick = async () => {
     setIsLoading(true);
@@ -42,12 +45,22 @@ const PlanCard: React.FC<PlanCardProps> = ({
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -10, scale: 1.02 }}
       transition={{ duration: 0.3 }}
-      className={`relative bg-gray-800/60 backdrop-blur-xl border rounded-3xl p-8 w-80 h-auto overflow-hidden shadow-2xl transition-all duration-500 ${
+      className={`relative backdrop-blur-xl border rounded-3xl p-8 w-80 h-auto overflow-hidden shadow-2xl transition-all duration-500 ${
+        isDark 
+          ? 'bg-gray-800/60 border-gray-700' 
+          : 'bg-white/90 border-gray-200'
+      } ${
         isPopular 
-          ? "border-yellow-500/50 shadow-yellow-500/20" 
+          ? isDark 
+            ? "border-yellow-500/50 shadow-yellow-500/20" 
+            : "border-yellow-400/60 shadow-yellow-400/20"
           : unPopular 
-          ? "border-gray-600/50 shadow-gray-500/10"
-          : "border-purple-500/50 shadow-purple-500/20"
+            ? isDark
+              ? "border-gray-600/50 shadow-gray-500/10"
+              : "border-gray-300/60 shadow-gray-300/10"
+            : isDark
+              ? "border-purple-500/50 shadow-purple-500/20"
+              : "border-purple-400/60 shadow-purple-400/20"
       }`}
     >
       {/* Background Gradient */}
@@ -87,22 +100,30 @@ const PlanCard: React.FC<PlanCardProps> = ({
         </div>
 
         {/* Title */}
-        <h2 className="text-2xl font-bold mb-2 text-white font-orbitron">
+        <h2 className={`text-2xl font-bold mb-2 font-orbitron ${
+          isDark ? 'text-white' : 'text-gray-900'
+        }`}>
           {title}
         </h2>
         
         {/* Description */}
-        <p className="text-sm mb-6 text-gray-400 font-roboto">
+        <p className={`text-sm mb-6 font-roboto ${
+          isDark ? 'text-gray-400' : 'text-gray-600'
+        }`}>
           {description}
         </p>
         
         {/* Price */}
         <div className="mb-8">
-          <span className="text-4xl font-bold text-white font-orbitron">
+          <span className={`text-4xl font-bold font-orbitron ${
+            isDark ? 'text-white' : 'text-gray-900'
+          }`}>
             {price}
           </span>
           {price !== "$0.00" && (
-            <span className="text-gray-400 text-sm font-roboto ml-1">/month</span>
+            <span className={`text-sm font-roboto ml-1 ${
+              isDark ? 'text-gray-400' : 'text-gray-600'
+            }`}>/month</span>
           )}
         </div>
 
@@ -126,7 +147,9 @@ const PlanCard: React.FC<PlanCardProps> = ({
                     isFeatureDenied ? 'fa-times text-red-400' : 'fa-check text-green-400'
                   } text-xs`}></i>
                 </div>
-                <span className="text-gray-300">
+                <span className={`${
+                  isDark ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   {feature}
                 </span>
               </li>

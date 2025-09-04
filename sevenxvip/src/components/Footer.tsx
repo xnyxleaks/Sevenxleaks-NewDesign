@@ -26,12 +26,20 @@ const Footer = () => {
     <footer className={`relative overflow-hidden border-t transition-all duration-300 ${
       isDark 
         ? "bg-gray-900/95 border-gray-800/50 text-white" 
-        : "bg-white/95 border-gray-200 text-gray-900"
+        : "bg-white/95 border-gray-200/50 text-gray-900"
     }`}>
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-transparent to-blue-500/5"></div>
-      <div className="absolute top-0 left-1/4 w-96 h-32 bg-purple-500/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 right-1/4 w-96 h-32 bg-blue-500/10 rounded-full blur-3xl"></div>
+      <div className={`absolute inset-0 ${
+        isDark 
+          ? 'bg-gradient-to-r from-purple-500/5 via-transparent to-blue-500/5'
+          : 'bg-gradient-to-r from-purple-200/20 via-transparent to-blue-200/20'
+      }`}></div>
+      <div className={`absolute top-0 left-1/4 w-96 h-32 rounded-full blur-3xl ${
+        isDark ? 'bg-purple-500/10' : 'bg-purple-200/30'
+      }`}></div>
+      <div className={`absolute bottom-0 right-1/4 w-96 h-32 rounded-full blur-3xl ${
+        isDark ? 'bg-blue-500/10' : 'bg-blue-200/30'
+      }`}></div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">

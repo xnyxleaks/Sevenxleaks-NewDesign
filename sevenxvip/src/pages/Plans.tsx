@@ -15,6 +15,7 @@ const Plans: React.FC = () => {
   const token = localStorage.getItem("Token");
   const email = localStorage.getItem("email");
   const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   useEffect(() => {
     const checkAuthAndVipStatus = async () => {
@@ -110,42 +111,66 @@ const Plans: React.FC = () => {
   if (loading) return <Loading />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+    <div className={`min-h-screen ${
+      isDark 
+        ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white' 
+        : 'bg-gradient-to-br from-gray-50 via-white to-gray-100 text-gray-900'
+    }`}>
       <Helmet>
         <title>Sevenxleaks - Plans</title>
         <link rel="canonical" href={`https://sevenxleaks.com/plans`} />
       </Helmet>
 
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-yellow-900/20 via-gray-900 to-gray-900"></div>
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className={`absolute inset-0 ${
+        isDark 
+          ? 'bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-yellow-900/20 via-gray-900 to-gray-900'
+          : 'bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-yellow-100/30 via-white to-gray-50'
+      }`}></div>
+      <div className={`absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse ${
+        isDark ? 'bg-yellow-500/10' : 'bg-yellow-200/30'
+      }`}></div>
+      <div className={`absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse ${
+        isDark ? 'bg-yellow-500/10' : 'bg-yellow-200/30'
+      }`}></div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Header Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <div className="mb-8">
-            <motion.div
-              className="w-24 h-24 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-yellow-500/30"
-              animate={{ rotate: [0, 5, -5, 0] }}
-              transition={{ duration: 3, repeat: Infinity }}
-            >
-              <Crown className="w-12 h-12 text-black" />
-            </motion.div>
-            
-            <h1 className="text-5xl sm:text-6xl font-bold mb-6 font-orbitron bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
-              VIP LOUNGE
-            </h1>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto font-roboto">
-              Choose Your VIP Experience and unlock exclusive premium content
-            </p>
-          </div>
-        </motion.div>
+       <motion.div
+  initial={{ opacity: 0, y: 30 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8 }}
+  className="flex flex-col items-center"
+>
+  <motion.div
+    animate={{ rotate: [0, 5, -5, 0] }}
+    transition={{ duration: 3, repeat: Infinity }}
+    className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl ${
+      isDark
+        ? 'bg-gradient-to-br from-yellow-400 to-yellow-500 shadow-yellow-500/30'
+        : 'bg-gradient-to-br from-yellow-500 to-yellow-600 shadow-yellow-500/20'
+    }`}
+  >
+    <Crown className="w-12 h-12 text-black" />
+  </motion.div>
+
+  <h1
+    className={`text-5xl sm:text-6xl font-bold mb-6 font-orbitron bg-clip-text text-transparent ${
+      isDark
+        ? 'bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500'
+        : 'bg-gradient-to-r from-yellow-600 via-yellow-700 to-yellow-800'
+    }`}
+  >
+    VIP LOUNGE
+  </h1>
+  <p
+    className={`text-xl max-w-2xl mx-auto font-roboto ${
+      isDark ? 'text-gray-400' : 'text-gray-600'
+    }`}
+  >
+    Choose Your VIP Experience and unlock exclusive premium content
+  </p>
+</motion.div>
 
         {/* Plans Grid */}
         <div className="flex justify-center gap-8 flex-wrap">
@@ -233,7 +258,9 @@ const Plans: React.FC = () => {
           transition={{ delay: 0.8, duration: 0.8 }}
           className="mt-20 text-center"
         >
-          <h2 className="text-3xl font-bold mb-12 text-white font-orbitron">
+          <h2 className={`text-3xl font-bold mb-12 font-orbitron ${
+            isDark ? 'text-white' : 'text-gray-900'
+          }`}>
             Why Choose VIP?
           </h2>
           
@@ -263,19 +290,33 @@ const Plans: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1 + index * 0.1 }}
-                className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 hover:border-gray-600 transition-all duration-300"
+                className={`backdrop-blur-sm border rounded-2xl p-6 transition-all duration-300 ${
+                  isDark 
+                    ? 'bg-gray-800/50 border-gray-700 hover:border-gray-600' 
+                    : 'bg-white/60 border-gray-200 hover:border-gray-300'
+                }`}
               >
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 ${
                   benefit.color === 'yellow' 
-                    ? 'bg-yellow-500/20 text-yellow-400'
+                    ? isDark 
+                      ? 'bg-yellow-500/20 text-yellow-400'
+                      : 'bg-yellow-100 text-yellow-600'
                     : benefit.color === 'purple'
-                    ? 'bg-purple-500/20 text-purple-400'
-                    : 'bg-blue-500/20 text-blue-400'
+                      ? isDark
+                        ? 'bg-purple-500/20 text-purple-400'
+                        : 'bg-purple-100 text-purple-600'
+                      : isDark
+                        ? 'bg-blue-500/20 text-blue-400'
+                        : 'bg-blue-100 text-blue-600'
                 }`}>
                   <benefit.icon className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2 text-white font-orbitron">{benefit.title}</h3>
-                <p className="text-gray-400 font-roboto">{benefit.description}</p>
+                <h3 className={`text-lg font-semibold mb-2 font-orbitron ${
+                  isDark ? 'text-white' : 'text-gray-900'
+                }`}>{benefit.title}</h3>
+                <p className={`font-roboto ${
+                  isDark ? 'text-gray-400' : 'text-gray-600'
+                }`}>{benefit.description}</p>
               </motion.div>
             ))}
           </div>
