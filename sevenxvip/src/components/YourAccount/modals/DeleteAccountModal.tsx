@@ -52,6 +52,8 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
       
       setTimeout(() => {
         localStorage.removeItem('Token');
+        localStorage.removeItem('name');
+        localStorage.removeItem('email');
         window.location.href = '/';
       }, 2000);
       
@@ -64,9 +66,9 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-black bg-opacity-50 backdrop-blur-sm animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-black/70 backdrop-blur-sm">
       <div 
-        className={`w-full max-w-md p-6 rounded-xl shadow-lg animate-scaleIn ${
+        className={`w-full max-w-md p-6 rounded-xl shadow-lg ${
           isDark ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'
         }`}
       >

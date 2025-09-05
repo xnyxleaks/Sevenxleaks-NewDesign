@@ -79,12 +79,15 @@ const VIPUnknownPage: React.FC = () => {
       if (searchName) params.append("search", searchName);
       if (selectedCategory) params.append("category", selectedCategory);
       if (selectedRegion) params.append("region", selectedRegion);
+      if (selectedMonth) params.append("month", selectedMonth);
 
       if (dateFilter !== "all") {
         const today = new Date();
         let targetDate = new Date();
 
         switch (dateFilter) {
+          case "today":
+            break;
           case "yesterday":
             targetDate.setDate(today.getDate() - 1);
             break;
@@ -93,10 +96,12 @@ const VIPUnknownPage: React.FC = () => {
             break;
         }
 
-        params.append(
-          "month",
-          (targetDate.getMonth() + 1).toString().padStart(2, "0")
-        );
+        if (!selectedMonth) {
+          params.append(
+            "month",
+            (targetDate.getMonth() + 1).toString().padStart(2, "0")
+          );
+        }
       }
 
       const endpoint = searchName
@@ -165,7 +170,7 @@ const VIPUnknownPage: React.FC = () => {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchName, selectedCategory, selectedRegion, dateFilter]);
+  }, [searchName, selectedCategory, selectedRegion, selectedMonth, dateFilter]);
 
   const handleLoadMore = () => {
     if (loadingMore || currentPage >= totalPages) return;
@@ -293,6 +298,12 @@ const VIPUnknownPage: React.FC = () => {
                   </option>
                 ))}
               </select>
+
+              <MonthFilter
+                selectedMonth={selectedMonth}
+                onMonthChange={setSelectedMonth}
+                themeColor="yellow"
+              />
 
                   <div>
                 <MonthFilter

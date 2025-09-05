@@ -1,292 +1,237 @@
-import React from "react";
-import { motion } from "framer-motion";
-import {
-  Plus,
-  Loader2,
-  LinkIcon,
-  Tag,
-  Calendar,
-  ChevronDown,
-  ChevronRight,
-  Upload,
-  Image as ImageIcon,
-} from "lucide-react";
+import React, { useRef, useCallback } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { Edit2, Trash2, LinkIcon, ExternalLink } from "lucide-react";
 import { LinkItem } from "../../utils/index";
+import { useTheme } from "../../contexts/ThemeContext";
 
-interface AdminLinkFormProps {
-  newLink: LinkItem;
-  setNewLink: React.Dispatch<React.SetStateAction<LinkItem>>;
+export interface AdminLinkListProps {
+  links: LinkItem[];
   isLoading: boolean;
-  isEditing: number | null;
-  handleAddLink: () => Promise<void>;
-  handleUpdateLink: () => Promise<void>;
-  categories: string[];
+  handleEditLink: (id: number) => void;
+  handleDeleteLink: (id: number) => Promise<void>;
+  hasMore: boolean;
+  loadMore: () => void;
 }
 
-const AdminLinkForm: React.FC<AdminLinkFormProps> = ({
-  newLink,
-  setNewLink,
+
+const AdminLinkList: React.FC<AdminLinkListProps> = ({
+  links = [],
   isLoading,
-  isEditing,
-  handleAddLink,
-  handleUpdateLink,
-  categories,
+  handleEditLink,
+  handleDeleteLink,
+  hasMore,
+  loadMore,
+
+
+
 }) => {
-  const [showAdditionalLinks, setShowAdditionalLinks] = React.useState(false);
-  const [uploadingImage, setUploadingImage] = React.useState(false);
+  const parentRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setNewLink((prev) => ({ ...prev, [name]: value }));
-  };
+  const rowVirtualizer = useVirtualizer({
+    count: links.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: useCallback(() => 200, []),
+    overscan: 5,
+  });
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setUploadingImage(true);
-    
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", import.meta.env.VITE_UPLOAD_PRESET || "default_preset");
-      formData.append("cloud_name", import.meta.env.VITE_CLOUDY_NAME || "default_cloud");
-
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDY_NAME || "default_cloud"}/image/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const data = await response.json();
-      
-      if (data.secure_url) {
-        setNewLink((prev) => ({ ...prev, thumbnail: data.secure_url }));
+  const handleScroll = useCallback(
+    (e: React.UIEvent<HTMLDivElement>) => {
+      const target = e.target as HTMLDivElement;
+      if (
+        target.scrollHeight - target.scrollTop <= target.clientHeight * 1.5 &&
+        hasMore &&
+        !isLoading
+      ) {
+        loadMore();
       }
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    } finally {
-      setUploadingImage(false);
-    }
-  };
+    },
+    [hasMore, isLoading, loadMore]
+  );
+
+  if (isLoading && links.length === 0) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div
+          className={`animate-spin h-8 w-8 border-4 rounded-full border-t-transparent ${
+            isDark ? "border-blue-500" : "border-blue-600"
+          }`}
+        ></div>
+      </div>
+    );
+  }
 
   return (
-    <div className="grid gap-4 mb-6 bg-gray-800/80 p-6 rounded-xl border border-gray-700">
-      <h2 className="text-xl font-semibold mb-2">
-        {isEditing ? "Edit Content" : "Add New Content"}
-      </h2>
-      
-      <div className="flex gap-4 items-center">
-        <div className="relative flex-1">
-          <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <input
-            type="text"
-            placeholder="Content Name"
-            name="name"
-            value={newLink.name}
-            onChange={handleInputChange}
-            className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
-          />
-        </div>
-        <div className="relative flex-1">
-          <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <input
-            type="text"
-            placeholder="MEGA URL"
-            name="mega"
-            value={newLink.mega}
-            onChange={handleInputChange}
-            className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
-          />
-        </div>
-      </div>
-      
-      {/* Thumbnail Upload Section */}
-      {/* <div className="space-y-3">
-        <div className="flex items-center gap-2 text-gray-300">
-          <ImageIcon className="w-5 h-5" />
-          <span>Thumbnail Image</span>
-        </div>
-        
-        <div className="flex gap-4 items-center">
-          <div className="relative flex-1">
-            <input
-              type="text"
-              placeholder="Thumbnail URL (or upload below)"
-              name="thumbnail"
-              value={newLink.thumbnail || ""}
-              onChange={handleInputChange}
-              className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
-            />
-          </div>
-          
-          <div className="relative">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="hidden"
-              id="thumbnail-upload"
-            />
-            <label
-              htmlFor="thumbnail-upload"
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-colors ${
-                uploadingImage
-                  ? "bg-gray-600 cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-700"
-              } text-white`}
-            >
-              {uploadingImage ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Upload className="w-4 h-4" />
-              )}
-              <span>{uploadingImage ? "Uploading..." : "Upload"}</span>
-            </label>
-          </div>
-        </div>
-        
-        {newLink.thumbnail && (
-          <div className="mt-3">
-            <img
-              src={newLink.thumbnail}
-              alt="Thumbnail preview"
-              className="w-32 h-24 object-cover rounded-lg border border-gray-600"
-            />
-          </div>
-        )}
-      </div> */}
-      
-      <div className="flex items-center gap-2 cursor-pointer text-gray-300 hover:text-white transition-colors" 
-           onClick={() => setShowAdditionalLinks(!showAdditionalLinks)}>
-        {showAdditionalLinks ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
-        <span>Additional Links</span>
-      </div>
-      
-      {showAdditionalLinks && (
-        <motion.div 
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          exit={{ opacity: 0, height: 0 }}
-          className="space-y-3"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div className="relative">
-              <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="MEGA 2"
-                name="mega2"
-                value={newLink.mega2}
-                onChange={handleInputChange}
-                className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
-              />
-            </div>
-            <div className="relative">
-              <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="Pixeldrain"
-                name="pixeldrain"
-                value={newLink.pixeldrain}
-                onChange={handleInputChange}
-                className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
-              />
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div className="relative">
-              <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="AdmavenMega"
-                name="AdmavenMega"
-                value={newLink.AdmavenMega}
-                onChange={handleInputChange}
-                className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
-              />
-            </div>
-            <div className="relative">
-              <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="AdmavenMega2"
-                name="AdmavenMega2"
-                value={newLink.AdmavenMega2}
-                onChange={handleInputChange}
-                className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
-              />
-            </div>
-            <div className="relative">
-              <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="AdmavenPixeldrain"
-                name="AdmavenPixeldrain"
-                value={newLink.AdmavenPixeldrain}
-                onChange={handleInputChange}
-                className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
-              />
-            </div>
-          </div>
-        </motion.div>
-      )}
-      
-      <div className="flex gap-4 items-center">
-        <div className="relative flex-1">
-          <Tag className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <select
-            name="category"
-            value={newLink.category}
-            onChange={handleInputChange}
-            className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white appearance-none"
-          >
-            <option value="">Select Category</option>
-            {categories.map((category) => (
-              <option key={category} value={category}>{category}</option>
-            ))}
-          </select>
-          <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-        </div>
-        <div className="relative flex-1">
-          <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <input
-            type="date"
-            name="postDate"
-            value={newLink.postDate}
-            onChange={handleInputChange}
-            className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
-          />
-        </div>
-      </div>
-      
-      <motion.button
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        onClick={isEditing ? handleUpdateLink : handleAddLink}
-        disabled={isLoading || uploadingImage}
-        className={`flex items-center justify-center gap-2 w-full py-2 rounded-lg transition-colors ${
-          isLoading || uploadingImage
-            ? "bg-gray-600 cursor-not-allowed"
-            : isEditing
-            ? "bg-yellow-600 hover:bg-yellow-700"
-            : "bg-green-600 hover:bg-green-700"
-        }`}
+    <div
+      ref={parentRef}
+      onScroll={handleScroll}
+      className="h-[600px] overflow-auto"
+      style={{ contain: "strict" }}
+    >
+      <div
+        style={{
+          height: `${rowVirtualizer.getTotalSize()}px`,
+          width: "100%",
+          position: "relative",
+        }}
       >
-        {isLoading || uploadingImage ? (
-          <Loader2 className="w-5 h-5 animate-spin" />
-        ) : (
-          <Plus className="w-5 h-5" />
-        )}
-        {uploadingImage ? "Uploading Image..." : isEditing ? "Update Content" : "Add New Content"}
-      </motion.button>
+        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+          const link = links[virtualRow.index];
+          return (
+            <div
+              key={link.id}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: `${virtualRow.size}px`,
+                transform: `translateY(${virtualRow.start}px)`,
+              }}
+            >
+              <div
+                className={`border rounded-lg p-4 m-2 ${
+                  isDark
+                    ? "bg-gray-700/30 border-gray-600"
+                    : "bg-gray-100/50 border-gray-300"
+                }`}
+              >
+                <div className="flex items-start justify-between gap-4 mb-3">
+                  <div className="flex-1">
+                    <h3
+                      className={`font-medium text-lg ${
+                        isDark ? "text-white" : "text-gray-900"
+                      }`}
+                    >
+                      {link.name}
+                    </h3>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs ${
+                          isDark
+                            ? "bg-gray-700 text-gray-300"
+                            : "bg-gray-200 text-gray-700"
+                        }`}
+                      >
+                        {link.category}
+                      </span>
+                      <span
+                        className={`text-xs ${
+                          isDark ? "text-gray-400" : "text-gray-600"
+                        }`}
+                      >
+                        {new Date(link.postDate).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleEditLink(link.id!)}
+                      className="p-2 bg-yellow-600 hover:bg-yellow-700 rounded-lg transition-colors"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteLink(link.id!)}
+                      className="p-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  className={`space-y-2 text-sm ${
+                    isDark ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <LinkIcon className="w-4 h-4" />
+                    <span className="truncate">{link.mega}</span>
+                    <a
+                      href={link.mega}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`p-1 rounded-full transition-colors ${
+                        isDark ? "hover:bg-gray-600" : "hover:bg-gray-200"
+                      }`}
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+
+                  {link.pixeldrain && (
+                    <div className="flex items-center gap-2">
+                      <LinkIcon className="w-4 h-4" />
+                      <span className="text-xs">Pixeldrain:</span>
+                      <span className="truncate">{link.pixeldrain}</span>
+                    </div>
+                  )}
+
+                  {link.mega2 && (
+                    <div className="flex items-center gap-2">
+                      <LinkIcon className="w-4 h-4" />
+                      <span className="text-xs">MEGA 2:</span>
+                      <span className="truncate">{link.mega2}</span>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-3 gap-2 mt-2">
+                    {link.AdmavenMega && (
+                      <div className="flex items-center gap-1 text-xs">
+                        <span>AdmavenMega:</span>
+                        <span className="truncate">{link.AdmavenMega}</span>
+                      </div>
+                    )}
+                    {link.AdmavenMega2 && (
+                      <div className="flex items-center gap-1 text-xs">
+                        <span>AdmavenMega2:</span>
+                        <span className="truncate">{link.AdmavenMega2}</span>
+                      </div>
+                    )}
+                    {link.AdmavenPixeldrain && (
+                      <div className="flex items-center gap-1 text-xs">
+                        <span>AdmavenPixeldrain:</span>
+                        <span className="truncate">{link.AdmavenPixeldrain}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {isLoading && links.length > 0 && (
+        <div className="flex justify-center py-4">
+          <div
+            className={`animate-spin h-8 w-8 border-4 rounded-full border-t-transparent ${
+              isDark ? "border-blue-500" : "border-blue-600"
+            }`}
+          ></div>
+        </div>
+      )}
+      {!isLoading && !hasMore && links.length > 0 && (
+        <div
+          className={`text-center py-4 ${
+            isDark ? "text-gray-400" : "text-gray-600"
+          }`}
+        >
+          No more content to load
+        </div>
+      )}
+      {links.length === 0 && (
+        <div
+          className={`text-center py-12 ${
+            isDark ? "text-gray-400" : "text-gray-600"
+          }`}
+        >
+          No content found
+        </div>
+      )}
     </div>
   );
 };
 
-export default AdminLinkForm;
+export default React.memo(AdminLinkList);

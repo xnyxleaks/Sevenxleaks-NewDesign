@@ -56,7 +56,6 @@ try {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
       'x-api-key': `${import.meta.env.VITE_FRONTEND_API_KEY}`,
-      'x-admin-key': `BDBC3C797E73D`
     },
     body: JSON.stringify({ token, password: newPassword })
   });
@@ -89,9 +88,9 @@ setSuccess(true);
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-black bg-opacity-50 backdrop-blur-sm animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-black/70 backdrop-blur-sm">
       <div 
-        className={`w-full max-w-md p-6 rounded-xl shadow-lg animate-scaleIn ${
+        className={`w-full max-w-md p-6 rounded-xl shadow-lg ${
           isDark ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'
         }`}
       >

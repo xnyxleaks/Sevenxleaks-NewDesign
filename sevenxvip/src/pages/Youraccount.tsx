@@ -751,6 +751,25 @@ const YourAccount: React.FC = () => {
                     }`}>Permanently delete your account</p>
                   </div>
                 </button>
+
+                <button 
+                  onClick={() => setShowPasswordModal(true)}
+                  className={`w-full p-4 text-left rounded-xl transition-all duration-200 flex items-center gap-3 border cursor-pointer ${
+                    isDark 
+                      ? 'text-gray-300 hover:bg-gray-700/50 hover:text-white border-transparent hover:border-purple-500/20'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 border-transparent hover:border-purple-300'
+                  }`}
+                >
+                  <Key className={`w-5 h-5 ${
+                    isDark ? 'text-purple-400' : 'text-purple-600'
+                  }`} />
+                  <div>
+                    <span className="font-medium">Change Password</span>
+                    <p className={`text-sm ${
+                      isDark ? 'text-gray-400' : 'text-gray-600'
+                    }`}>Update your account password</p>
+                  </div>
+                </button>
               </div>
             </div>
           </motion.div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle, XCircle, Clock, AlertCircle, ClipboardList } from 'lucide-react';
 import Loading from '../components/Loading/Loading';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface Recommendation {
   id: number;
@@ -16,6 +17,8 @@ const ViewRequests: React.FC = () => {
   const [requests, setRequests] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -79,17 +82,23 @@ const ViewRequests: React.FC = () => {
       case 'approved':
         return {
           icon: CheckCircle,
-          classes: 'bg-green-500/10 text-green-400 border-green-500/20',
+          classes: isDark 
+            ? 'bg-green-500/10 text-green-400 border-green-500/20'
+            : 'bg-green-100 text-green-600 border-green-200',
         };
       case 'rejected':
         return {
           icon: XCircle,
-          classes: 'bg-red-500/10 text-red-400 border-red-500/20',
+          classes: isDark 
+            ? 'bg-red-500/10 text-red-400 border-red-500/20'
+            : 'bg-red-100 text-red-600 border-red-200',
         };
       default:
         return {
           icon: Clock,
-          classes: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
+          classes: isDark 
+            ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20'
+            : 'bg-yellow-100 text-yellow-600 border-yellow-200',
         };
     }
   };
@@ -108,7 +117,11 @@ const ViewRequests: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
+    <div className={`min-h-screen p-6 ${
+      isDark 
+        ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white' 
+        : 'bg-gradient-to-br from-gray-50 via-white to-gray-100 text-gray-900'
+    }`}>
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

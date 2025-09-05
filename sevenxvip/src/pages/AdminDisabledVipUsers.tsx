@@ -17,6 +17,7 @@ import {
   Filter,
   ChevronDown
 } from "lucide-react";
+import { useTheme } from "../contexts/ThemeContext";
 
 // Types
 interface User {
@@ -34,7 +35,11 @@ interface ConfirmModalProps {
 }
 
 // Modals
-const ConfirmModal: React.FC<ConfirmModalProps> = ({ title, message, onConfirm, onCancel }) => (
+const ConfirmModal: React.FC<ConfirmModalProps> = ({ title, message, onConfirm, onCancel }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+  
+  return (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
@@ -45,16 +50,26 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ title, message, onConfirm, 
       initial={{ scale: 0.95, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0.95, opacity: 0 }}
-      className="bg-white rounded-xl shadow-xl p-6 max-w-md w-full mx-4"
+      className={`rounded-xl shadow-xl p-6 max-w-md w-full mx-4 ${
+        isDark ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
+      }`}
     >
-      <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
-      <p className="text-gray-600 mb-6">{message}</p>
+      <h3 className={`text-xl font-bold mb-2 ${
+        isDark ? 'text-white' : 'text-gray-900'
+      }`}>{title}</h3>
+      <p className={`mb-6 ${
+        isDark ? 'text-gray-300' : 'text-gray-600'
+      }`}>{message}</p>
       <div className="flex justify-end gap-3">
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={onCancel}
-          className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors rounded-lg hover:bg-gray-100"
+          className={`px-4 py-2 transition-colors rounded-lg ${
+            isDark 
+              ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700'
+              : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
+          }`}
         >
           Cancel
         </motion.button>
@@ -69,9 +84,14 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ title, message, onConfirm, 
       </div>
     </motion.div>
   </motion.div>
-);
+  );
+};
 
-const SuccessModal: React.FC<{ message: string; onClose: () => void }> = ({ message, onClose }) => (
+const SuccessModal: React.FC<{ message: string; onClose: () => void }> = ({ message, onClose }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+  
+  return (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
@@ -82,26 +102,37 @@ const SuccessModal: React.FC<{ message: string; onClose: () => void }> = ({ mess
       initial={{ scale: 0.95, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0.95, opacity: 0 }}
-      className="bg-white rounded-xl shadow-xl p-6 max-w-md w-full mx-4"
+      className={`rounded-xl shadow-xl p-6 max-w-md w-full mx-4 ${
+        isDark ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
+      }`}
     >
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <CheckCircle2 className="w-6 h-6 text-green-500" />
-          <h3 className="text-xl font-bold text-gray-900">Success</h3>
+          <h3 className={`text-xl font-bold ${
+            isDark ? 'text-white' : 'text-gray-900'
+          }`}>Success</h3>
         </div>
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={onClose}
-          className="text-gray-400 hover:text-gray-600 rounded-full p-1 hover:bg-gray-100"
+          className={`rounded-full p-1 transition-colors ${
+            isDark 
+              ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700'
+              : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
+          }`}
         >
           <X className="w-5 h-5" />
         </motion.button>
       </div>
-      <p className="text-gray-600 mb-4">{message}</p>
+      <p className={`mb-4 ${
+        isDark ? 'text-gray-300' : 'text-gray-600'
+      }`}>{message}</p>
     </motion.div>
   </motion.div>
-);
+  );
+};
 
 // Main Component
 const AdminDisabledVipUsers: React.FC = () => {
@@ -120,6 +151,8 @@ const AdminDisabledVipUsers: React.FC = () => {
   const [sortBy, setSortBy] = useState<"name" | "date">("date");
 
   const navigate = useNavigate();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   useEffect(() => {
     fetchDisabledVipUsers();
@@ -206,19 +239,31 @@ const AdminDisabledVipUsers: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+    <div className={`min-h-screen ${
+      isDark 
+        ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white' 
+        : 'bg-gradient-to-br from-gray-50 via-white to-gray-100 text-gray-900'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold">Disabled VIP Users</h1>
-            <p className="text-gray-400 mt-2">Manage users with disabled VIP access</p>
+            <h1 className={`text-3xl font-bold ${
+              isDark ? 'text-white' : 'text-gray-900'
+            }`}>Disabled VIP Users</h1>
+            <p className={`mt-2 ${
+              isDark ? 'text-gray-400' : 'text-gray-600'
+            }`}>Manage users with disabled VIP access</p>
           </div>
           <div className="flex gap-4">
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => navigate("/admin-vip-users")}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                isDark 
+                  ? 'bg-gray-700 hover:bg-gray-600 text-white' 
+                  : 'bg-gray-200 hover:bg-gray-300 text-gray-900'
+              }`}
             >
               <Users className="w-5 h-5" />
               Back to VIP Users
@@ -227,7 +272,7 @@ const AdminDisabledVipUsers: React.FC = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={fetchDisabledVipUsers}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
             >
               <RefreshCw className="w-5 h-5" />
               Refresh
@@ -239,52 +284,86 @@ const AdminDisabledVipUsers: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-red-500/10 border border-red-500 text-red-500 p-4 rounded-lg mb-6 flex items-center gap-2"
+            className={`border p-4 rounded-lg mb-6 flex items-center gap-2 ${
+              isDark 
+                ? 'bg-red-500/10 border-red-500 text-red-500' 
+                : 'bg-red-50 border-red-200 text-red-700'
+            }`}
           >
             <AlertCircle className="w-5 h-5" />
             {error}
           </motion.div>
         )}
 
-        <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
+        <div className={`backdrop-blur-sm border rounded-xl p-6 ${
+          isDark 
+            ? 'bg-gray-800/50 border-gray-700' 
+            : 'bg-white/80 border-gray-200'
+        }`}>
           <div className="flex flex-col md:flex-row gap-4 mb-6">
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
+                  isDark ? 'text-gray-400' : 'text-gray-500'
+                }`} />
                 <input
                   type="text"
                   placeholder="Search by name or email..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
+                  className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
+                    isDark 
+                      ? 'bg-gray-700/50 border-gray-600 text-white placeholder-gray-400'
+                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                  }`}
                 />
               </div>
             </div>
             <div className="relative">
-              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Filter className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
+                isDark ? 'text-gray-400' : 'text-gray-500'
+              }`} />
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as "name" | "date")}
-                className="pl-10 pr-8 py-2 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white appearance-none"
+                className={`pl-10 pr-8 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none transition-colors ${
+                  isDark 
+                    ? 'bg-gray-700/50 border-gray-600 text-white'
+                    : 'bg-white border-gray-300 text-gray-900'
+                }`}
               >
                 <option value="date">Sort by Date</option>
                 <option value="name">Sort by Name</option>
               </select>
-              <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <ChevronDown className={`absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
+                isDark ? 'text-gray-400' : 'text-gray-500'
+              }`} />
             </div>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-700">
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">User</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Last VIP Date</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th>
+                <tr className={`border-b ${
+                  isDark ? 'border-gray-700' : 'border-gray-200'
+                }`}>
+                  <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                    isDark ? 'text-gray-400' : 'text-gray-600'
+                  }`}>User</th>
+                  <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                    isDark ? 'text-gray-400' : 'text-gray-600'
+                  }`}>Status</th>
+                  <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                    isDark ? 'text-gray-400' : 'text-gray-600'
+                  }`}>Last VIP Date</th>
+                  <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                    isDark ? 'text-gray-400' : 'text-gray-600'
+                  }`}>Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-700">
+              <tbody className={`divide-y ${
+                isDark ? 'divide-gray-700' : 'divide-gray-200'
+              }`}>
                 <AnimatePresence>
                   {loading ? (
                     <tr>
@@ -297,7 +376,9 @@ const AdminDisabledVipUsers: React.FC = () => {
                   ) : filteredUsers.length === 0 ? (
                     <tr>
                       <td colSpan={4}>
-                        <div className="text-center py-8 text-gray-400">
+                        <div className={`text-center py-8 ${
+                          isDark ? 'text-gray-400' : 'text-gray-600'
+                        }`}>
                           No disabled VIP users found
                         </div>
                       </td>
@@ -309,12 +390,16 @@ const AdminDisabledVipUsers: React.FC = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="bg-gray-700/20"
+                        className={isDark ? "bg-gray-700/20" : "bg-gray-100/50"}
                       >
                         <td className="px-6 py-4">
                           <div>
-                            <div className="font-medium">{user.name}</div>
-                            <div className="text-sm text-gray-400">{user.email}</div>
+                            <div className={`font-medium ${
+                              isDark ? 'text-white' : 'text-gray-900'
+                            }`}>{user.name}</div>
+                            <div className={`text-sm ${
+                              isDark ? 'text-gray-400' : 'text-gray-600'
+                            }`}>{user.email}</div>
                           </div>
                         </td>
                         <td className="px-6 py-4">
@@ -325,8 +410,12 @@ const AdminDisabledVipUsers: React.FC = () => {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
-                            <Clock className="w-4 h-4 text-gray-400" />
-                            <span>{formatDate(user.vipExpirationDate)}</span>
+                            <Clock className={`w-4 h-4 ${
+                              isDark ? 'text-gray-400' : 'text-gray-600'
+                            }`} />
+                            <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>
+                              {formatDate(user.vipExpirationDate)}
+                            </span>
                           </div>
                         </td>
                         <td className="px-6 py-4">

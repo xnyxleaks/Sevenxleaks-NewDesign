@@ -118,7 +118,7 @@ const MonthFilter: React.FC<MonthFilterProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.2 }}
-            className={`absolute top-full mt-2 right-0 w-48 rounded-xl shadow-xl border backdrop-blur-xl z-[9999] ${themeClasses.dropdown}`}
+            className={`absolute top-full mt-2 right-0 w-48 rounded-xl shadow-xl border backdrop-blur-xl z-[99999] ${themeClasses.dropdown}`}
           >
             <div className="p-2 max-h-64 overflow-y-auto">
               {months.map((month) => (
@@ -149,7 +149,7 @@ const MonthFilter: React.FC<MonthFilterProps> = ({
       {/* Backdrop */}
       {isOpen && (
         <div 
-          className="fixed inset-0 z-[9998]" 
+          className="fixed inset-0 z-[99998]" 
           onClick={() => setIsOpen(false)}
         />
       )}
