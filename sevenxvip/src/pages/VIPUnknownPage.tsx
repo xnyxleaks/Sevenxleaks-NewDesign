@@ -208,6 +208,116 @@ const VIPUnknownPage: React.FC = () => {
         <link rel="canonical" href="https://sevenxleaks.com/vip-unknown" />
       </Helmet>
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div
+          className={`backdrop-blur-xl border rounded-3xl p-6 shadow-2xl ${
+            isDark
+              ? "bg-gray-800/60 border-yellow-500/30 shadow-yellow-500/10"
+              : "bg-white/80 border-yellow-400/40 shadow-yellow-400/10"
+          }`}
+        >
+          <div
+            className={`flex flex-col lg:flex-row items-center gap-4 rounded-2xl px-6 py-4 border shadow-inner ${
+              isDark ? "bg-gray-700/50 border-yellow-500/20" : "bg-gray-100/50 border-yellow-400/30"
+            }`}
+          >
+            {/* Search Bar */}
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <Crown className="text-yellow-400 w-5 h-5 animate-pulse" />
+                <HelpCircle className="text-gray-400 w-4 h-4" />
+              </div>
+              <input
+                type="text"
+                className={`flex-1 bg-transparent border-none outline-none text-lg ${
+                  isDark ? "text-white placeholder-yellow-300/60" : "text-gray-900 placeholder-yellow-600/60"
+                }`}
+                placeholder="Search VIP unknown content..."
+                value={searchName}
+                onChange={(e) => setSearchName(e.target.value)}
+              />
+              {searchLoading && (
+                <div
+                  className={`w-4 h-4 border-2 border-t-transparent rounded-full animate-spin ${
+                    isDark ? "border-yellow-400" : "border-yellow-600"
+                  }`}
+                ></div>
+              )}
+            </div>
+
+            {/* Filter Controls */}
+            <div className="flex items-center gap-2">
+              {["all", "today", "yesterday", "7days"].map((filter) => (
+                <button
+                  key={filter}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 border whitespace-nowrap ${
+                    dateFilter === filter
+                      ? isDark
+                        ? "bg-yellow-500 text-black border-yellow-400 shadow-lg shadow-yellow-500/30"
+                        : "bg-yellow-600 text-white border-yellow-500 shadow-lg shadow-yellow-500/20"
+                      : isDark
+                        ? "bg-gray-700/50 text-gray-300 hover:bg-yellow-500/20 border-gray-600/50 hover:text-yellow-300"
+                        : "bg-gray-200/50 text-gray-700 hover:bg-yellow-100 border-gray-300/50 hover:text-yellow-700"
+                  }`}
+                  onClick={() => setDateFilter(filter)}
+                >
+                  {filter === "all"
+                    ? "All"
+                    : filter === "7days"
+                    ? "7 Days"
+                    : filter.charAt(0).toUpperCase() + filter.slice(1)}
+                </button>
+              ))}
+            </div>
+
+            {/* Category and Region Select */}
+            <div className="flex items-center gap-2">
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className={`px-3 py-1.5 border rounded-lg text-xs focus:outline-none focus:ring-1 transition-all duration-300 min-w-[120px] ${
+                  isDark
+                    ? "bg-gray-700/50 border-yellow-500/30 text-gray-300 focus:ring-yellow-500/50 hover:bg-gray-600/50"
+                    : "bg-gray-200/50 border-yellow-400/40 text-gray-700 focus:ring-yellow-600/50 hover:bg-gray-300/50"
+                }`}
+              >
+                <option value="">All Categories</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.category}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={selectedRegion}
+                onChange={(e) => setSelectedRegion(e.target.value)}
+                className={`px-3 py-1.5 border rounded-lg text-xs focus:outline-none focus:ring-1 transition-all duration-300 min-w-[100px] ${
+                  isDark
+                    ? "bg-gray-700/50 border-yellow-500/30 text-gray-300 focus:ring-yellow-500/50 hover:bg-gray-600/50"
+                    : "bg-gray-200/50 border-yellow-400/40 text-gray-700 focus:ring-yellow-600/50 hover:bg-gray-300/50"
+                }`}
+              >
+                <option value="">All Regions</option>
+                <option value="asian">Asian</option>
+                <option value="western">Western</option>
+              </select>
+
+              <button 
+                className={`p-2 rounded-lg transition-all duration-300 border ${
+                  isDark 
+                    ? "bg-gray-700/50 hover:bg-yellow-500/20 text-gray-300 hover:text-yellow-300 border-yellow-500/30"
+                    : "bg-gray-200/50 hover:bg-yellow-100 text-gray-700 hover:text-yellow-700 border-yellow-400/40"
+                }`}
+                title="Calendar View"
+              >
+                <Calendar className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Content Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
         <main>

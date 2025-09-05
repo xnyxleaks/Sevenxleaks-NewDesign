@@ -298,43 +298,7 @@ const VIPChooser: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* VIP Benefits */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8, duration: 0.8 }}
-          className="mt-16 text-center"
-        >
-          <div
-            className={`rounded-2xl p-6 backdrop-blur-sm border ${
-              isDark
-                ? "bg-gradient-to-r from-yellow-500/10 to-yellow-600/10 border-yellow-500/30"
-                : "bg-gradient-to-r from-yellow-100/50 to-yellow-200/50 border-yellow-400/40"
-            }`}
-          >
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <Shield className="w-6 h-6 text-yellow-400" />
-              <h3
-                className={`text-xl font-bold font-orbitron ${
-                  isDark ? "text-yellow-400" : "text-yellow-600"
-                }`}
-              >
-                VIP EXCLUSIVE ACCESS
-              </h3>
-              <Shield className="w-6 h-6 text-yellow-400" />
-            </div>
-
-            {/* Corrigido: apenas um <p> */}
-            <p
-              className={`text-sm sm:text-base font-roboto px-4 ${
-                isDark ? "text-gray-300" : "text-gray-700"
-              }`}
-            >
-              Enjoy premium content with no ads, exclusive downloads, and
-              priority access to all features
-            </p>
-          </div>
-        </motion.div>
+       
       </motion.div>
     </div>
   );

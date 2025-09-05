@@ -6,6 +6,7 @@ import { Helmet } from "react-helmet";
 import { Crown, Calendar, Plus, Star, Sparkles } from "lucide-react";
 import VIPHeader from "../components/VIP/VIPHeader";
 import { useTheme } from "../contexts/ThemeContext";
+import MonthFilter from "../components/MonthFilter";
 
 type LinkItem = {
   id: string;
@@ -45,7 +46,7 @@ const VIPAsianPage: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [searchName, setSearchName] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [dateFilter, setDateFilter] = useState("all");
+  const [selectedMonth, setSelectedMonth] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -77,22 +78,8 @@ const VIPAsianPage: React.FC = () => {
       if (selectedCategory) {
         params.append('category', selectedCategory);
       }
-      if (dateFilter !== 'all') {
-        const today = new Date();
-        let targetDate = new Date();
-        
-        switch (dateFilter) {
-          case 'today':
-            break;
-          case 'yesterday':
-            targetDate.setDate(today.getDate() - 1);
-            break;
-          case '7days':
-            targetDate.setDate(today.getDate() - 7);
-            break;
-        }
-        
-        params.append('month', (targetDate.getMonth() + 1).toString().padStart(2, '0'));
+      if (selectedMonth) {
+        params.append('month', selectedMonth);
       }
 
       const endpoint = searchName ? '/vip-asiancontent/search' : '/vip-asiancontent';
@@ -158,7 +145,7 @@ const VIPAsianPage: React.FC = () => {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchName, selectedCategory, dateFilter]);
+  }, [searchName, selectedCategory, selectedMonth]);
 
   const handleLoadMore = () => {
     if (loadingMore || currentPage >= totalPages) return;
@@ -241,27 +228,11 @@ const VIPAsianPage: React.FC = () => {
 
             {/* Filter Buttons */}
             <div className="flex items-center gap-2">
-              {["all", "today", "yesterday", "7days"].map((filter) => (
-                <button
-                  key={filter}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 border whitespace-nowrap ${
-                    dateFilter === filter
-                      ? isDark
-                        ? "bg-yellow-500 text-black border-yellow-400 shadow-lg shadow-yellow-500/30"
-                        : "bg-yellow-600 text-white border-yellow-500 shadow-lg shadow-yellow-500/20"
-                      : isDark
-                        ? "bg-gray-700/50 text-gray-300 hover:bg-yellow-500/20 border-gray-600/50 hover:text-yellow-300"
-                        : "bg-gray-200/50 text-gray-700 hover:bg-yellow-100 border-gray-300/50 hover:text-yellow-700"
-                  }`}
-                  onClick={() => setDateFilter(filter)}
-                >
-                  {filter === "all"
-                    ? "All"
-                    : filter === "7days"
-                    ? "7 Days"
-                    : filter.charAt(0).toUpperCase() + filter.slice(1)}
-                </button>
-              ))}
+              <MonthFilter
+                selectedMonth={selectedMonth}
+                onMonthChange={setSelectedMonth}
+                themeColor="yellow"
+              />
             </div>
 
             {/* Category Select */}

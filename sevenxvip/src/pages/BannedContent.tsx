@@ -7,6 +7,7 @@ import { useRegion } from "../contexts/RegionContext";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
 import LoadingBanned from "../components/Loaders/LoadingBanned";
+import MonthFilter from "../components/MonthFilter";
 
 type LinkItem = {
   id: string;
@@ -22,23 +23,6 @@ type LinkItem = {
   region: string;
   contentType?: string;
 };
-
-const months = [
-  { value: "", label: "All Months" },
-  { value: "01", label: "January" },
-  { value: "02", label: "February" },
-  { value: "03", label: "March" },
-  { value: "04", label: "April" },
-  { value: "05", label: "May" },
-  { value: "06", label: "June" },
-  { value: "07", label: "July" },
-  { value: "08", label: "August" },
-  { value: "09", label: "September" },
-  { value: "10", label: "October" },
-  { value: "11", label: "November" },
-  { value: "12", label: "December" },
-];
-
 
 const BannedContent: React.FC = () => {
   const navigate = useNavigate();
@@ -255,21 +239,11 @@ const BannedContent: React.FC = () => {
 
               {/* Filter Controls */}
               <div className="flex items-center gap-2">
-                <select
-                  value={selectedMonth}
-                  onChange={(e) => setSelectedMonth(e.target.value)}
-                  className={`px-3 py-1.5 border rounded-lg text-xs focus:outline-none focus:ring-1 transition-all duration-300 min-w-[120px] ${
-                    isDark 
-                      ? 'bg-gray-700/50 border-gray-600/50 text-gray-300 focus:ring-red-500/50 hover:bg-gray-600/50'
-                      : 'bg-gray-200/50 border-gray-300/50 text-gray-700 focus:ring-red-600/50 hover:bg-gray-300/50'
-                  }`}
-                >
-                  {months.map((month) => (
-                    <option key={month.value} value={month.value}>
-                      {month.label}
-                    </option>
-                  ))}
-                </select>
+                <MonthFilter
+                  selectedMonth={selectedMonth}
+                  onMonthChange={setSelectedMonth}
+                  themeColor="red"
+                />
 
                 <select
                   value={sortOption}
@@ -290,9 +264,9 @@ const BannedContent: React.FC = () => {
                       ? 'bg-gray-700/50 hover:bg-red-500/20 text-gray-300 hover:text-red-300 border-gray-600/50'
                       : 'bg-gray-200/50 hover:bg-red-100 text-gray-700 hover:text-red-700 border-gray-300/50'
                   }`}
-                  title="Calendar View"
+                  title="Additional Filters"
                 >
-                  <Calendar className="w-5 h-5" />
+                  <Filter className="w-5 h-5" />
                 </button>
               </div>
             </div>

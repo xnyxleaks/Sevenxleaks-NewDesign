@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
 import { useTheme } from "../contexts/ThemeContext";
+import MonthFilter from "../components/MonthFilter";
 
 type LinkItem = {
   id: string;
@@ -43,7 +44,7 @@ const WesternPage: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [searchName, setSearchName] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [dateFilter, setDateFilter] = useState("all");
+  const [selectedMonth, setSelectedMonth] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -75,22 +76,8 @@ const WesternPage: React.FC = () => {
       if (selectedCategory) {
         params.append('category', selectedCategory);
       }
-      if (dateFilter !== 'all') {
-        const today = new Date();
-        let targetDate = new Date();
-        
-        switch (dateFilter) {
-          case 'today':
-            break;
-          case 'yesterday':
-            targetDate.setDate(today.getDate() - 1);
-            break;
-          case '7days':
-            targetDate.setDate(today.getDate() - 7);
-            break;
-        }
-        
-        params.append('month', (targetDate.getMonth() + 1).toString().padStart(2, '0'));
+      if (selectedMonth) {
+        params.append('month', selectedMonth);
       }
 
       const endpoint = searchName ? '/westerncontent/search' : '/westerncontent';
@@ -154,7 +141,7 @@ const WesternPage: React.FC = () => {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchName, selectedCategory, dateFilter]);
+  }, [searchName, selectedCategory, selectedMonth]);
 
   const handleLoadMore = () => {
     if (loadingMore || currentPage >= totalPages) return;
@@ -239,27 +226,11 @@ const WesternPage: React.FC = () => {
 
             {/* Filter Buttons */}
             <div className="flex items-center gap-2">
-            {["all", "today", "yesterday", "7days"].map((filter) => (
-              <button
-                key={filter}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 border whitespace-nowrap ${
-                  dateFilter === filter
-                    ? isDark
-                      ? "bg-orange-500 text-white border-orange-400"
-                      : "bg-orange-600 text-white border-orange-500"
-                    : isDark
-                      ? "bg-gray-700/50 text-gray-300 hover:bg-orange-500/20 border-gray-600/50"
-                      : "bg-gray-200/50 text-gray-700 hover:bg-orange-100 border-gray-300/50"
-                }`}
-                onClick={() => setDateFilter(filter)}
-              >
-                {filter === "all"
-                  ? "All"
-                  : filter === "7days"
-                  ? "7 Days"
-                  : filter.charAt(0).toUpperCase() + filter.slice(1)}
-              </button>
-            ))}
+              <MonthFilter
+                selectedMonth={selectedMonth}
+                onMonthChange={setSelectedMonth}
+                themeColor="orange"
+              />
             </div>
 
             {/* Category Select */}

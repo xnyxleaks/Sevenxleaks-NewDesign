@@ -100,7 +100,11 @@ const Header: React.FC = () => {
   ];
 
   return (
-    <header className="w-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b border-gray-700/30 sticky top-0 z-50 backdrop-blur-xl shadow-2xl">
+    <header className={`w-full sticky top-0 z-50 backdrop-blur-xl shadow-2xl border-b ${
+      isDark 
+        ? 'bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-gray-700/30' 
+        : 'bg-gradient-to-r from-white via-gray-50 to-white border-gray-200/30'
+    }`}>
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="flex items-center justify-between h-16 sm:h-18 lg:h-20">
           {/* Logo Section */}
@@ -110,7 +114,9 @@ const Header: React.FC = () => {
               transition={{ duration: 0.2 }}
               className="flex items-center gap-3"
             >
-              <div className="text-sm sm:text-base lg:text-lg font-bold text-white tracking-wide font-orbitron">
+              <div className={`text-sm sm:text-base lg:text-lg font-bold tracking-wide font-orbitron ${
+                isDark ? 'text-white' : 'text-gray-900'
+              }`}>
                 <span>SEVENXLEAKS</span>
                 {location.pathname !== "/" && (
                   <span className={`ml-2 ${themeClasses.accent} drop-shadow-lg`}>
@@ -125,7 +131,11 @@ const Header: React.FC = () => {
           <nav className="hidden md:flex items-center space-x-4">
             <Link
               to="/"
-              className={`relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent ${themeClasses.border} ${themeClasses.glow}`}
+              className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent ${themeClasses.border} ${themeClasses.glow} ${
+                isDark 
+                  ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
+              }`}
             >
               <span className="relative z-10 font-medium font-roboto text-sm">Home</span>
               <div className={`absolute inset-0 ${themeClasses.gradient} opacity-0 group-hover:opacity-10 rounded-xl transition-opacity duration-300`}></div>
@@ -133,10 +143,16 @@ const Header: React.FC = () => {
 
             <Link 
               to="/banned" 
-              className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent border-slate-500/20 shadow-slate-500/20"
+              className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent border-slate-500/20 shadow-slate-500/20 ${
+                isDark 
+                  ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
+              }`}
             >
               <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
-                <i className="fa-solid fa-ban text-slate-400 text-xs"></i>
+                <i className={`fa-solid fa-ban text-xs ${
+                  isDark ? 'text-slate-400' : 'text-slate-500'
+                }`}></i>
                 Banned
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-slate-500 to-slate-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
@@ -144,10 +160,16 @@ const Header: React.FC = () => {
 
             <Link 
               to="/unknown" 
-              className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent border-gray-500/20 shadow-gray-500/20"
+              className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent border-gray-500/20 shadow-gray-500/20 ${
+                isDark 
+                  ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
+              }`}
             >
               <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
-                <i className="fa-solid fa-question text-gray-400 text-xs"></i>
+                <i className={`fa-solid fa-question text-xs ${
+                  isDark ? 'text-gray-400' : 'text-gray-500'
+                }`}></i>
                 Unknown
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-gray-500 to-gray-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
@@ -155,10 +177,16 @@ const Header: React.FC = () => {
 
             <Link 
               to="/plans" 
-              className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent border-slate-500/20 shadow-slate-500/20"
+              className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent border-slate-500/20 shadow-slate-500/20 ${
+                isDark 
+                  ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
+              }`}
             >
               <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
-                <i className="fa-solid fa-crown text-slate-400 text-xs"></i>
+                <i className={`fa-solid fa-crown text-xs ${
+                  isDark ? 'text-slate-400' : 'text-slate-500'
+                }`}></i>
                 Plans
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-slate-500 to-slate-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
@@ -168,10 +196,16 @@ const Header: React.FC = () => {
               href="https://discord.gg/95BKaYTPPS"
               target="_blank"
               rel="noopener noreferrer"
-              className="relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent border-slate-500/20 shadow-slate-500/20"
+              className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent border-slate-500/20 shadow-slate-500/20 ${
+                isDark 
+                  ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
+              }`}
             >
               <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
-                <i className="fab fa-discord text-slate-400 text-xs"></i>
+                <i className={`fab fa-discord text-xs ${
+                  isDark ? 'text-slate-400' : 'text-slate-500'
+                }`}></i>
                 Discord
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-slate-500 to-slate-600 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
@@ -179,7 +213,11 @@ const Header: React.FC = () => {
 
             <Link 
               to="/login" 
-              className={`relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 group rounded-lg hover:bg-gray-800/50 backdrop-blur-sm border border-transparent ${themeClasses.border} ${themeClasses.glow}`}
+              className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent ${themeClasses.border} ${themeClasses.glow} ${
+                isDark 
+                  ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
+              }`}
             >
               <span className="relative z-10 font-medium font-roboto text-sm">Login</span>
               <div className={`absolute inset-0 ${themeClasses.gradient} opacity-0 group-hover:opacity-10 rounded-xl transition-opacity duration-300`}></div>
@@ -202,12 +240,17 @@ const Header: React.FC = () => {
             </Link>
 
             {/* Simple Mobile Menu Toggle */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="md:hidden p-2 text-gray-300 hover:text-white transition-colors duration-200"
-              onClick={toggleMenu}
-            >
+<motion.button
+  whileHover={{ scale: 1.05 }}
+  whileTap={{ scale: 0.95 }}
+  className={`md:hidden p-2 transition-colors duration-200 ${
+    isDark
+      ? "text-gray-300 hover:text-white"
+      : "text-gray-600 hover:text-gray-900"
+  }`}
+  onClick={toggleMenu}
+>
+
               <div className="w-6 h-6 flex flex-col justify-center items-center">
                 <motion.span
                   animate={isMenuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
@@ -234,7 +277,9 @@ const Header: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden inset-0 top-16 sm:top-18 lg:top-20 bg-slate-900 z-50 h-[800px]"
+            className={`md:hidden inset-0 top-16 sm:top-18 lg:top-20 z-50 h-[800px] ${
+              isDark ? 'bg-slate-900' : 'bg-white'
+            }`}
           >
             {/* Close Button */}
             <div className="absolute top-6 right-6">
@@ -261,6 +306,9 @@ const Header: React.FC = () => {
                   <i className="fa-solid fa-crown text-white text-xl"></i>
                 </div>
                 <h2 className="text-3xl font-bold text-white font-orbitron">MENU</h2>
+                <h2 className={`text-3xl font-bold font-orbitron ${
+                  isDark ? 'text-white' : 'text-gray-900'
+                }`}>MENU</h2>
               </motion.div>
               <div className={`w-32 h-1 mx-auto rounded-full ${themeClasses.gradient}`}></div>
             </div>
@@ -280,14 +328,22 @@ const Header: React.FC = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={toggleMenu}
-                      className={`flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white ${themeClasses.bg} rounded-xl transition-all duration-300 border border-transparent ${themeClasses.border} backdrop-blur-sm`}
+                      className={`flex items-center gap-4 px-6 py-4 ${themeClasses.bg} rounded-xl transition-all duration-300 border border-transparent ${themeClasses.border} backdrop-blur-sm ${
+                        isDark 
+                          ? 'text-gray-300 hover:text-white' 
+                          : 'text-gray-700 hover:text-gray-900'
+                      }`}
                     >
                       <div className={`w-12 h-12 ${themeClasses.bg} rounded-xl flex items-center justify-center border ${themeClasses.border}`}>
-                        <i className={`${item.icon} text-gray-300`}></i>
+                        <i className={`${item.icon} ${
+                          isDark ? 'text-gray-300' : 'text-gray-600'
+                        }`}></i>
                       </div>
                       <div className="flex-1">
                         <span className="font-medium text-lg">{item.name}</span>
-                        <p className="text-sm text-gray-400">External link</p>
+                        <p className={`text-sm ${
+                          isDark ? 'text-gray-400' : 'text-gray-500'
+                        }`}>External link</p>
                       </div>
                       <i className="fa-solid fa-external-link text-xs"></i>
                     </a>
@@ -295,14 +351,22 @@ const Header: React.FC = () => {
                     <Link
                       to={item.path}
                       onClick={toggleMenu}
-                      className={`flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-white ${themeClasses.bg} rounded-xl transition-all duration-300 border border-transparent ${themeClasses.border} backdrop-blur-sm`}
+                      className={`flex items-center gap-4 px-6 py-4 ${themeClasses.bg} rounded-xl transition-all duration-300 border border-transparent ${themeClasses.border} backdrop-blur-sm ${
+                        isDark 
+                          ? 'text-gray-300 hover:text-white' 
+                          : 'text-gray-700 hover:text-gray-900'
+                      }`}
                     >
                       <div className={`w-12 h-12 ${themeClasses.bg} rounded-xl flex items-center justify-center border ${themeClasses.border}`}>
-                        <i className={`${item.icon} text-gray-300`}></i>
+                        <i className={`${item.icon} ${
+                          isDark ? 'text-gray-300' : 'text-gray-600'
+                        }`}></i>
                       </div>
                       <div className="flex-1">
                         <span className="font-medium text-lg">{item.name}</span>
-                        <p className="text-sm text-gray-400">Navigate to page</p>
+                        <p className={`text-sm ${
+                          isDark ? 'text-gray-400' : 'text-gray-500'
+                        }`}>Navigate to page</p>
                       </div>
                       <i className="fa-solid fa-chevron-right text-xs"></i>
                     </Link>
@@ -319,12 +383,22 @@ const Header: React.FC = () => {
               >
                 <Link to="/plans" onClick={toggleMenu}>
                   <div className={`flex items-center gap-4 px-6 py-4 ${themeClasses.gradient} border ${themeClasses.border} rounded-xl hover:opacity-90 transition-all duration-300`}>
-                    <div className="w-12 h-12 bg-yellow-500/30 rounded-xl flex items-center justify-center border border-yellow-500/40">
-                      <i className="fa-solid fa-crown text-yellow-400"></i>
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${
+                      isDark 
+                        ? 'bg-yellow-500/30 border-yellow-500/40' 
+                        : 'bg-yellow-200/50 border-yellow-400/50'
+                    }`}>
+                      <i className={`fa-solid fa-crown ${
+                        isDark ? 'text-yellow-400' : 'text-yellow-600'
+                      }`}></i>
                     </div>
                     <div className="flex-1">
-                      <span className="font-bold text-white text-lg">Get VIP Access</span>
-                      <p className="text-sm text-gray-200">Unlock premium features</p>
+                      <span className={`font-bold text-lg ${
+                        isDark ? 'text-white' : 'text-gray-900'
+                      }`}>Get VIP Access</span>
+                      <p className={`text-sm ${
+                        isDark ? 'text-gray-200' : 'text-gray-700'
+                      }`}>Unlock premium features</p>
                     </div>
                   </div>
                 </Link>

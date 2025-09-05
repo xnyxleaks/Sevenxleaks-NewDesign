@@ -6,6 +6,7 @@ import { Helmet } from "react-helmet";
 import { Crown, Calendar, Plus, Star, Sparkles, Shield, AlertTriangle } from "lucide-react";
 import VIPHeader from "../components/VIP/VIPHeader";
 import { useTheme } from "../contexts/ThemeContext";
+import MonthFilter from "../components/MonthFilter";
 
 type LinkItem = {
   id: string;
@@ -47,7 +48,7 @@ const VIPBannedPage: React.FC = () => {
   const [searchName, setSearchName] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("");
-  const [dateFilter, setDateFilter] = useState("all");
+  const [selectedMonth, setSelectedMonth] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -82,22 +83,8 @@ const VIPBannedPage: React.FC = () => {
       if (selectedRegion) {
         params.append("region", selectedRegion);
       }
-      if (dateFilter !== "all") {
-        const today = new Date();
-        let targetDate = new Date();
-
-        switch (dateFilter) {
-          case "today":
-            break;
-          case "yesterday":
-            targetDate.setDate(today.getDate() - 1);
-            break;
-          case "7days":
-            targetDate.setDate(today.getDate() - 7);
-            break;
-        }
-
-        params.append("month", (targetDate.getMonth() + 1).toString().padStart(2, "0"));
+      if (selectedMonth) {
+        params.append("month", selectedMonth);
       }
 
       const endpoint = searchName ? "/vip-bannedcontent/search" : "/vip-bannedcontent";
@@ -161,7 +148,7 @@ const VIPBannedPage: React.FC = () => {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchName, selectedCategory, selectedRegion, dateFilter]);
+  }, [searchName, selectedCategory, selectedRegion, selectedMonth]);
 
   const handleLoadMore = () => {
     if (loadingMore || currentPage >= totalPages) return;
@@ -251,27 +238,42 @@ const VIPBannedPage: React.FC = () => {
 
             {/* Filter Controls */}
             <div className="flex items-center gap-2">
-              {["all", "today", "yesterday", "7days"].map((filter) => (
-                <button
-                  key={filter}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 border whitespace-nowrap ${
-                    dateFilter === filter
-                      ? isDark
-                        ? "bg-yellow-500 text-black border-yellow-400 shadow-lg shadow-yellow-500/30"
-                        : "bg-yellow-600 text-white border-yellow-500 shadow-lg shadow-yellow-500/20"
-                      : isDark
-                        ? "bg-gray-700/50 text-gray-300 hover:bg-yellow-500/20 border-gray-600/50 hover:text-yellow-300"
-                        : "bg-gray-200/50 text-gray-700 hover:bg-yellow-100 border-gray-300/50 hover:text-yellow-700"
-                  }`}
-                  onClick={() => setDateFilter(filter)}
-                >
-                  {filter === "all"
-                    ? "All"
-                    : filter === "7days"
-                    ? "7 Days"
-                    : filter.charAt(0).toUpperCase() + filter.slice(1)}
-                </button>
-              ))}
+              <MonthFilter
+                selectedMonth={selectedMonth}
+                onMonthChange={setSelectedMonth}
+                themeColor="yellow"
+              />
+
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className={`px-3 py-1.5 border rounded-lg text-xs focus:outline-none focus:ring-1 transition-all duration-300 min-w-[120px] ${
+                  isDark
+                    ? "bg-gray-700/50 border-yellow-500/30 text-gray-300 focus:ring-yellow-500/50 hover:bg-gray-600/50"
+                    : "bg-gray-200/50 border-yellow-400/40 text-gray-700 focus:ring-yellow-600/50 hover:bg-gray-300/50"
+                }`}
+              >
+                <option value="">All Categories</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.category}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={selectedRegion}
+                onChange={(e) => setSelectedRegion(e.target.value)}
+                className={`px-3 py-1.5 border rounded-lg text-xs focus:outline-none focus:ring-1 transition-all duration-300 min-w-[100px] ${
+                  isDark
+                    ? "bg-gray-700/50 border-yellow-500/30 text-gray-300 focus:ring-yellow-500/50 hover:bg-gray-600/50"
+                    : "bg-gray-200/50 border-yellow-400/40 text-gray-700 focus:ring-yellow-600/50 hover:bg-gray-300/50"
+                }`}
+              >
+                <option value="">All Regions</option>
+                <option value="asian">Asian</option>
+                <option value="western">Western</option>
+              </select>
             </div>
           </div>
         </div>
