@@ -89,7 +89,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
 <AnimatePresence>
   {isMenuOpen && (
     <motion.div
-      className={`absolute right-0 mt-2 w-56 rounded-xl shadow-xl border overflow-hidden 
+      className={`absolute left-0 mt-2 w-56 rounded-xl shadow-xl border overflow-hidden 
         ${isDark 
           ? "bg-gray-900/95 border-gray-700/50" 
           : "bg-white border-gray-200"}`
@@ -130,23 +130,54 @@ const UserMenu: React.FC<UserMenuProps> = ({
 
             {/* Menu Items */}
             <div className="py-2">
-              {/* Account Section */}
-              <div className="px-2">
-                <Link
-                  to="/account"
-                  className="flex items-center gap-3 px-3 py-2  rounded-lg transition-all duration-200 group border border-transparent hover:border-blue-500/20"
-                  onClick={handleMenuToggle}
-                >
-                  <div className="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500/20 to-indigo-500/20 flex items-center justify-center group-hover:from-blue-500/30 group-hover:to-indigo-500/30 transition-all duration-200">
-                    <i className="fa-solid fa-user text-blue-400 text-sm"></i>
-                  </div>
-                  <div className="flex-1">
-                    <span className={`text-sm font-medium ${isDark ? "text-gray-200 group-hover:text-white" : "text-black"}`}>Your Account</span>
+               <div className="px-2">
+  <Link
+    to="/account"
+    onClick={handleMenuToggle}
+    className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 group border ${
+      isDark
+        ? "border-transparent hover:border-blue-500/20 hover:shadow-lg hover:shadow-blue-500/10"
+        : "border-gray-200" // Light theme: borda clara
+    }`}
+  >
+    {/* Icon */}
+    <div
+      className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 border ${
+        isDark
+          ? "bg-gradient-to-br from-blue-500/20 to-indigo-500/20 group-hover:from-blue-500/30 group-hover:to-indigo-500/30 border-blue-500/20"
+          : "bg-gradient-to-br from-blue-100/50 to-indigo-100/50 border-blue-200" // Light theme: cores mais suaves
+      }`}
+    >
+      <i className="fa-solid fa-user text-blue-500 text-sm"></i>
+    </div>
 
-                  </div>
-                  <i className="fa-solid fa-chevron-right text-gray-500 text-xs"></i>
-                </Link>
-              </div>
+    {/* Text */}
+    <div className="flex-1">
+      <span
+        className={`text-sm font-['Roboto'] font-bold ${
+          isDark ? "text-gray-200 group-hover:text-white" : "text-gray-900"
+        }`}
+      >
+        Your Account
+      </span>
+      <p
+        className={`text-xs font-['Roboto'] ${
+          isDark ? "text-gray-400" : "text-gray-700"
+        }`}
+      >
+        Manage your profile
+      </p>
+    </div>
+
+    <i
+      className={`fa-solid fa-chevron-right text-sm transition-all duration-200 ${
+        isDark ? "text-gray-500 group-hover:text-gray-400" : "text-gray-400"
+      } group-hover:translate-x-1`}
+    ></i>
+  </Link>
+</div>
+             
+
 
               {/* VIP Section */}
               {isVip && (
@@ -256,8 +287,13 @@ const UserMenu: React.FC<UserMenuProps> = ({
                     <i className="fab fa-discord text-purple-400 text-sm"></i>
                   </div>
                   <div className="flex-1">
-                    <span className="text-sm font-bold text-gray-200 group-hover:text-white">Discord Support</span>
-                    <p className="text-xs text-gray-400 font-['Roboto']">Get help from community</p>
+                    <span className={`${isDark ? 'text-sm font-bold text-gray-200 group-hover:text-white': 'text-sm font-bold text-black group-hover:text-black'}`}>Discord</span>
+<p
+  className={`${isDark ? 'text-xs text-gray-400' : 'text-xs text-gray-800'}`}
+  style={{ fontFamily: "Roboto, sans-serif" }}
+>
+  Get help from community
+</p>
                   </div>
                   <i className="fa-solid fa-external-link text-gray-500 text-sm"></i>
                 </a>
@@ -273,8 +309,9 @@ const UserMenu: React.FC<UserMenuProps> = ({
                     <i className="fa-solid fa-sign-out-alt text-red-400 text-sm"></i>
                   </div>
                   <div className="flex-1 text-left">
-                    <span className="text-sm font-bold text-gray-200 group-hover:text-white">Logout</span>
-                    <p className="text-xs text-gray-400 font-['Roboto']">Sign out of your account</p>
+                    <span className={`${isDark ? 'text-sm font-bold text-gray-200 group-hover:text-white': 'text-sm font-bold text-black group-hover:text-black'}`}>Logout</span>
+                    <p className={`${isDark ? 'text-xs text-gray-400' : 'text-xs text-gray-800'}`}
+  style={{ fontFamily: "Roboto, sans-serif" }}>Sign out of your account</p>
                   </div>
                   <i className="fa-solid fa-chevron-right text-gray-500 text-sm group-hover:text-gray-400 transition-all duration-200 group-hover:translate-x-1"></i>
                 </button>
