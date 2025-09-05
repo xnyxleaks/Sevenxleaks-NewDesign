@@ -296,7 +296,7 @@ const Header: React.FC = () => {
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="flex items-center justify-center gap-4 mb-4"
+                className="flex items-center justify-center gap-1 mb-4"
               >
                 <div
                   className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg ${
@@ -305,7 +305,7 @@ const Header: React.FC = () => {
                 >
                   <i className="fa-solid fa-crown text-white text-xl"></i>
                 </div>
-                <h2 className="text-3xl font-bold text-white font-orbitron">MENU</h2>
+                <h2 className="text-3xl font-bold text-white font-orbitron"></h2>
                 <h2 className={`text-3xl font-bold font-orbitron ${
                   isDark ? 'text-white' : 'text-gray-900'
                 }`}>MENU</h2>

@@ -43,7 +43,7 @@ const VIPUserMenu: React.FC<VIPUserMenuProps> = ({
       <motion.div
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        className="flex items-center gap-3 cursor-pointer px-4 py-3 rounded-2xl bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 hover:from-yellow-500/30 hover:to-yellow-600/30 backdrop-blur-sm border border-yellow-500/40 hover:border-yellow-400/60 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-yellow-500/20"
+        className="hidden sm:flex items-center gap-3 cursor-pointer px-4 py-3 rounded-2xl bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 hover:from-yellow-500/30 hover:to-yellow-600/30 backdrop-blur-sm border border-yellow-500/40 hover:border-yellow-400/60 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-yellow-500/20"
         onClick={handleAccountClick}
       >
         <div className="relative">

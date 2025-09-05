@@ -42,7 +42,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
       <motion.div
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        className="flex items-center gap-3 cursor-pointer px-4 py-3 rounded-2xl bg-gray-800/60 hover:bg-gray-700/80 backdrop-blur-sm border border-gray-700/40 hover:border-gray-600/60 transition-all duration-300 shadow-lg hover:shadow-xl"
+        className="hidden sm:flex items-center gap-3 cursor-pointer px-4 py-3 rounded-2xl bg-gray-800/60 hover:bg-gray-700/80 backdrop-blur-sm border border-gray-700/40 hover:border-gray-600/60 transition-all duration-300 shadow-lg hover:shadow-xl"
         onClick={handleAccountClick}
       >
         <div className="relative">
