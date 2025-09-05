@@ -87,7 +87,7 @@ const VIPHeader: React.FC = () => {
   const allMenuItems: MenuItem[] = getVIPMenuItems();
 
   return (
-    <header className="w-full bg-gradient-to-r from-gray-900 via-yellow-900/20 to-gray-900 border-b border-yellow-500/30 sticky top-0 shadow-2xl bg-opacity-100 z-50 backdrop-blur-xl">
+    <header className="w-full  from-gray-900 via-yellow-900/20 to-gray-900 border-b border-yellow-500/30 sticky top-0 shadow-2xl bg-opacity-100 z-50">
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="flex items-center justify-between h-16 sm:h-18 lg:h-20">
           {/* VIP Logo Section */}
