@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface UserMenuProps {
   name: string | null;
@@ -29,6 +30,9 @@ const UserMenu: React.FC<UserMenuProps> = ({
   const isMobile = window.innerWidth <= 768;
   const navigate = useNavigate();
 
+    const { theme } = useTheme();
+    const isDark = theme === "dark";
+
   const handleAccountClick = () => {
     if(isMobile){
       navigate('/account');
@@ -42,7 +46,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
       <motion.div
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        className="hidden sm:flex items-center gap-3 cursor-pointer px-4 py-3 rounded-2xl bg-gray-800/60 hover:bg-gray-700/80 backdrop-blur-sm border border-gray-700/40 hover:border-gray-600/60 transition-all duration-300 shadow-lg hover:shadow-xl"
+        className="hidden sm:flex items-center gap-3 cursor-pointer px-4 py-3 rounded-2xl   transition-all duration-300 shadow-lg hover:shadow-xl"
         onClick={handleAccountClick}
       >
         <div className="relative">
@@ -61,7 +65,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
           )}
         </div>
         <div className="hidden sm:block">
-          <p className="font-semibold text-gray-200 text-sm font-['Roboto']">{name}</p>
+          <p className={`${isDark ? 'font-semibold text-gray-200' : 'text-black font-semibold'}`}>{name}</p>
           <div className="flex items-center gap-2">
             {isVip ? (
               <span className="text-yellow-400 font-semibold flex items-center gap-1 text-xs">
@@ -82,56 +86,47 @@ const UserMenu: React.FC<UserMenuProps> = ({
         <i className="fa-solid fa-chevron-down text-gray-400 text-xs hidden sm:block transition-transform duration-200 group-hover:rotate-180"></i>
       </motion.div>
 
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div
-            className="absolute right-0 mt-4 w-64 bg-gray-900/95 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-700/50 overflow-hidden"
-            initial={{ opacity: 0, scale: 0.95, y: -10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -10 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-          >
-            {/* Header do Menu */}
-            <div className="p-3 bg-gradient-to-br from-gray-800/80 via-gray-900/60 to-gray-900/80 border-b border-gray-700/50">
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 flex items-center justify-center shadow-lg ring-1 ring-blue-500/20">
-                    <i className="fa-solid fa-user text-white text-sm"></i>
-                  </div>
-                  {isVip && (
-                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center shadow-md ring-1 ring-yellow-400/40">
-                      <i className="fa-solid fa-crown text-black text-xs animate-pulse"></i>
-                    </div>
-                  )}
-                  {isAdmin && (
-                    <div className="absolute -bottom-1 -left-1 w-4 h-4 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center shadow-md ring-1 ring-red-500/40">
-                      <i className="fa-solid fa-shield text-white text-xs"></i>
-                    </div>
-                  )}
-                </div>
-                <div className="flex-1">
-                  <p className="font-bold text-white text-base font-['Orbitron']">{name}</p>
-                  <div className="flex flex-wrap items-center gap-2 mt-2">
-                    {isVip ? (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-yellow-400/20 to-yellow-500/20 text-yellow-400 rounded-full text-xs font-bold border border-yellow-400/30 backdrop-blur-sm">
-                        <i className="fa-solid fa-crown text-xs animate-pulse"></i>
-                        VIP MEMBER
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center px-2 py-0.5 bg-gray-700/50 text-gray-300 rounded-full text-xs font-medium border border-gray-600/30">
-                        FREE MEMBER
-                      </span>
-                    )}
-                    {isAdmin && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-red-500/20 to-red-600/20 text-red-400 rounded-full text-xs font-bold border border-red-500/30 backdrop-blur-sm">
-                        <i className="fa-solid fa-shield text-xs"></i>
-                        ADMIN
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
+<AnimatePresence>
+  {isMenuOpen && (
+    <motion.div
+      className={`absolute right-0 mt-2 w-56 rounded-xl shadow-xl border overflow-hidden 
+        ${isDark 
+          ? "bg-gray-900/95 border-gray-700/50" 
+          : "bg-white border-gray-200"}`
+      }
+      initial={{ opacity: 0, scale: 0.95, y: -10 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95, y: -10 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+    >
+      {/* Header do Menu */}
+      <div
+        className={`p-3 border-b 
+          ${isDark 
+            ? "bg-gradient-to-br from-gray-800/80 via-gray-900/60 to-gray-900/80 border-gray-700/50" 
+            : "bg-gradient-to-br from-gray-50 via-white to-gray-100 border-gray-200"}`}
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-md">
+            <i className="fa-solid fa-user text-white text-xs"></i>
+          </div>
+          <div className="flex-1">
+            <p className={`${isDark ? "text-white" : "text-gray-900"} font-bold text-sm`}>
+              {name}
+            </p>
+            <div className="flex flex-wrap items-center gap-1 mt-1">
+              {isVip ? (
+                <span className="text-yellow-500 text-xs font-semibold">VIP</span>
+              ) : (
+                <span className="text-gray-400 text-xs">Free</span>
+              )}
+              {isAdmin && (
+                <span className="text-red-500 text-xs font-semibold">Admin</span>
+              )}
             </div>
+          </div>
+        </div>
+      </div>
 
             {/* Menu Items */}
             <div className="py-2">
@@ -139,14 +134,15 @@ const UserMenu: React.FC<UserMenuProps> = ({
               <div className="px-2">
                 <Link
                   to="/account"
-                  className="flex items-center gap-3 px-3 py-2 hover:bg-gray-800/60 rounded-lg transition-all duration-200 group border border-transparent hover:border-blue-500/20"
+                  className="flex items-center gap-3 px-3 py-2  rounded-lg transition-all duration-200 group border border-transparent hover:border-blue-500/20"
                   onClick={handleMenuToggle}
                 >
                   <div className="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500/20 to-indigo-500/20 flex items-center justify-center group-hover:from-blue-500/30 group-hover:to-indigo-500/30 transition-all duration-200">
                     <i className="fa-solid fa-user text-blue-400 text-sm"></i>
                   </div>
                   <div className="flex-1">
-                    <span className="text-sm font-medium text-gray-200 group-hover:text-white">Your Account</span>
+                    <span className={`text-sm font-medium ${isDark ? "text-gray-200 group-hover:text-white" : "text-black"}`}>Your Account</span>
+
                   </div>
                   <i className="fa-solid fa-chevron-right text-gray-500 text-xs"></i>
                 </Link>
@@ -260,7 +256,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
                     <i className="fab fa-discord text-purple-400 text-sm"></i>
                   </div>
                   <div className="flex-1">
-                    <span className="text-sm font-bold text-gray-200 group-hover:text-white font-['Orbitron']">Discord Support</span>
+                    <span className="text-sm font-bold text-gray-200 group-hover:text-white">Discord Support</span>
                     <p className="text-xs text-gray-400 font-['Roboto']">Get help from community</p>
                   </div>
                   <i className="fa-solid fa-external-link text-gray-500 text-sm"></i>
@@ -277,7 +273,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
                     <i className="fa-solid fa-sign-out-alt text-red-400 text-sm"></i>
                   </div>
                   <div className="flex-1 text-left">
-                    <span className="text-sm font-bold text-gray-200 group-hover:text-white font-['Orbitron']">Logout</span>
+                    <span className="text-sm font-bold text-gray-200 group-hover:text-white">Logout</span>
                     <p className="text-xs text-gray-400 font-['Roboto']">Sign out of your account</p>
                   </div>
                   <i className="fa-solid fa-chevron-right text-gray-500 text-sm group-hover:text-gray-400 transition-all duration-200 group-hover:translate-x-1"></i>

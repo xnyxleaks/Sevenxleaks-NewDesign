@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Crown, Sparkles, Star, Shield } from "lucide-react";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface VIPUserMenuProps {
   name: string | null;
@@ -29,6 +30,10 @@ const VIPUserMenu: React.FC<VIPUserMenuProps> = ({
 
   const isMobile = window.innerWidth <= 768;
   const navigate = useNavigate();
+
+  
+      const { theme } = useTheme();
+      const isDark = theme === "dark";
 
   const handleAccountClick = () => {
     if(isMobile){
@@ -64,7 +69,9 @@ const VIPUserMenu: React.FC<VIPUserMenuProps> = ({
         </div>
         
         <div className="hidden sm:block">
-          <p className="font-semibold text-yellow-200 text-sm font-orbitron">{name}</p>
+<p className={`${isDark ? "font-semibold text-yellow-200 text-sm font-['Roboto']" : "font-semibold text-black text-sm font-['Roboto']"}`}>
+  {name}
+</p>
           <div className="flex items-center gap-2">
             <span className="text-yellow-300 font-bold flex items-center gap-1 text-xs">
               <Crown className="w-3 h-3 animate-pulse" />
@@ -93,7 +100,7 @@ const VIPUserMenu: React.FC<VIPUserMenuProps> = ({
             {/* VIP Header do Menu */}
             <div className="p-4 bg-gradient-to-br from-yellow-900/60 via-yellow-800/40 to-gray-900/80 border-b border-yellow-500/30">
               <div className="flex items-center gap-4">
-                <div className="relative">
+                <div className="relative max-w-10">
                   <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600 flex items-center justify-center shadow-lg ring-1 ring-yellow-400/30">
                     <i className="fa-solid fa-user text-black text-sm font-bold"></i>
                   </div>
@@ -111,7 +118,7 @@ const VIPUserMenu: React.FC<VIPUserMenuProps> = ({
                 </div>
                 
                 <div className="flex-1">
-                  <p className="font-bold text-yellow-200 text-base font-orbitron">{name}</p>
+                  <p className="font-bold text-yellow-200 text-base font-['Roboto]">{name}</p>
                   <div className="flex flex-wrap items-center gap-2 mt-2">
                     <span className="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-yellow-400/30 to-yellow-500/30 text-yellow-300 rounded-full text-xs font-bold border border-yellow-400/40 backdrop-blur-sm">
                       <Crown className="w-3 h-3 animate-pulse" />
@@ -149,7 +156,7 @@ const VIPUserMenu: React.FC<VIPUserMenuProps> = ({
 
               {/* VIP Features Section */}
               <div className="px-3 mt-3">
-                <div className="text-xs font-bold text-yellow-500 uppercase tracking-wider px-3 py-1 font-orbitron">
+                <div className="text-xs font-bold text-yellow-500 uppercase tracking-wider px-3 py-1 font-['Roboto]">
                   VIP EXCLUSIVE
                 </div>
                 <div className="space-y-1">
@@ -162,7 +169,7 @@ const VIPUserMenu: React.FC<VIPUserMenuProps> = ({
                       <i className="fa-solid fa-plus text-yellow-400 text-sm"></i>
                     </div>
                     <div className="flex-1">
-                      <span className="text-sm font-bold text-yellow-200 group-hover:text-yellow-100 font-orbitron">Recommend Content</span>
+                      <span className="text-sm font-bold text-yellow-200 group-hover:text-yellow-100 font-['Roboto]">Recommend Content</span>
                       <p className="text-xs text-yellow-400 font-roboto">Suggest premium content</p>
                     </div>
                     <i className="fa-solid fa-chevron-right text-yellow-500 text-sm group-hover:text-yellow-400 transition-all duration-200 group-hover:translate-x-1"></i>
@@ -177,7 +184,7 @@ const VIPUserMenu: React.FC<VIPUserMenuProps> = ({
                       <i className="fa-solid fa-crown text-purple-400 text-sm"></i>
                     </div>
                     <div className="flex-1">
-                      <span className="text-sm font-bold text-yellow-200 group-hover:text-yellow-100 font-orbitron">VIP Asian</span>
+                      <span className="text-sm font-bold text-yellow-200 group-hover:text-yellow-100 font-['Roboto]">VIP Asian</span>
                       <p className="text-xs text-yellow-400 font-roboto">Premium Asian content</p>
                     </div>
                     <i className="fa-solid fa-chevron-right text-yellow-500 text-sm group-hover:text-yellow-400 transition-all duration-200 group-hover:translate-x-1"></i>
@@ -192,7 +199,7 @@ const VIPUserMenu: React.FC<VIPUserMenuProps> = ({
                       <i className="fa-solid fa-crown text-orange-400 text-sm"></i>
                     </div>
                     <div className="flex-1">
-                      <span className="text-sm font-bold text-yellow-200 group-hover:text-yellow-100 font-orbitron">VIP Western</span>
+                      <span className="text-sm font-bold text-yellow-200 group-hover:text-yellow-100 font-['Roboto]">VIP Western</span>
                       <p className="text-xs text-yellow-400 font-roboto">Premium Western content</p>
                     </div>
                     <i className="fa-solid fa-chevron-right text-yellow-500 text-sm group-hover:text-yellow-400 transition-all duration-200 group-hover:translate-x-1"></i>
@@ -203,7 +210,7 @@ const VIPUserMenu: React.FC<VIPUserMenuProps> = ({
               {/* Admin Section */}
               {isAdmin && (
                 <div className="px-3 mt-3">
-                  <div className="text-xs font-bold text-red-500 uppercase tracking-wider px-3 py-1 font-orbitron">
+                  <div className="text-xs font-bold text-red-500 uppercase tracking-wider px-3 py-1 font-['Roboto]">
                     ADMIN CONTROLS
                   </div>
                   <div className="space-y-1">
@@ -216,7 +223,7 @@ const VIPUserMenu: React.FC<VIPUserMenuProps> = ({
                         <i className="fa-solid fa-clipboard-list text-red-400 text-sm"></i>
                       </div>
                       <div className="flex-1">
-                        <span className="text-sm font-bold text-yellow-200 group-hover:text-yellow-100 font-orbitron">View Requests</span>
+                        <span className="text-sm font-bold text-yellow-200 group-hover:text-yellow-100 font-['Roboto]">View Requests</span>
                         <p className="text-xs text-yellow-400 font-roboto">Manage user requests</p>
                       </div>
                       <i className="fa-solid fa-chevron-right text-yellow-500 text-sm group-hover:text-yellow-400 transition-all duration-200 group-hover:translate-x-1"></i>
@@ -231,7 +238,7 @@ const VIPUserMenu: React.FC<VIPUserMenuProps> = ({
                         <i className="fa-solid fa-chart-line text-green-400 text-sm"></i>
                       </div>
                       <div className="flex-1">
-                        <span className="text-sm font-bold text-yellow-200 group-hover:text-yellow-100 font-orbitron">View Stats</span>
+                        <span className="text-sm font-bold text-yellow-200 group-hover:text-yellow-100 font-['Roboto]">View Stats</span>
                         <p className="text-xs text-yellow-400 font-roboto">Analytics & metrics</p>
                       </div>
                       <i className="fa-solid fa-chevron-right text-yellow-500 text-sm group-hover:text-yellow-400 transition-all duration-200 group-hover:translate-x-1"></i>
@@ -246,7 +253,7 @@ const VIPUserMenu: React.FC<VIPUserMenuProps> = ({
                         <i className="fa-solid fa-cog text-indigo-400 text-sm"></i>
                       </div>
                       <div className="flex-1">
-                        <span className="text-sm font-bold text-yellow-200 group-hover:text-yellow-100 font-orbitron">Admin Settings</span>
+                        <span className="text-sm font-bold text-yellow-200 group-hover:text-yellow-100 font-['Roboto]">Admin Settings</span>
                         <p className="text-xs text-yellow-400 font-roboto">System configuration</p>
                       </div>
                       <i className="fa-solid fa-chevron-right text-yellow-500 text-sm group-hover:text-yellow-400 transition-all duration-200 group-hover:translate-x-1"></i>
@@ -268,7 +275,7 @@ const VIPUserMenu: React.FC<VIPUserMenuProps> = ({
                     <i className="fab fa-discord text-purple-400 text-sm"></i>
                   </div>
                   <div className="flex-1">
-                    <span className="text-sm font-bold text-yellow-200 group-hover:text-yellow-100 font-orbitron">VIP Discord</span>
+                    <span className="text-sm font-bold text-yellow-200 group-hover:text-yellow-100 font-['Roboto]">VIP Discord</span>
                     <p className="text-xs text-yellow-400 font-roboto">Exclusive VIP community</p>
                   </div>
                   <i className="fa-solid fa-external-link text-yellow-500 text-sm"></i>
@@ -285,7 +292,7 @@ const VIPUserMenu: React.FC<VIPUserMenuProps> = ({
                     <i className="fa-solid fa-sign-out-alt text-red-400 text-sm"></i>
                   </div>
                   <div className="flex-1 text-left">
-                    <span className="text-sm font-bold text-yellow-200 group-hover:text-yellow-100 font-orbitron">Logout</span>
+                    <span className="text-sm font-bold text-yellow-200 group-hover:text-yellow-100 font-['Roboto]">Logout</span>
                     <p className="text-xs text-yellow-400 font-roboto">Sign out of VIP account</p>
                   </div>
                   <i className="fa-solid fa-chevron-right text-yellow-500 text-sm group-hover:text-yellow-400 transition-all duration-200 group-hover:translate-x-1"></i>
