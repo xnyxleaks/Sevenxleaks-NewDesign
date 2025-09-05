@@ -53,6 +53,7 @@ const VIPWesternPage: React.FC = () => {
   const [hasMoreContent, setHasMoreContent] = useState(true);
   const [searchLoading, setSearchLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
+  const [dateFilter, setDateFilter] = useState("all");
 
   function decodeModifiedBase64<T>(encodedStr: string): T {
     const fixedBase64 = encodedStr.slice(0, 2) + encodedStr.slice(3);
@@ -80,6 +81,24 @@ const VIPWesternPage: React.FC = () => {
       }
       if (selectedMonth) {
         params.append('month', selectedMonth);
+      }
+      
+      if (dateFilter !== 'all') {
+        const today = new Date();
+        let targetDate = new Date();
+        
+        switch (dateFilter) {
+          case 'today':
+            break;
+          case 'yesterday':
+            targetDate.setDate(today.getDate() - 1);
+            break;
+          case '7days':
+            targetDate.setDate(today.getDate() - 7);
+            break;
+        }
+        
+        params.append('month', (targetDate.getMonth() + 1).toString().padStart(2, '0'));
       }
 
       const endpoint = searchName ? '/vip-westerncontent/search' : '/vip-westerncontent';
@@ -145,7 +164,7 @@ const VIPWesternPage: React.FC = () => {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchName, selectedCategory, selectedMonth]);
+  }, [searchName, selectedCategory, selectedMonth, dateFilter]);
 
   const handleLoadMore = () => {
     if (loadingMore || currentPage >= totalPages) return;
@@ -229,6 +248,28 @@ const VIPWesternPage: React.FC = () => {
 
             {/* Filter Buttons */}
             <div className="flex items-center gap-2">
+              {["all", "today", "yesterday", "7days"].map((filter) => (
+                <button
+                  key={filter}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 border whitespace-nowrap ${
+                    dateFilter === filter
+                      ? isDark
+                        ? "bg-yellow-500 text-black border-yellow-400 shadow-lg shadow-yellow-500/30"
+                        : "bg-yellow-600 text-white border-yellow-500 shadow-lg shadow-yellow-500/20"
+                      : isDark
+                        ? "bg-gray-700/50 text-gray-300 hover:bg-yellow-500/20 border-gray-600/50 hover:text-yellow-300"
+                        : "bg-gray-200/50 text-gray-700 hover:bg-yellow-100 border-gray-300/50 hover:text-yellow-700"
+                  }`}
+                  onClick={() => setDateFilter(filter)}
+                >
+                  {filter === "all"
+                    ? "All"
+                    : filter === "7days"
+                    ? "7 Days"
+                    : filter.charAt(0).toUpperCase() + filter.slice(1)}
+                </button>
+              ))}
+              
               <MonthFilter
                 selectedMonth={selectedMonth}
                 onMonthChange={setSelectedMonth}
@@ -313,18 +354,37 @@ const VIPWesternPage: React.FC = () => {
                       {posts
                         .sort((a, b) => new Date(b.postDate || b.createdAt).getTime() - new Date(a.postDate || a.createdAt).getTime())
                         .map((link, index) => (
-                          <motion.div
-                            key={link.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.05 }}
-                            className={`group rounded-xl p-3 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl transform hover:scale-[1.01] ${
-                              isDark 
-                                ? 'bg-gray-800/60 hover:bg-gray-700/80 border-yellow-500/30 hover:border-yellow-400/60 hover:shadow-yellow-500/20'
-                                : 'bg-white/60 hover:bg-gray-50/80 border-yellow-400/40 hover:border-yellow-500/60 hover:shadow-yellow-400/20'
-                            } border`}
-                            onClick={() => navigate(`/vip-western/${link.slug}`)}
-                          >
+<motion.div
+  key={link.id}
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: index * 0.05 }}
+  className={`group rounded-xl p-3 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl transform hover:scale-[1.01] ${
+    isDark 
+      ? 'bg-gray-800/60 hover:bg-gray-700/80 border-yellow-500/30 hover:border-yellow-400/60 hover:shadow-yellow-500/20'
+      : 'bg-white/60 hover:bg-gray-50/80 border-yellow-400/40 hover:border-yellow-500/60 hover:shadow-yellow-400/20'
+  } border`}
+  onClick={() => {
+    const contentType = link.contentType || 'vip-western';
+    switch (contentType) {
+      case 'vip-asian':
+        navigate(`/vip-asian/${link.slug}`);
+        break;
+      case 'vip-western':
+        navigate(`/vip-western/${link.slug}`);
+        break;
+      case 'vip-banned':
+        navigate(`/vip-banned/${link.slug}`);
+        break;
+      case 'vip-unknown':
+        navigate(`/vip-unknown/${link.slug}`);
+        break;
+      default:
+        navigate(`/vip-western/${link.slug}`);
+    }
+  }}
+>
+
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                               <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
                                 <Crown className="w-5 h-5 text-yellow-400 animate-pulse" />
@@ -351,6 +411,18 @@ const VIPWesternPage: React.FC = () => {
                                     NEW VIP
                                   </span>
                                 )}
+                                
+                                {/* Content Type Badge for cross-section results */}
+                                {link.contentType && link.contentType !== 'vip-western' && (
+                                  <span className={`inline-flex items-center px-3 py-1 text-xs font-bold rounded-full ${
+                                    link.contentType === 'vip-asian' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' :
+                                    link.contentType === 'vip-banned' ? 'bg-red-500/20 text-red-300 border border-red-500/30' :
+                                    link.contentType === 'vip-unknown' ? 'bg-gray-500/20 text-gray-300 border border-gray-500/30' : ''
+                                  }`}>
+                                    {link.contentType.replace('vip-', '').toUpperCase()}
+                                  </span>
+                                )}
+                                
                                 <span className={`inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm font-medium rounded-full border backdrop-blur-sm font-roboto ${
                                   isDark 
                                     ? 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-300 border-yellow-500/30'

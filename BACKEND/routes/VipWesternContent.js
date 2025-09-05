@@ -5,6 +5,7 @@ const verifyToken = require('../Middleware/verifyToken');
 const isAdmin = require('../Middleware/isAdmin');
 const { Op, Sequelize } = require('sequelize');
 const { v4: uuidv4 } = require('uuid');
+const { VipAsianContent, VipBannedContent, VipUnknownContent } = require('../models');
 
 function insertRandomChar(base64Str) {
   const letters = 'abcdefghijklmnopqrstuvwxyz';
@@ -48,43 +49,108 @@ router.get('/search', async (req, res) => {
 
     const { search, category, month, sortBy = 'postDate', sortOrder = 'DESC' } = req.query;
 
-    const where = {};
+    let allResults = [];
     
+    // Busca universal em todas as tabelas VIP
     if (search) {
-      where.name = { [Op.iLike]: `%${search}%` };
+      const searchWhere = { name: { [Op.iLike]: `%${search}%` } };
+      
+      // Adiciona filtro de mês se especificado
+      if (month) {
+        searchWhere.postDate = {
+          [Op.and]: [
+            Sequelize.where(
+              Sequelize.fn('EXTRACT', Sequelize.literal('MONTH FROM "postDate"')),
+              month
+            )
+          ]
+        };
+      }
+      
+      // Busca em VipAsianContent
+      const vipAsianResults = await VipAsianContent.findAll({
+        where: searchWhere,
+        order: [[sortBy, sortOrder]],
+        raw: true
+      });
+      
+      // Busca em VipWesternContent
+      const vipWesternResults = await VipWesternContent.findAll({
+        where: searchWhere,
+        order: [[sortBy, sortOrder]],
+        raw: true
+      });
+      
+      // Busca em VipBannedContent
+      const vipBannedResults = await VipBannedContent.findAll({
+        where: searchWhere,
+        order: [[sortBy, sortOrder]],
+        raw: true
+      });
+      
+      // Busca em VipUnknownContent
+      const vipUnknownResults = await VipUnknownContent.findAll({
+        where: searchWhere,
+        order: [[sortBy, sortOrder]],
+        raw: true
+      });
+      
+      // Adiciona tipo de conteúdo para identificação
+      const vipAsianWithType = vipAsianResults.map(item => ({ ...item, contentType: 'vip-asian' }));
+      const vipWesternWithType = vipWesternResults.map(item => ({ ...item, contentType: 'vip-western' }));
+      const vipBannedWithType = vipBannedResults.map(item => ({ ...item, contentType: 'vip-banned' }));
+      const vipUnknownWithType = vipUnknownResults.map(item => ({ ...item, contentType: 'vip-unknown' }));
+      
+      // Combina todos os resultados
+      allResults = [
+        ...vipAsianWithType,
+        ...vipWesternWithType,
+        ...vipBannedWithType,
+        ...vipUnknownWithType
+      ];
+      
+      // Ordena por data
+      allResults.sort((a, b) => {
+        const dateA = new Date(a.postDate);
+        const dateB = new Date(b.postDate);
+        return sortOrder === 'DESC' ? dateB.getTime() - dateA.getTime() : dateA.getTime() - dateB.getTime();
+      });
+    } else {
+      // Se não há busca, retorna apenas conteúdo VIP western
+      const where = {};
+      if (category) {
+        where.category = category;
+      }
+      if (month) {
+        where.postDate = {
+          [Op.and]: [
+            Sequelize.where(
+              Sequelize.fn('EXTRACT', Sequelize.literal('MONTH FROM "postDate"')),
+              month
+            )
+          ]
+        };
+      }
+      
+      const results = await VipWesternContent.findAll({
+        where,
+        order: [[sortBy, sortOrder]],
+        raw: true
+      });
+      
+      allResults = results.map(item => ({ ...item, contentType: 'vip-western' }));
     }
     
-    if (category) {
-      where.category = category;
-    }
-    
-    if (month) {
-      where.postDate = {
-        [Op.and]: [
-          Sequelize.where(
-            Sequelize.fn('EXTRACT', Sequelize.literal('MONTH FROM "postDate"')),
-            month
-          )
-        ]
-      };
-    }
-
-    const results = await VipWesternContent.findAll({
-      where,
-      order: [[sortBy, sortOrder]],
-      limit,
-      offset,
-      raw: true
-    });
-
-    const total = await VipWesternContent.count({ where });
+    // Paginação manual
+    const total = allResults.length;
+    const paginatedResults = allResults.slice(offset, offset + limit);
 
     const payload = {
       page,
       perPage: limit,
       total,
       totalPages: Math.ceil(total / limit),
-      data: results.map(item => ({ ...item, contentType: 'vip-western' }))
+      data: paginatedResults
     };
 
     const encodedPayload = encodePayloadToBase64(payload);

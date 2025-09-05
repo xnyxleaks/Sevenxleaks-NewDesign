@@ -268,6 +268,8 @@ const VIPUnknownPage: React.FC = () => {
                     : filter.charAt(0).toUpperCase() + filter.slice(1)}
                 </button>
               ))}
+              
+
             </div>
 
             {/* Category and Region Select */}
@@ -356,20 +358,37 @@ const VIPUnknownPage: React.FC = () => {
                             new Date(a.postDate || a.createdAt).getTime()
                         )
                         .map((link, index) => (
-                          <motion.div
-                            key={link.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.05 }}
-                            className={`group rounded-xl p-3 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl transform hover:scale-[1.01] ${
-                              isDark
-                                ? "bg-gray-800/60 hover:bg-gray-700/80 border-yellow-500/30 hover:border-gray-400/60 hover:shadow-gray-500/20"
-                                : "bg-white/60 hover:bg-gray-50/80 border-yellow-400/40 hover:border-gray-400/60 hover:shadow-gray-400/20"
-                            } border`}
-                            onClick={() =>
-                              navigate(`/vip-unknown/${link.slug}`)
-                            }
-                          >
+<motion.div
+  key={link.id}
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: index * 0.05 }}
+  className={`group rounded-xl p-3 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl transform hover:scale-[1.01] ${
+    isDark
+      ? "bg-gray-800/60 hover:bg-gray-700/80 border-yellow-500/30 hover:border-gray-400/60 hover:shadow-gray-500/20"
+      : "bg-white/60 hover:bg-gray-50/80 border-yellow-400/40 hover:border-gray-400/60 hover:shadow-gray-400/20"
+  } border`}
+  onClick={() => {
+    const contentType = link.contentType || 'vip-unknown';
+    switch (contentType) {
+      case 'vip-asian':
+        navigate(`/vip-asian/${link.slug}`);
+        break;
+      case 'vip-western':
+        navigate(`/vip-western/${link.slug}`);
+        break;
+      case 'vip-banned':
+        navigate(`/vip-banned/${link.slug}`);
+        break;
+      case 'vip-unknown':
+        navigate(`/vip-unknown/${link.slug}`);
+        break;
+      default:
+        navigate(`/vip-unknown/${link.slug}`);
+    }
+  }}
+>
+
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                               <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
                                 <Crown className="w-5 h-5 text-yellow-400 animate-pulse" />
@@ -399,6 +418,16 @@ const VIPUnknownPage: React.FC = () => {
                                   </span>
                                 )}
 
+                                {/* Content Type Badge for cross-section results */}
+                                {link.contentType && link.contentType !== 'vip-unknown' && (
+                                  <span className={`inline-flex items-center px-3 py-1 text-xs font-bold rounded-full ${
+                                    link.contentType === 'vip-asian' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' :
+                                    link.contentType === 'vip-western' ? 'bg-orange-500/20 text-orange-300 border border-orange-500/30' :
+                                    link.contentType === 'vip-banned' ? 'bg-red-500/20 text-red-300 border border-red-500/30' : ''
+                                  }`}>
+                                    {link.contentType.replace('vip-', '').toUpperCase()}
+                                  </span>
+                                )}
                                 {/* Region Badge */}
                                 <span
                                   className={`inline-flex items-center px-2 py-1 text-xs font-bold rounded-full ${

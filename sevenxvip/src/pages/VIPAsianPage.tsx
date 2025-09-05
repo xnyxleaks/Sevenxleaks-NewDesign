@@ -41,6 +41,7 @@ const VIPAsianPage: React.FC = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
   const isDark = theme === "dark";
+
   const [links, setLinks] = useState<LinkItem[]>([]);
   const [filteredLinks, setFilteredLinks] = useState<LinkItem[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -53,6 +54,7 @@ const VIPAsianPage: React.FC = () => {
   const [hasMoreContent, setHasMoreContent] = useState(true);
   const [searchLoading, setSearchLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
+  const [dateFilter, setDateFilter] = useState("all");
 
   function decodeModifiedBase64<T>(encodedStr: string): T {
     const fixedBase64 = encodedStr.slice(0, 2) + encodedStr.slice(3);
@@ -72,30 +74,43 @@ const VIPAsianPage: React.FC = () => {
         limit: "24",
       });
 
-      if (searchName) {
-        params.append('search', searchName);
-      }
-      if (selectedCategory) {
-        params.append('category', selectedCategory);
-      }
-      if (selectedMonth) {
-        params.append('month', selectedMonth);
+      if (searchName) params.append("search", searchName);
+      if (selectedCategory) params.append("category", selectedCategory);
+      if (selectedMonth) params.append("month", selectedMonth);
+
+      if (dateFilter !== "all") {
+        const today = new Date();
+        let targetDate = new Date();
+
+        switch (dateFilter) {
+          case "today":
+            break;
+          case "yesterday":
+            targetDate.setDate(today.getDate() - 1);
+            break;
+          case "7days":
+            targetDate.setDate(today.getDate() - 7);
+            break;
+        }
+
+        params.append(
+          "month",
+          (targetDate.getMonth() + 1).toString().padStart(2, "0")
+        );
       }
 
-      const endpoint = searchName ? '/vip-asiancontent/search' : '/vip-asiancontent';
+      const endpoint = searchName ? "/vip-asiancontent/search" : "/vip-asiancontent";
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}${endpoint}?${params}`,
         {
           headers: {
             "x-api-key": `${import.meta.env.VITE_FRONTEND_API_KEY}`,
-            "Authorization": `Bearer ${localStorage.getItem("Token")}`,
+            Authorization: `Bearer ${localStorage.getItem("Token")}`,
           },
         }
       );
-      
-      if (!response.data?.data) {
-        throw new Error("Invalid server response");
-      }
+
+      if (!response.data?.data) throw new Error("Invalid server response");
 
       const decoded = decodeModifiedBase64<{ data: LinkItem[]; totalPages: number }>(
         response.data.data
@@ -114,19 +129,17 @@ const VIPAsianPage: React.FC = () => {
       setTotalPages(totalPages);
       setHasMoreContent(page < totalPages);
 
-      const uniqueCategories = Array.from(
-        new Set(rawData.map((item) => item.category))
-      ).map((category) => ({
-        id: category,
-        name: category,
-        category,
-      }));
+      const uniqueCategories = Array.from(new Set(rawData.map((item) => item.category))).map(
+        (category) => ({
+          id: category,
+          name: category,
+          category,
+        })
+      );
 
       setCategories((prev) => {
         const existingCategories = new Set(prev.map((c) => c.category));
-        const newCategories = uniqueCategories.filter(
-          (c) => !existingCategories.has(c.category)
-        );
+        const newCategories = uniqueCategories.filter((c) => !existingCategories.has(c.category));
         return [...prev, ...newCategories];
       });
     } catch (error) {
@@ -143,9 +156,8 @@ const VIPAsianPage: React.FC = () => {
       setCurrentPage(1);
       fetchContent(1);
     }, 300);
-
     return () => clearTimeout(timer);
-  }, [searchName, selectedCategory, selectedMonth]);
+  }, [searchName, selectedCategory, selectedMonth, dateFilter]);
 
   const handleLoadMore = () => {
     if (loadingMore || currentPage >= totalPages) return;
@@ -157,7 +169,7 @@ const VIPAsianPage: React.FC = () => {
 
   const recentLinks = filteredLinks.slice(0, 5);
 
-  const formatDateHeader = (dateString: string): string => {
+  const formatDateHeader = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
       year: "numeric",
@@ -168,26 +180,24 @@ const VIPAsianPage: React.FC = () => {
 
   const groupPostsByDate = (posts: LinkItem[]) => {
     const grouped: { [key: string]: LinkItem[] } = {};
-    
-    posts.forEach(post => {
+    posts.forEach((post) => {
       const dateKey = formatDateHeader(post.postDate || post.createdAt);
-      if (!grouped[dateKey]) {
-        grouped[dateKey] = [];
-      }
+      if (!grouped[dateKey]) grouped[dateKey] = [];
       grouped[dateKey].push(post);
     });
-    
     return grouped;
   };
 
   const groupedLinks = groupPostsByDate(filteredLinks);
 
   return (
-    <div className={`min-h-screen ${
-      isDark 
-        ? 'bg-gradient-to-br from-gray-900 via-yellow-900/10 to-gray-900 text-white' 
-        : 'bg-gradient-to-br from-gray-50 via-yellow-100/20 to-gray-100 text-gray-900'
-    }`}>
+    <div
+      className={`min-h-screen ${
+        isDark
+          ? "bg-gradient-to-br from-gray-900 via-yellow-900/10 to-gray-900 text-white"
+          : "bg-gradient-to-br from-gray-50 via-yellow-100/20 to-gray-100 text-gray-900"
+      }`}
+    >
       <Helmet>
         <title>VIP Asian Content - Sevenxleaks</title>
         <link rel="canonical" href="https://sevenxleaks.com/vip-asian" />
@@ -195,39 +205,67 @@ const VIPAsianPage: React.FC = () => {
 
       {/* Filter Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className={`backdrop-blur-xl border rounded-3xl p-6 shadow-2xl ${
-          isDark 
-            ? 'bg-gray-800/60 border-yellow-500/30 shadow-yellow-500/10'
-            : 'bg-white/80 border-yellow-400/40 shadow-yellow-400/10'
-        }`}>
-          <div className={`flex flex-col lg:flex-row items-center gap-4 rounded-2xl px-6 py-4 border shadow-inner ${
-            isDark 
-              ? 'bg-gray-700/50 border-yellow-500/20'
-              : 'bg-gray-100/50 border-yellow-400/30'
-          }`}>
+        <div
+          className={`backdrop-blur-xl border rounded-3xl p-6 shadow-2xl ${
+            isDark
+              ? "bg-gray-800/60 border-yellow-500/30 shadow-yellow-500/10"
+              : "bg-white/80 border-yellow-400/40 shadow-yellow-400/10"
+          }`}
+        >
+          <div
+            className={`flex flex-col lg:flex-row items-center gap-4 rounded-2xl px-6 py-4 border shadow-inner ${
+              isDark
+                ? "bg-gray-700/50 border-yellow-500/20"
+                : "bg-gray-100/50 border-yellow-400/30"
+            }`}
+          >
             {/* Search Bar */}
             <div className="flex items-center gap-3 flex-1 min-w-0">
               <Crown className="text-yellow-400 w-5 h-5 animate-pulse" />
               <input
                 type="text"
                 className={`flex-1 bg-transparent border-none outline-none text-lg ${
-                  isDark 
-                    ? 'text-white placeholder-yellow-300/60' 
-                    : 'text-gray-900 placeholder-yellow-600/60'
+                  isDark
+                    ? "text-white placeholder-yellow-300/60"
+                    : "text-gray-900 placeholder-yellow-600/60"
                 }`}
                 placeholder="Search VIP Asian content..."
                 value={searchName}
                 onChange={(e) => setSearchName(e.target.value)}
               />
               {searchLoading && (
-                <div className={`w-4 h-4 border-2 border-t-transparent rounded-full animate-spin ${
-                  isDark ? 'border-yellow-400' : 'border-yellow-600'
-                }`}></div>
+                <div
+                  className={`w-4 h-4 border-2 border-t-transparent rounded-full animate-spin ${
+                    isDark ? "border-yellow-400" : "border-yellow-600"
+                  }`}
+                />
               )}
             </div>
 
             {/* Filter Buttons */}
             <div className="flex items-center gap-2">
+              {["all", "today", "yesterday", "7days"].map((filter) => (
+                <button
+                  key={filter}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 border whitespace-nowrap ${
+                    dateFilter === filter
+                      ? isDark
+                        ? "bg-yellow-500 text-black border-yellow-400 shadow-lg shadow-yellow-500/30"
+                        : "bg-yellow-600 text-white border-yellow-500 shadow-lg shadow-yellow-500/20"
+                      : isDark
+                      ? "bg-gray-700/50 text-gray-300 hover:bg-yellow-500/20 border-gray-600/50 hover:text-yellow-300"
+                      : "bg-gray-200/50 text-gray-700 hover:bg-yellow-100 border-gray-300/50 hover:text-yellow-700"
+                  }`}
+                  onClick={() => setDateFilter(filter)}
+                >
+                  {filter === "all"
+                    ? "All"
+                    : filter === "7days"
+                    ? "7 Days"
+                    : filter.charAt(0).toUpperCase() + filter.slice(1)}
+                </button>
+              ))}
+
               <MonthFilter
                 selectedMonth={selectedMonth}
                 onMonthChange={setSelectedMonth}
@@ -241,9 +279,9 @@ const VIPAsianPage: React.FC = () => {
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 className={`px-3 py-1.5 border rounded-lg text-xs focus:outline-none focus:ring-1 transition-all duration-300 min-w-[120px] ${
-                  isDark 
-                    ? 'bg-gray-700/50 border-yellow-500/30 text-gray-300 focus:ring-yellow-500/50 hover:bg-gray-600/50'
-                    : 'bg-gray-200/50 border-yellow-400/40 text-gray-700 focus:ring-yellow-600/50 hover:bg-gray-300/50'
+                  isDark
+                    ? "bg-gray-700/50 border-yellow-500/30 text-gray-300 focus:ring-yellow-500/50 hover:bg-gray-600/50"
+                    : "bg-gray-200/50 border-yellow-400/40 text-gray-700 focus:ring-yellow-600/50 hover:bg-gray-300/50"
                 }`}
               >
                 <option value="">All Categories</option>
@@ -254,25 +292,25 @@ const VIPAsianPage: React.FC = () => {
                 ))}
               </select>
 
-              <button 
+              <button
                 className={`p-2 rounded-lg transition-all duration-300 border ${
-                  isDark 
-                    ? 'bg-gray-700/50 hover:bg-yellow-500/20 text-gray-300 hover:text-yellow-300 border-yellow-500/30'
-                    : 'bg-gray-200/50 hover:bg-yellow-100 text-gray-700 hover:text-yellow-700 border-yellow-400/40'
+                  isDark
+                    ? "bg-gray-700/50 hover:bg-yellow-500/20 text-gray-300 hover:text-yellow-300 border-yellow-500/30"
+                    : "bg-gray-200/50 hover:bg-yellow-100 text-gray-700 hover:text-yellow-700 border-yellow-400/40"
                 }`}
                 title="Calendar View"
               >
                 <Calendar className="w-5 h-5" />
               </button>
-              
-              <button 
+
+              <button
                 className={`p-2 rounded-lg transition-all duration-300 border ${
-                  isDark 
-                    ? 'bg-gray-700/50 hover:bg-yellow-500/20 text-gray-300 hover:text-yellow-300 border-yellow-500/30'
-                    : 'bg-gray-200/50 hover:bg-yellow-100 text-gray-700 hover:text-yellow-700 border-yellow-400/40'
+                  isDark
+                    ? "bg-gray-700/50 hover:bg-yellow-500/20 text-gray-300 hover:text-yellow-300 border-yellow-500/30"
+                    : "bg-gray-200/50 hover:bg-yellow-100 text-gray-700 hover:text-yellow-700 border-yellow-400/40"
                 }`}
                 title="Switch to VIP Western"
-                onClick={() => navigate('/vip-western')}
+                onClick={() => navigate("/vip-western")}
               >
                 <i className="fa-solid fa-repeat text-sm"></i>
               </button>
@@ -288,19 +326,16 @@ const VIPAsianPage: React.FC = () => {
             <LoadingSpinner />
           ) : filteredLinks.length > 0 ? (
             <>
+              {/* Render grouped links */}
               {Object.entries(groupedLinks)
-                .sort(([dateA], [dateB]) => {
-                  const parseDateA = new Date(dateA);
-                  const parseDateB = new Date(dateB);
-                  return parseDateB.getTime() - parseDateA.getTime();
-                })
+                .sort(([dateA], [dateB]) => new Date(dateB).getTime() - new Date(dateA).getTime())
                 .map(([date, posts]) => (
                   <div key={date} className="mb-8">
-                    <h2 className={`text-xl font-bold mb-4 pb-2 border-b font-orbitron flex items-center gap-3 ${
-                      isDark 
-                        ? 'text-gray-300 border-yellow-500/30' 
-                        : 'text-gray-700 border-yellow-400/40'
-                    }`}>
+                    <h2
+                      className={`text-xl font-bold mb-4 pb-2 border-b font-orbitron flex items-center gap-3 ${
+                        isDark ? "text-gray-300 border-yellow-500/30" : "text-gray-700 border-yellow-400/40"
+                      }`}
+                    >
                       <div className="w-3 h-8 bg-gradient-to-b from-yellow-500 to-purple-600 rounded-full shadow-lg shadow-yellow-500/30"></div>
                       <Crown className="w-5 h-5 text-yellow-400 animate-pulse" />
                       <span className="bg-gradient-to-r from-yellow-400 to-purple-400 bg-clip-text text-transparent">
@@ -308,9 +343,14 @@ const VIPAsianPage: React.FC = () => {
                       </span>
                       <Sparkles className="w-4 h-4 text-yellow-300" />
                     </h2>
+
                     <div className="space-y-2">
                       {posts
-                        .sort((a, b) => new Date(b.postDate || b.createdAt).getTime() - new Date(a.postDate || a.createdAt).getTime())
+                        .sort(
+                          (a, b) =>
+                            new Date(b.postDate || b.createdAt).getTime() -
+                            new Date(a.postDate || a.createdAt).getTime()
+                        )
                         .map((link, index) => (
                           <motion.div
                             key={link.id}
@@ -318,48 +358,79 @@ const VIPAsianPage: React.FC = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.05 }}
                             className={`group rounded-xl p-3 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl transform hover:scale-[1.01] ${
-                              isDark 
-                                ? 'bg-gray-800/60 hover:bg-gray-700/80 border-yellow-500/30 hover:border-yellow-400/60 hover:shadow-yellow-500/20'
-                                : 'bg-white/60 hover:bg-gray-50/80 border-yellow-400/40 hover:border-yellow-500/60 hover:shadow-yellow-400/20'
+                              isDark
+                                ? "bg-gray-800/60 hover:bg-gray-700/80 border-yellow-500/30 hover:border-yellow-400/60 hover:shadow-yellow-500/20"
+                                : "bg-white/60 hover:bg-gray-50/80 border-yellow-400/40 hover:border-yellow-500/60 hover:shadow-yellow-400/20"
                             } border`}
-                            onClick={() => navigate(`/vip-asian/${link.slug}`)}
+                            onClick={() => {
+                              const contentType = link.contentType || "vip-asian";
+                              navigate(`/${contentType}/${link.slug}`);
+                            }}
                           >
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                              <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
-                                <Crown className="w-5 h-5 text-yellow-400 animate-pulse" />
-                                <h3 className={`text-sm sm:text-lg font-bold transition-colors duration-300 font-orbitron relative truncate ${
-                                  isDark ? 'text-white group-hover:text-yellow-300' : 'text-gray-900 group-hover:text-yellow-600'
-                                }`}>
-                                  {link.name}
-                                  <div className="absolute -bottom-1 left-0 w-16 h-0.5 bg-gradient-to-r from-yellow-500 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                </h3>
-                                <div className={`hidden sm:block h-px bg-gradient-to-r to-transparent flex-1 max-w-20 transition-all duration-300 ${
-                                  isDark 
-                                    ? 'from-yellow-500/50 group-hover:from-yellow-400/70'
-                                    : 'from-yellow-400/50 group-hover:from-yellow-500/70'
-                                }`}></div>
-                              </div>
-                              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-                                {recentLinks.includes(link) && (
-                                  <span className={`inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 text-xs font-bold rounded-full shadow-lg animate-pulse border font-roboto ${
-                                    isDark 
-                                      ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-black border-yellow-400/30'
-                                      : 'bg-gradient-to-r from-yellow-600 to-yellow-700 text-white border-yellow-500/30'
-                                  }`}>
-                                    <Star className="w-3 h-3 mr-1" />
-                                    NEW VIP
-                                  </span>
-                                )}
-                                <span className={`inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm font-medium rounded-full border backdrop-blur-sm font-roboto ${
-                                  isDark 
-                                    ? 'bg-gradient-to-r from-yellow-500/20 to-purple-500/20 text-yellow-300 border-yellow-500/30'
-                                    : 'bg-gradient-to-r from-yellow-200/40 to-purple-200/30 text-yellow-700 border-yellow-400/40'
-                                }`}>
-                                  <Crown className="w-3 h-3 mr-2" />
-                                  {link.category}
-                                </span>
-                              </div>
-                            </div>
+  <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
+    <Crown className="w-5 h-5 text-yellow-400 animate-pulse" />
+    <h3
+      className={`text-sm sm:text-lg font-bold transition-colors duration-300 font-orbitron relative truncate ${
+        isDark ? "text-white group-hover:text-yellow-300" : "text-gray-900 group-hover:text-yellow-600"
+      }`}
+    >
+      {link.name}
+      <div className="absolute -bottom-1 left-0 w-16 h-0.5 bg-gradient-to-r from-yellow-500 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+    </h3>
+    <div
+      className={`hidden sm:block h-px bg-gradient-to-r to-transparent flex-1 max-w-20 transition-all duration-300 ${
+        isDark
+          ? "from-yellow-500/50 group-hover:from-yellow-400/70"
+          : "from-yellow-400/50 group-hover:from-yellow-500/70"
+      }`}
+    ></div>
+  </div>
+
+  <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+    {recentLinks.includes(link) && (
+      <span
+        className={`inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 text-xs font-bold rounded-full shadow-lg animate-pulse border font-roboto ${
+          isDark
+            ? "bg-gradient-to-r from-yellow-500 to-yellow-600 text-black border-yellow-400/30"
+            : "bg-gradient-to-r from-yellow-600 to-yellow-700 text-white border-yellow-500/30"
+        }`}
+      >
+        <Star className="w-3 h-3 mr-1" />
+        NEW VIP
+      </span>
+    )}
+
+    {/* Content Type Badge for cross-section results */}
+    {link.contentType && link.contentType !== "vip-asian" && (
+      <span
+        className={`inline-flex items-center px-3 py-1 text-xs font-bold rounded-full ${
+          link.contentType === "vip-western"
+            ? "bg-orange-500/20 text-orange-300 border border-orange-500/30"
+            : link.contentType === "vip-banned"
+            ? "bg-red-500/20 text-red-300 border border-red-500/30"
+            : link.contentType === "vip-unknown"
+            ? "bg-gray-500/20 text-gray-300 border border-gray-500/30"
+            : ""
+        }`}
+      >
+        {link.contentType.replace("vip-", "").toUpperCase()}
+      </span>
+    )}
+
+    <span
+      className={`inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm font-medium rounded-full border backdrop-blur-sm font-roboto ${
+        isDark
+          ? "bg-gradient-to-r from-yellow-500/20 to-purple-500/20 text-yellow-300 border-yellow-500/30"
+          : "bg-gradient-to-r from-yellow-200/40 to-purple-200/30 text-yellow-700 border-yellow-400/40"
+      }`}
+    >
+      <Crown className="w-3 h-3 mr-2" />
+      {link.category}
+    </span>
+  </div>
+</div>
+
                           </motion.div>
                         ))}
                     </div>
@@ -374,9 +445,9 @@ const VIPAsianPage: React.FC = () => {
                     onClick={handleLoadMore}
                     disabled={loadingMore}
                     className={`px-10 py-4 font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform disabled:opacity-50 disabled:cursor-not-allowed border backdrop-blur-sm font-orbitron ${
-                      isDark 
-                        ? 'bg-gradient-to-r from-yellow-500 to-purple-600 hover:from-yellow-600 hover:to-purple-700 text-white hover:shadow-yellow-500/30 border-yellow-400/30'
-                        : 'bg-gradient-to-r from-yellow-600 to-purple-700 hover:from-yellow-700 hover:to-purple-800 text-white hover:shadow-yellow-500/20 border-yellow-500/30'
+                      isDark
+                        ? "bg-gradient-to-r from-yellow-500 to-purple-600 hover:from-yellow-600 hover:to-purple-700 text-white hover:shadow-yellow-500/30 border-yellow-400/30"
+                        : "bg-gradient-to-r from-yellow-600 to-purple-700 hover:from-yellow-700 hover:to-purple-800 text-white hover:shadow-yellow-500/20 border-yellow-500/30"
                     }`}
                   >
                     {loadingMore ? (
@@ -399,14 +470,14 @@ const VIPAsianPage: React.FC = () => {
               <div className="mb-8">
                 <Crown className="w-16 h-16 text-yellow-500 mx-auto animate-pulse" />
               </div>
-              <h3 className={`text-3xl font-bold mb-4 font-orbitron ${
-                isDark ? 'text-white' : 'text-gray-900'
-              }`}>
+              <h3
+                className={`text-3xl font-bold mb-4 font-orbitron ${
+                  isDark ? "text-white" : "text-gray-900"
+                }`}
+              >
                 No VIP Asian Content Found
               </h3>
-              <p className={`text-lg font-roboto ${
-                isDark ? 'text-gray-400' : 'text-gray-600'
-              }`}>
+              <p className={`text-lg font-roboto ${isDark ? "text-gray-400" : "text-gray-600"}`}>
                 Try adjusting your search or filters to find premium content.
               </p>
             </div>

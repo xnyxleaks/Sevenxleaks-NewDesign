@@ -134,7 +134,7 @@ const Header: React.FC = () => {
               className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent ${themeClasses.border} ${themeClasses.glow} ${
                 isDark 
                   ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
+                  : 'text-gray-800 hover:text-black hover:bg-gray-100/50'
               }`}
             >
               <span className="relative z-10 font-medium font-roboto text-sm">Home</span>
@@ -146,7 +146,7 @@ const Header: React.FC = () => {
               className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent border-slate-500/20 shadow-slate-500/20 ${
                 isDark 
                   ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
+                  : 'text-gray-800 hover:text-black hover:bg-gray-100/50'
               }`}
             >
               <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
@@ -163,7 +163,7 @@ const Header: React.FC = () => {
               className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent border-gray-500/20 shadow-gray-500/20 ${
                 isDark 
                   ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
+                  : 'text-gray-800 hover:text-black hover:bg-gray-100/50'
               }`}
             >
               <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
@@ -180,7 +180,7 @@ const Header: React.FC = () => {
               className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent border-slate-500/20 shadow-slate-500/20 ${
                 isDark 
                   ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
+                  : 'text-gray-800 hover:text-black hover:bg-gray-100/50'
               }`}
             >
               <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
@@ -199,7 +199,7 @@ const Header: React.FC = () => {
               className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent border-slate-500/20 shadow-slate-500/20 ${
                 isDark 
                   ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
+                  : 'text-gray-800 hover:text-black hover:bg-gray-100/50'
               }`}
             >
               <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
@@ -216,7 +216,7 @@ const Header: React.FC = () => {
               className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent ${themeClasses.border} ${themeClasses.glow} ${
                 isDark 
                   ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
+                  : 'text-gray-800 hover:text-black hover:bg-gray-100/50'
               }`}
             >
               <span className="relative z-10 font-medium font-roboto text-sm">Login</span>
@@ -246,7 +246,7 @@ const Header: React.FC = () => {
   className={`md:hidden p-2 transition-colors duration-200 ${
     isDark
       ? "text-gray-300 hover:text-white"
-      : "text-gray-600 hover:text-gray-900"
+      : "text-gray-800 hover:text-black"
   }`}
   onClick={toggleMenu}
 >
@@ -331,7 +331,7 @@ const Header: React.FC = () => {
                       className={`flex items-center gap-4 px-6 py-4 ${themeClasses.bg} rounded-xl transition-all duration-300 border border-transparent ${themeClasses.border} backdrop-blur-sm ${
                         isDark 
                           ? 'text-gray-300 hover:text-white' 
-                          : 'text-gray-700 hover:text-gray-900'
+                          : 'text-gray-800 hover:text-black hover:bg-gray-100'
                       }`}
                     >
                       <div className={`w-12 h-12 ${themeClasses.bg} rounded-xl flex items-center justify-center border ${themeClasses.border}`}>
@@ -354,7 +354,7 @@ const Header: React.FC = () => {
                       className={`flex items-center gap-4 px-6 py-4 ${themeClasses.bg} rounded-xl transition-all duration-300 border border-transparent ${themeClasses.border} backdrop-blur-sm ${
                         isDark 
                           ? 'text-gray-300 hover:text-white' 
-                          : 'text-gray-700 hover:text-gray-900'
+                          : 'text-gray-800 hover:text-black hover:bg-gray-100'
                       }`}
                     >
                       <div className={`w-12 h-12 ${themeClasses.bg} rounded-xl flex items-center justify-center border ${themeClasses.border}`}>

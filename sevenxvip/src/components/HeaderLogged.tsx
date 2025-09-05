@@ -196,11 +196,11 @@ const HeaderLogged: React.FC = () => {
               className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent ${
                 isDark 
                   ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
+                  : 'text-gray-800 hover:text-black hover:bg-gray-100/50'
               }`}
             >
               <span className="relative z-10 font-medium font-['Roboto'] text-sm">Home</span>
-              <div className={`absolute inset-0 bg-gradient-to-r ${theme.gradient} opacity-0 group-hover:opacity-10 rounded-xl transition-opacity duration-300`} />
+              <div className={`absolute inset-0 bg-gradient-to-r ${themeClasses.gradient} opacity-0 group-hover:opacity-10 rounded-xl transition-opacity duration-300`} />
             </Link>
 
             <Link
@@ -208,7 +208,7 @@ const HeaderLogged: React.FC = () => {
               className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent hover:border-slate-500/20 hover:shadow-slate-500/20 ${
                 isDark 
                   ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
+                  : 'text-gray-800 hover:text-black hover:bg-gray-100/50'
               }`}
             >
               <span className="relative z-10 font-medium font-['Roboto'] text-sm flex items-center gap-2">
@@ -225,7 +225,7 @@ const HeaderLogged: React.FC = () => {
               className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent hover:border-gray-500/20 hover:shadow-gray-500/20 ${
                 isDark 
                   ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
+                  : 'text-gray-800 hover:text-black hover:bg-gray-100/50'
               }`}
             >
               <span className="relative z-10 font-medium font-['Roboto'] text-sm flex items-center gap-2">
@@ -243,7 +243,7 @@ const HeaderLogged: React.FC = () => {
                 className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent hover:border-slate-500/20 hover:shadow-slate-500/20 ${
                   isDark 
                     ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
+                    : 'text-gray-800 hover:text-black hover:bg-gray-100/50'
                 }`}
               >
                 <span className="relative z-10 font-medium font-['Roboto'] text-sm flex items-center gap-2">
@@ -263,7 +263,7 @@ const HeaderLogged: React.FC = () => {
               className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent hover:border-slate-500/20 hover:shadow-slate-500/20 ${
                 isDark 
                   ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
+                  : 'text-gray-800 hover:text-black hover:bg-gray-100/50'
               }`}
             >
               <span className="relative z-10 font-medium font-['Roboto'] text-sm flex items-center gap-2">
@@ -282,7 +282,7 @@ const HeaderLogged: React.FC = () => {
                   className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent hover:border-red-500/20 hover:shadow-red-500/20 ${
                     isDark 
                       ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
+                      : 'text-gray-800 hover:text-black hover:bg-gray-100/50'
                   }`}
                 >
                   <span className="relative z-10 font-medium font-['Roboto'] text-sm flex items-center gap-2">
@@ -298,7 +298,7 @@ const HeaderLogged: React.FC = () => {
                   className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent hover:border-green-500/20 hover:shadow-green-500/20 ${
                     isDark 
                       ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/50'
+                      : 'text-gray-800 hover:text-black hover:bg-gray-100/50'
                   }`}
                 >
                   <span className="relative z-10 font-medium font-['Roboto'] text-sm flex items-center gap-2">
@@ -362,7 +362,7 @@ const HeaderLogged: React.FC = () => {
               className={`lg:hidden p-2 transition-colors duration-200 ${
                 isDark 
                   ? 'text-gray-300 hover:text-white' 
-                  : 'text-gray-600 hover:text-gray-900'
+                  : 'text-gray-800 hover:text-black'
               }`}
               onClick={handleMobileMenuToggle}
             >
@@ -429,7 +429,7 @@ const HeaderLogged: React.FC = () => {
                     </div>
                   </div>
                 )}
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg bg-gradient-to-br ${theme.gradient}`}>
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg bg-gradient-to-br ${themeClasses.gradient}`}>
                   <i className="fa-solid fa-crown text-white text-xl" />
                 </div>
                 <h2 className={`text-3xl font-bold font-['Orbitron'] ${
@@ -438,7 +438,7 @@ const HeaderLogged: React.FC = () => {
                   {isVip ? "VIP MENU" : "MENU"}
                 </h2>
               </motion.div>
-              <div className={`w-32 h-1 mx-auto rounded-full ${isVip ? "bg-gradient-to-r from-yellow-400 to-yellow-500" : `bg-gradient-to-r ${theme.gradient}`}`} />
+              <div className={`w-32 h-1 mx-auto rounded-full ${isVip ? "bg-gradient-to-r from-yellow-400 to-yellow-500" : `bg-gradient-to-r ${themeClasses.gradient}`}`} />
             </div>
 
             <div className="px-4 space-y-2">
@@ -458,10 +458,10 @@ const HeaderLogged: React.FC = () => {
                       className={`flex items-center gap-4 px-6 py-4 rounded-xl transition-all duration-300 border border-transparent backdrop-blur-sm ${
                         isDark 
                           ? 'text-gray-300 hover:text-white' 
-                          : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
+                          : 'text-gray-800 hover:text-black hover:bg-gray-100'
                       }`}
                     >
-                      <div className={`w-12 h-12 ${theme.bg} rounded-xl flex items-center justify-center border ${theme.border}`}>
+                      <div className={`w-12 h-12 ${themeClasses.bg} rounded-xl flex items-center justify-center border ${themeClasses.border}`}>
                         <i className={`${item.icon} ${
                           isDark ? 'text-gray-300' : 'text-gray-600'
                         }`} />
@@ -481,10 +481,10 @@ const HeaderLogged: React.FC = () => {
                       className={`flex items-center gap-4 px-6 py-4 rounded-xl transition-all duration-300 border border-transparent backdrop-blur-sm ${
                         isDark 
                           ? 'text-gray-300 hover:text-white' 
-                          : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
+                          : 'text-gray-800 hover:text-black hover:bg-gray-100'
                       }`}
                     >
-                      <div className={`w-12 h-12 ${theme.bg} rounded-xl flex items-center justify-center border ${theme.border}`}>
+                      <div className={`w-12 h-12 ${themeClasses.bg} rounded-xl flex items-center justify-center border ${themeClasses.border}`}>
                         <i className={`${item.icon} ${
                           isDark ? 'text-gray-300' : 'text-gray-600'
                         }`} />
@@ -506,17 +506,17 @@ const HeaderLogged: React.FC = () => {
   initial={{ opacity: 0, y: 20 }}
   animate={{ opacity: 1, y: 0 }}
   transition={{ delay: 0.8 }}
-  className={`pt-6 border-t ${theme.border} space-y-3`}
+  className={`pt-6 border-t ${themeClasses.border} space-y-3`}
 >
   <Link to="/account" onClick={handleMobileMenuToggle}>
     <div
       className={`flex items-center gap-4 px-6 py-4 rounded-xl transition-all duration-300 border border-transparent backdrop-blur-sm ${
         isDark 
           ? 'text-gray-300 hover:text-white' 
-          : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
+          : 'text-gray-800 hover:text-black hover:bg-gray-100'
       }`}
     >
-      <div className={`w-12 h-12 ${theme.bg} rounded-xl flex items-center justify-center border ${theme.border}`}>
+      <div className={`w-12 h-12 ${themeClasses.bg} rounded-xl flex items-center justify-center border ${themeClasses.border}`}>
         <i className={`fa-solid fa-user ${
           isDark ? 'text-gray-300' : 'text-gray-600'
         }`} />
@@ -541,13 +541,13 @@ const HeaderLogged: React.FC = () => {
     className={`w-full flex items-center gap-4 px-6 py-4 rounded-xl transition-all duration-300 border border-transparent ${
       isDark 
         ? 'text-red-400 hover:text-red-300 hover:bg-red-500/10 hover:border-red-500/30'
-        : 'text-red-600 hover:text-red-700 hover:bg-red-50 hover:border-red-300'
+        : 'text-red-700 hover:text-red-800 hover:bg-red-50 hover:border-red-300'
     }`}
   >
     <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${
       isDark 
         ? 'bg-red-500/20 border-red-500/30' 
-        : 'bg-red-100 border-red-200'
+        : 'bg-red-100 border-red-300'
     }`}>
       <i className={`fa-solid fa-right-from-bracket ${
         isDark ? 'text-red-400' : 'text-red-600'
@@ -556,7 +556,7 @@ const HeaderLogged: React.FC = () => {
     <div className="flex-1 text-left">
       <span className="font-medium text-lg">Logout</span>
       <p className={`text-sm ${
-        isDark ? 'text-red-300' : 'text-red-500'
+        isDark ? 'text-red-300' : 'text-red-600'
       }`}>Sign out of account</p>
     </div>
   </button>
