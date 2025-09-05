@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
+import { useTheme } from "../contexts/ThemeContext";
+import MonthFilter from "../components/MonthFilter";
 
 type LinkItem = {
   id: string;
@@ -35,6 +37,8 @@ const LoadingSpinner = () => (
 
 const AsianPage: React.FC = () => {
   const navigate = useNavigate();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [links, setLinks] = useState<LinkItem[]>([]);
   const [filteredLinks, setFilteredLinks] = useState<LinkItem[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -47,6 +51,8 @@ const AsianPage: React.FC = () => {
   const [hasMoreContent, setHasMoreContent] = useState(true);
   const [searchLoading, setSearchLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
+    const [selectedMonth, setSelectedMonth] = useState("");
+  
 
   function decodeModifiedBase64<T>(encodedStr: string): T {
     const fixedBase64 = encodedStr.slice(0, 2) + encodedStr.slice(3);
@@ -72,6 +78,11 @@ const AsianPage: React.FC = () => {
       if (selectedCategory) {
         params.append('category', selectedCategory);
       }
+
+       if (selectedMonth) {
+        params.append('month', selectedMonth);
+      }
+
       if (dateFilter !== 'all') {
         const today = new Date();
         let targetDate = new Date();
@@ -189,7 +200,11 @@ const AsianPage: React.FC = () => {
   const groupedLinks = groupPostsByDate(filteredLinks);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+    <div className={`min-h-screen ${
+      isDark 
+        ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white' 
+        : 'bg-gradient-to-br from-gray-50 via-white to-gray-100 text-gray-900'
+    }`}>
       <Helmet>
         <title>Sevenxleaks Asian - Free Content</title>
         <link rel="canonical" href="https://sevenxleaks.com/Asian" />
@@ -197,20 +212,36 @@ const AsianPage: React.FC = () => {
 
       {/* Filter Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-6 shadow-2xl">
-          <div className="flex flex-col lg:flex-row items-center gap-4 bg-gray-700/50 rounded-2xl px-6 py-4 border border-gray-600/30 shadow-inner">
+        <div className={`backdrop-blur-xl border rounded-3xl p-6 shadow-2xl ${
+          isDark 
+            ? 'bg-gray-800/60 border-gray-700/50' 
+            : 'bg-white/80 border-gray-200/50'
+        }`}>
+          <div className={`flex flex-col lg:flex-row items-center gap-4 rounded-2xl px-6 py-4 border shadow-inner ${
+            isDark 
+              ? 'bg-gray-700/50 border-gray-600/30' 
+              : 'bg-gray-100/50 border-gray-300/30'
+          }`}>
             {/* Search Bar */}
             <div className="flex items-center gap-3 flex-1 min-w-0">
-              <i className="fa-solid fa-search text-purple-400 text-lg"></i>
+              <i className={`fa-solid fa-search text-lg ${
+                isDark ? 'text-purple-400' : 'text-purple-600'
+              }`}></i>
               <input
                 type="text"
-                className="flex-1 bg-transparent border-none outline-none text-white placeholder-gray-400 text-lg"
+                className={`flex-1 bg-transparent border-none outline-none text-lg ${
+                  isDark 
+                    ? 'text-white placeholder-gray-400' 
+                    : 'text-gray-900 placeholder-gray-500'
+                }`}
                 placeholder="Search by name..."
                 value={searchName}
                 onChange={(e) => setSearchName(e.target.value)}
               />
               {searchLoading && (
-                <div className="w-4 h-4 border-2 border-purple-400 border-t-transparent rounded-full animate-spin"></div>
+                <div className={`w-4 h-4 border-2 border-t-transparent rounded-full animate-spin ${
+                  isDark ? 'border-purple-400' : 'border-purple-600'
+                }`}></div>
               )}
             </div>
 
@@ -221,8 +252,12 @@ const AsianPage: React.FC = () => {
                   key={filter}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 border whitespace-nowrap ${
                     dateFilter === filter
-                      ? "bg-purple-500 text-white border-purple-400"
-                      : "bg-gray-700/50 text-gray-300 hover:bg-purple-500/20 border-gray-600/50"
+                      ? isDark
+                        ? "bg-purple-500 text-white border-purple-400"
+                        : "bg-purple-600 text-white border-purple-500"
+                      : isDark
+                        ? "bg-gray-700/50 text-gray-300 hover:bg-purple-500/20 border-gray-600/50"
+                        : "bg-gray-200/50 text-gray-700 hover:bg-purple-100 border-gray-300/50"
                   }`}
                   onClick={() => setDateFilter(filter)}
                 >
@@ -235,12 +270,24 @@ const AsianPage: React.FC = () => {
               ))}
             </div>
 
+                <div className="flex items-center gap-2">
+              <MonthFilter
+                selectedMonth={selectedMonth}
+                onMonthChange={setSelectedMonth}
+                themeColor="purple"
+              />
+            </div>
+
             {/* Category Select */}
             <div className="flex items-center gap-2">
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-3 py-1.5 bg-gray-700/50 border border-gray-600/50 rounded-lg text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-purple-500/50 transition-all duration-300 hover:bg-gray-600/50 min-w-[120px]"
+                className={`px-3 py-1.5 border rounded-lg text-xs focus:outline-none focus:ring-1 transition-all duration-300 min-w-[120px] ${
+                  isDark 
+                    ? 'bg-gray-700/50 border-gray-600/50 text-gray-300 focus:ring-purple-500/50 hover:bg-gray-600/50'
+                    : 'bg-gray-200/50 border-gray-300/50 text-gray-700 focus:ring-purple-600/50 hover:bg-gray-300/50'
+                }`}
               >
                 <option value="">All Categories</option>
                 {categories.map((category) => (
@@ -252,13 +299,21 @@ const AsianPage: React.FC = () => {
 
               {/* Action Buttons */}
               <button 
-                className="p-2 bg-gray-700/50 hover:bg-purple-500/20 text-gray-300 hover:text-purple-300 rounded-lg transition-all duration-300 border border-gray-600/50" 
+                className={`p-2 rounded-lg transition-all duration-300 border ${
+                  isDark 
+                    ? 'bg-gray-700/50 hover:bg-purple-500/20 text-gray-300 hover:text-purple-300 border-gray-600/50'
+                    : 'bg-gray-200/50 hover:bg-purple-100 text-gray-700 hover:text-purple-700 border-gray-300/50'
+                }`}
                 title="Calendar View"
               >
                 <i className="fa-regular fa-calendar text-sm"></i>
               </button>
               <button 
-                className="p-2 bg-gray-700/50 hover:bg-purple-500/20 text-gray-300 hover:text-purple-300 rounded-lg transition-all duration-300 border border-gray-600/50" 
+                className={`p-2 rounded-lg transition-all duration-300 border ${
+                  isDark 
+                    ? 'bg-gray-700/50 hover:bg-purple-500/20 text-gray-300 hover:text-purple-300 border-gray-600/50'
+                    : 'bg-gray-200/50 hover:bg-purple-100 text-gray-700 hover:text-purple-700 border-gray-300/50'
+                }`}
                 title="Switch to Asian"
                 onClick={() => navigate('/western')}
               >
@@ -284,21 +339,23 @@ const AsianPage: React.FC = () => {
                 })
                 .map(([date, posts]) => (
                   <div key={date} className="mb-8">
-                    <h2 className="text-xl font-bold text-gray-300 mb-4 pb-2 border-b border-gray-700/50 font-orbitron flex items-center gap-3">
+                    <h2 className={`text-xl font-bold mb-4 pb-2 border-b font-orbitron flex items-center gap-3 ${
+                      isDark 
+                        ? 'text-gray-300 border-gray-700/50' 
+                        : 'text-gray-700 border-gray-300/50'
+                    }`}>
                       <div
-                        className={`w-3 h-8 rounded-full shadow-lg ${
-                          posts.every(p => (p.contentType || 'asian') === 'asian')
-                            ? 'bg-gradient-to-b from-purple-500 to-puple-600 shadow-purple-500/30'
-                            : 'bg-gradient-to-b from-purple-500 to-purple-600 shadow-purple-500/30'
-                        }`}
+                        className="w-3 h-8 bg-gradient-to-b from-purple-500 to-purple-600 rounded-full shadow-lg shadow-purple-500/30"
                       ></div>
-                      <span
-                        className={`bg-clip-text text-transparent ${
+                      <span className={`bg-clip-text text-transparent ${
                           posts.every(p => (p.contentType || 'asian') === 'asian')
-                            ? 'bg-gradient-to-r from-purple-400 to-purple-300'
-                            : 'bg-gradient-to-r from-purple-400 to-purple-300'
-                        }`}
-                      >
+                            ? isDark 
+                              ? 'bg-gradient-to-r from-purple-400 to-purple-300'
+                              : 'bg-gradient-to-r from-purple-600 to-purple-500'
+                            : isDark
+                              ? 'bg-gradient-to-r from-purple-400 to-purple-300'
+                              : 'bg-gradient-to-r from-purple-600 to-purple-500'
+                        }`}>
                         {date}
                       </span>
                     </h2>
@@ -311,10 +368,14 @@ const AsianPage: React.FC = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.05 }}
-                            className={`group bg-gray-800/60 hover:bg-gray-700/80 border border-gray-700/50 rounded-xl p-3 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl transform hover:scale-[1.01] ${
+                            className={`group rounded-xl p-3 transition-all duration-300 cursor-pointer backdrop-blur-sm shadow-lg hover:shadow-xl transform hover:scale-[1.01] ${
+                              isDark 
+                                ? 'bg-gray-800/60 hover:bg-gray-700/80 border-gray-700/50 hover:border-purple-500/50 hover:shadow-purple-500/10'
+                                : 'bg-white/60 hover:bg-gray-50/80 border-gray-200/50 hover:border-purple-400/50 hover:shadow-purple-400/10'
+                            } border ${
                               (link.contentType || 'asian') === 'asian'
-                                ? 'hover:border-purple-500/50 hover:shadow-purple-500/10'
-                                : 'hover:border-purple-500/50 hover:shadow-purple-500/10'
+                                ? ''
+                                : ''
                             }`}
                             onClick={() => {
                               const contentType = link.contentType || 'asian';
@@ -351,25 +412,21 @@ const AsianPage: React.FC = () => {
                                 )}
 
                                 <h3
-                                  className={`text-sm sm:text-lg font-bold text-white transition-colors duration-300 font-orbitron relative group-hover:${
-                                    (link.contentType || 'asian') === 'asian' ? 'text-purple-300' : 'text-purple-300'
-                                  } truncate`}
+                                  className={`text-sm sm:text-lg font-bold transition-colors duration-300 font-orbitron relative truncate ${
+                                    isDark ? 'text-white group-hover:text-purple-300' : 'text-gray-900 group-hover:text-purple-600'
+                                  }`}
                                 >
                                   {link.name}
                                   <div
-                                    className={`absolute -bottom-1 left-0 w-16 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
-                                      (link.contentType || 'asian') === 'asian'
-                                        ? 'bg-gradient-to-r from-purple-500 to-purple-300'
-                                        : 'bg-gradient-to-r from-purple-500 to-purple-300'
-                                    }`}
+                                    className="absolute -bottom-1 left-0 w-16 h-0.5 bg-gradient-to-r from-purple-500 to-purple-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                                   ></div>
                                 </h3>
 
                                 <div
-                                  className={`hidden sm:block h-px flex-1 max-w-20 transition-all duration-300 ${
-                                    (link.contentType || 'asian') === 'asian'
-                                      ? 'bg-gradient-to-r from-purple-500/50 to-transparent group-hover:from-purple-400/70'
-                                      : 'bg-gradient-to-r from-purple-500/50 to-transparent group-hover:from-purple-400/70'
+                                  className={`hidden sm:block h-px bg-gradient-to-r to-transparent flex-1 max-w-20 transition-all duration-300 ${
+                                    isDark 
+                                      ? 'from-purple-500/50 group-hover:from-purple-400/70'
+                                      : 'from-purple-400/50 group-hover:from-purple-500/70'
                                   }`}
                                 ></div>
                               </div>
@@ -377,9 +434,9 @@ const AsianPage: React.FC = () => {
                               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                                 {recentLinks.includes(link) && (
                                   <span className={`inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 text-white text-xs font-bold rounded-full shadow-lg animate-pulse border font-roboto ${
-                                    (link.contentType || 'asian') === 'asian'
+                                    isDark 
                                       ? 'bg-gradient-to-r from-purple-500 to-purple-600 border-purple-400/30'
-                                      : 'bg-gradient-to-r from-purple-500 to-purple-600 border-purple-400/30'
+                                      : 'bg-gradient-to-r from-purple-600 to-purple-700 border-purple-500/30'
                                   }`}>
                                     <i className="fa-solid fa-star mr-1 text-xs hidden sm:inline"></i>
                                     NEW
@@ -407,7 +464,11 @@ const AsianPage: React.FC = () => {
                                   </span>
                                 )}
 
-                                <span className="inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 bg-gray-700/70 text-gray-300 text-xs sm:text-sm font-medium rounded-full border border-gray-600/50 backdrop-blur-sm font-roboto">
+                                <span className={`inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm font-medium rounded-full border backdrop-blur-sm font-roboto ${
+                                  isDark 
+                                    ? 'bg-gray-700/70 text-gray-300 border-gray-600/50'
+                                    : 'bg-gray-200/70 text-gray-700 border-gray-300/50'
+                                }`}>
                                   <i className="fa-solid fa-tag mr-1 sm:mr-2 text-xs"></i>
                                   {link.category}
                                 </span>
@@ -426,7 +487,11 @@ const AsianPage: React.FC = () => {
                     whileTap={{ scale: 0.95 }}
                     onClick={handleLoadMore}
                     disabled={loadingMore}
-                    className="px-10 py-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-300 transform disabled:opacity-50 disabled:cursor-not-allowed border border-purple-400/30 backdrop-blur-sm font-orbitron"
+                    className={`px-10 py-4 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform disabled:opacity-50 disabled:cursor-not-allowed border backdrop-blur-sm font-orbitron ${
+                      isDark 
+                        ? 'bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 hover:shadow-purple-500/30 border-purple-400/30'
+                        : 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 hover:shadow-purple-500/20 border-purple-500/30'
+                    }`}
                   >
                     {loadingMore ? (
                       <>
@@ -448,8 +513,12 @@ const AsianPage: React.FC = () => {
               <div className="mb-8">
                 <i className="fa-solid fa-search text-6xl text-gray-500"></i>
               </div>
-              <h3 className="text-3xl font-bold mb-4 text-white font-orbitron">No Content Found</h3>
-              <p className="text-gray-400 text-lg font-roboto">
+              <h3 className={`text-3xl font-bold mb-4 font-orbitron ${
+                isDark ? 'text-white' : 'text-gray-900'
+              }`}>No Content Found</h3>
+              <p className={`text-lg font-roboto ${
+                isDark ? 'text-gray-400' : 'text-gray-600'
+              }`}>
                 Try adjusting your search or filters to find what you're looking for.
               </p>
             </div>

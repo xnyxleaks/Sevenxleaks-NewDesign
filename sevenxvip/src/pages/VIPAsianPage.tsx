@@ -344,7 +344,7 @@ const VIPAsianPage: React.FC = () => {
                       <Sparkles className="w-4 h-4 text-yellow-300" />
                     </h2>
 
-                    <div className="space-y-2">
+                    <div className="space-y-2 -z-10">
                       {posts
                         .sort(
                           (a, b) =>

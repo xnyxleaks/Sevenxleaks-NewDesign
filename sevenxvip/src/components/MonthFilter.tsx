@@ -99,7 +99,7 @@ const MonthFilter: React.FC<MonthFilterProps> = ({
   const selectedMonthLabel = months.find(m => m.value === selectedMonth)?.label || "All Months";
 
   return (
-    <div className="relative">
+    <div className="relative z-50">
       <motion.button
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}

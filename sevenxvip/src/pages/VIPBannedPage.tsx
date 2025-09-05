@@ -421,16 +421,7 @@ const VIPBannedPage: React.FC = () => {
                                   </span>
                                 )}
 
-                                {/* Region Badge */}
-                                <span
-                                  className={`inline-flex items-center px-2 py-1 text-xs font-bold rounded-full ${
-                                    link.region === "asian"
-                                      ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
-                                      : "bg-orange-500/20 text-orange-300 border border-orange-500/30"
-                                  }`}
-                                >
-                                  {link.region.toUpperCase()}
-                                </span>
+
 
                                 {/* Category Badge */}
                                 <span

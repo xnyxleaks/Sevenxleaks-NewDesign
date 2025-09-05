@@ -13,6 +13,7 @@ import {
   AlertCircle,
   RefreshCw
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface StatsData {
   totalUsers: number;
@@ -33,6 +34,8 @@ const ViewStats: React.FC = () => {
   
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
+
+  const navigate = useNavigate()
 
   const fetchStats = async () => {
     setLoading(true);
@@ -300,7 +303,7 @@ const ViewStats: React.FC = () => {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => window.location.href = '/admin/settings'}
+                  onClick={() => navigate('/admin/settings')}
                   className="flex items-center gap-3 p-4 bg-gray-700/50 hover:bg-gray-600/50 rounded-xl transition-all duration-300 border border-gray-600/30 hover:border-blue-500/30"
                 >
                   <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
@@ -312,7 +315,7 @@ const ViewStats: React.FC = () => {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => window.location.href = '/admin-vip-users'}
+                  onClick={() => navigate('/admin-vip-users')}
                   className="flex items-center gap-3 p-4 bg-gray-700/50 hover:bg-gray-600/50 rounded-xl transition-all duration-300 border border-gray-600/30 hover:border-yellow-500/30"
                 >
                   <div className="w-8 h-8 bg-yellow-500/20 rounded-lg flex items-center justify-center">
@@ -324,7 +327,7 @@ const ViewStats: React.FC = () => {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => window.location.href = '/admin/requests'}
+                  onClick={() => navigate('/admin/requests')}
                   className="flex items-center gap-3 p-4 bg-gray-700/50 hover:bg-gray-600/50 rounded-xl transition-all duration-300 border border-gray-600/30 hover:border-green-500/30"
                 >
                   <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">

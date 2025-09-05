@@ -25,6 +25,8 @@ import {
 } from "lucide-react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
+import ChangePasswordModal from "../components/YourAccount/modals/ChangePasswordModal";
+import DeleteAccountModal from "../components/YourAccount/modals/DeleteAccountModal";
 
 const YourAccount: React.FC = () => {
   const [userData, setUserData] = useState<Userdatatypes | undefined>(undefined);
@@ -559,7 +561,7 @@ const YourAccount: React.FC = () => {
               <div className="space-y-3">
                 <button 
                   onClick={() => setShowPasswordModal(true)}
-                  className={`w-full p-4 text-left rounded-xl transition-all duration-200 flex items-center gap-3 border ${
+                  className={`w-full p-4 text-left rounded-xl transition-all duration-200 flex items-center gap-3 border cursor-pointer ${
                     isDark 
                       ? 'text-gray-300 hover:bg-gray-700/50 hover:text-white border-transparent hover:border-purple-500/20'
                       : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 border-transparent hover:border-purple-300'
@@ -735,7 +737,7 @@ const YourAccount: React.FC = () => {
 
                 <button 
                   onClick={() => setShowDeleteModal(true)}
-                  className={`w-full p-4 text-left rounded-xl transition-all duration-200 flex items-center gap-3 border ${
+                  className={`w-full p-4 text-left rounded-xl transition-all duration-200 flex items-center gap-3 border cursor-pointer ${
                     isDark 
                       ? 'text-red-400 hover:bg-red-500/10 hover:text-red-300 border-transparent hover:border-red-500/20'
                       : 'text-red-600 hover:bg-red-50 hover:text-red-700 border-transparent hover:border-red-300'
@@ -753,6 +755,19 @@ const YourAccount: React.FC = () => {
             </div>
           </motion.div>
         </div>
+
+        {/* Modals */}
+        <ChangePasswordModal 
+          isOpen={showPasswordModal}
+          onClose={() => setShowPasswordModal(false)}
+          userEmail={userData.email}
+        />
+        
+        <DeleteAccountModal
+          isOpen={showDeleteModal}
+          onClose={() => setShowDeleteModal(false)}
+          userEmail={userData.email}
+        />
       </div>
     </div>
   );

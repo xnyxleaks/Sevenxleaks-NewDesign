@@ -6,6 +6,7 @@ import { Helmet } from "react-helmet";
 import { Crown, Calendar, Plus, Star, Sparkles, HelpCircle } from "lucide-react";
 import VIPHeader from "../components/VIP/VIPHeader";
 import { useTheme } from "../contexts/ThemeContext";
+import MonthFilter from "../components/MonthFilter";
 
 type LinkItem = {
   id: string;
@@ -54,6 +55,8 @@ const VIPUnknownPage: React.FC = () => {
   const [hasMoreContent, setHasMoreContent] = useState(true);
   const [searchLoading, setSearchLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
+    const [selectedMonth, setSelectedMonth] = useState("");
+  
 
   function decodeModifiedBase64<T>(encodedStr: string): T {
     const fixedBase64 = encodedStr.slice(0, 2) + encodedStr.slice(3);
@@ -291,19 +294,13 @@ const VIPUnknownPage: React.FC = () => {
                 ))}
               </select>
 
-              <select
-                value={selectedRegion}
-                onChange={(e) => setSelectedRegion(e.target.value)}
-                className={`px-3 py-1.5 border rounded-lg text-xs focus:outline-none focus:ring-1 transition-all duration-300 min-w-[100px] ${
-                  isDark
-                    ? "bg-gray-700/50 border-yellow-500/30 text-gray-300 focus:ring-yellow-500/50 hover:bg-gray-600/50"
-                    : "bg-gray-200/50 border-yellow-400/40 text-gray-700 focus:ring-yellow-600/50 hover:bg-gray-300/50"
-                }`}
-              >
-                <option value="">All Regions</option>
-                <option value="asian">Asian</option>
-                <option value="western">Western</option>
-              </select>
+                  <div>
+                <MonthFilter
+                selectedMonth={selectedMonth}
+                onMonthChange={setSelectedMonth}
+                themeColor="yellow"
+              />
+                  </div>
 
               <button 
                 className={`p-2 rounded-lg transition-all duration-300 border ${
@@ -428,16 +425,7 @@ const VIPUnknownPage: React.FC = () => {
                                     {link.contentType.replace('vip-', '').toUpperCase()}
                                   </span>
                                 )}
-                                {/* Region Badge */}
-                                <span
-                                  className={`inline-flex items-center px-2 py-1 text-xs font-bold rounded-full ${
-                                    link.region === "asian"
-                                      ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
-                                      : "bg-orange-500/20 text-orange-300 border border-orange-500/30"
-                                  }`}
-                                >
-                                  {link.region.toUpperCase()}
-                                </span>
+
 
                                 <span
                                   className={`inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm font-medium rounded-full border backdrop-blur-sm font-roboto ${

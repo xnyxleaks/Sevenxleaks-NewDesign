@@ -5,6 +5,7 @@ import VIPUserMenu from "./VIPUserMenu";
 import { motion, AnimatePresence } from "framer-motion";
 import { Crown, Sparkles, X } from "lucide-react";
 import ThemeToggle from "../ThemeToggle";
+import { useTheme } from "../../contexts/ThemeContext";
 
 type MenuItem = {
   name: string;
@@ -19,6 +20,8 @@ const VIPHeader: React.FC = () => {
   const [isVip, setIsVip] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const location = useLocation();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   const token = localStorage.getItem("Token");
   const name = localStorage.getItem("name") || "";
@@ -34,7 +37,8 @@ const VIPHeader: React.FC = () => {
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const { isAdmin: adminFlag, isVip: vipFlag } = response.data as {
-          isAdmin: boolean; isVip: boolean;
+          isAdmin: boolean;
+          isVip: boolean;
         };
         setIsAdmin(adminFlag);
         setIsVip(vipFlag);
@@ -66,9 +70,7 @@ const VIPHeader: React.FC = () => {
 
     const adminItems: MenuItem[] = isAdmin
       ? [
-          { name: "Admin Panel", path: "/admin/settings", icon: "fa-solid fa-shield-halved" },
-          { name: "Statistics", path: "/admin/stats", icon: "fa-solid fa-chart-line" },
-          { name: "Requests", path: "/admin/requests", icon: "fa-solid fa-clipboard-list" },
+         
         ]
       : [];
 
@@ -87,7 +89,13 @@ const VIPHeader: React.FC = () => {
   const allMenuItems: MenuItem[] = getVIPMenuItems();
 
   return (
-    <header className="w-full  from-gray-900 via-yellow-900/20 to-gray-900 border-b border-yellow-500/30 sticky top-0 shadow-2xl bg-opacity-100 z-50">
+    <header
+      className={`w-full sticky top-0 shadow-2xl z-50 border-b ${
+        isDark
+          ? "bg-gradient-to-r from-gray-900 via-yellow-900/20 to-gray-900 border-yellow-500/30"
+          : "bg-gradient-to-r from-white via-yellow-100/20 to-white border-yellow-400/40"
+      }`}
+    >
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="flex items-center justify-between h-16 sm:h-18 lg:h-20">
           {/* VIP Logo Section */}
@@ -108,12 +116,18 @@ const VIPHeader: React.FC = () => {
                   <Crown className="w-8 h-8 text-yellow-400" />
                 </div>
               </div>
-              
-              <div className="text-base sm:text-lg lg:text-xl font-bold text-white tracking-wide font-orbitron">
-                <span className="text-yellow-400">SEVENXLEAKS</span>
-                <span className="text-yellow-300 drop-shadow-lg">{getLogoText()}</span>
+
+              <div className="text-base sm:text-lg lg:text-xl font-bold tracking-wide font-orbitron">
+                <span className={isDark ? "text-yellow-400" : "text-yellow-600"}>SEVENXLEAKS</span>
+                <span
+                  className={`drop-shadow-lg ${
+                    isDark ? "text-yellow-300" : "text-yellow-700"
+                  }`}
+                >
+                  {getLogoText()}
+                </span>
               </div>
-              
+
               <motion.div
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
@@ -125,102 +139,63 @@ const VIPHeader: React.FC = () => {
 
           {/* Desktop VIP Navigation */}
           <nav className="hidden lg:flex items-center space-x-4">
-            <Link 
-              to="/vip" 
-              className="relative px-4 py-2 text-gray-300 hover:text-yellow-300 transition-all duration-300 group rounded-lg hover:bg-yellow-500/10 backdrop-blur-sm border border-transparent hover:border-yellow-500/30 hover:shadow-yellow-500/20"
-            >
-              <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
-                <Crown className="w-4 h-4 text-yellow-400" />
-                VIP Home
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-yellow-600/10 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300"></div>
-            </Link>
-            
-            <Link 
-              to="/vip-asian" 
-              className="relative px-4 py-2 text-gray-300 hover:text-yellow-300 transition-all duration-300 group rounded-lg hover:bg-yellow-500/10 backdrop-blur-sm border border-transparent hover:border-yellow-500/30 hover:shadow-yellow-500/20"
-            >
-              <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
-                <i className="fa-solid fa-crown text-yellow-400 text-xs"></i>
-                VIP Asian
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300"></div>
-            </Link>
-            
-            <Link 
-              to="/vip-western" 
-              className="relative px-4 py-2 text-gray-300 hover:text-yellow-300 transition-all duration-300 group rounded-lg hover:bg-yellow-500/10 backdrop-blur-sm border border-transparent hover:border-yellow-500/30 hover:shadow-yellow-500/20"
-            >
-              <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
-                <i className="fa-solid fa-crown text-yellow-400 text-xs"></i>
-                VIP Western
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300"></div>
-            </Link>
-            
-            <Link 
-              to="/vip-banned" 
-              className="relative px-4 py-2 text-gray-300 hover:text-yellow-300 transition-all duration-300 group rounded-lg hover:bg-yellow-500/10 backdrop-blur-sm border border-transparent hover:border-red-500/20 hover:shadow-red-500/20"
-            >
-              <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
-                <i className="fa-solid fa-ban text-yellow-400 text-xs"></i>
-                VIP Banned
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-red-600/10 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300"></div>
-            </Link>
-            
-            <Link 
-              to="/vip-unknown" 
-              className="relative px-4 py-2 text-gray-300 hover:text-yellow-300 transition-all duration-300 group rounded-lg hover:bg-yellow-500/10 backdrop-blur-sm border border-transparent hover:border-gray-500/20 hover:shadow-gray-500/20"
-            >
-              <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
-                <i className="fa-solid fa-question text-yellow-400 text-xs"></i>
-                VIP Unknown
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-gray-500/10 to-gray-600/10 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300"></div>
-            </Link>
-            
-            <a 
-              href="https://discord.gg/95BKaYTPPS"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative px-4 py-2 text-gray-300 hover:text-yellow-300 transition-all duration-300 group rounded-lg hover:bg-yellow-500/10 backdrop-blur-sm border border-transparent hover:border-purple-500/20 hover:shadow-purple-500/20"
-            >
-              <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
-                <i className="fab fa-discord text-yellow-400 text-xs"></i>
-                Discord VIP
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-purple-600/10 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300"></div>
-            </a>
-            
-            {isAdmin && (
-              <Link 
-                to="/admin/settings" 
-                className="relative px-4 py-2 text-gray-300 hover:text-yellow-300 transition-all duration-300 group rounded-lg hover:bg-yellow-500/10 backdrop-blur-sm border border-transparent hover:border-red-500/20 hover:shadow-red-500/20"
-              >
-                <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
-                  <i className="fa-solid fa-shield text-red-400 text-sm"></i>
-                  Admin
-                </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-red-600/10 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300"></div>
-              </Link>
-            )}
+            {allMenuItems
+              .filter(item => !item.external)
+              .map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent ${
+                    isDark
+                      ? "text-gray-300 hover:text-yellow-300 hover:bg-yellow-500/10 hover:border-yellow-500/30 hover:shadow-yellow-500/20"
+                      : "text-gray-700 hover:text-yellow-700 hover:bg-yellow-100/50 hover:border-yellow-400/40 hover:shadow-yellow-400/10"
+                  }`}
+                >
+                  <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
+                    <i className={`${item.icon} text-yellow-400 text-xs`}></i>
+                    {item.name}
+                  </span>
+                  <div
+                    className={`absolute inset-0 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300 ${
+                      isDark
+                        ? "bg-yellow-500/10"
+                        : "bg-yellow-200/30"
+                    }`}
+                  ></div>
+                </Link>
+              ))}
+            {allMenuItems
+              .filter(item => item.external)
+              .map((item) => (
+                <a
+                  key={item.name}
+                  href={item.path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`relative px-4 py-2 transition-all duration-300 group rounded-lg backdrop-blur-sm border border-transparent ${
+                    isDark
+                      ? "text-gray-300 hover:text-yellow-300 hover:bg-yellow-500/10 hover:border-yellow-500/30 hover:shadow-yellow-500/20"
+                      : "text-gray-700 hover:text-yellow-700 hover:bg-yellow-100/50 hover:border-yellow-400/40 hover:shadow-yellow-400/10"
+                  }`}
+                >
+                  <span className="relative z-10 font-medium font-roboto text-sm flex items-center gap-2">
+                    <i className={`${item.icon} text-yellow-400 text-xs`}></i>
+                    {item.name}
+                  </span>
+                  <div
+                    className={`absolute inset-0 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300 ${
+                      isDark
+                        ? "bg-yellow-500/10"
+                        : "bg-yellow-200/30"
+                    }`}
+                  ></div>
+                </a>
+              ))}
           </nav>
 
           {/* Actions Section */}
           <div className="flex items-center space-x-4">
             <ThemeToggle />
-            
-            <motion.div
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ duration: 3, repeat: Infinity }}
-              className="hidden sm:flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-black font-bold rounded-xl shadow-lg border border-yellow-400/30 backdrop-blur-sm"
-            >
-              <Crown className="w-4 h-4 animate-pulse" />
-              <span className="text-sm font-orbitron tracking-wide">VIP ACTIVE</span>
-              <Sparkles className="w-4 h-4" />
-            </motion.div>
-
             <VIPUserMenu
               name={name}
               isMenuOpen={isMenuOpen}
@@ -264,7 +239,9 @@ const VIPHeader: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="lg:hidden fixed inset-0 bg-slate-900 z-50 h-[1000px]"
+            className={`lg:hidden fixed inset-0 z-50 h-[1000px] ${
+              isDark ? "bg-slate-900" : "bg-white"
+            }`}
           >
             {/* Close Button */}
             <div className="absolute top-6 right-6">
@@ -272,7 +249,11 @@ const VIPHeader: React.FC = () => {
                 whileHover={{ scale: 1.1, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={handleMobileMenuToggle}
-                className="w-12 h-12 bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/40 rounded-full flex items-center justify-center text-yellow-300 hover:text-yellow-200 transition-all duration-300"
+                className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 border ${
+                  isDark
+                    ? "bg-yellow-500/20 hover:bg-yellow-500/30 border-yellow-500/40 text-yellow-300 hover:text-yellow-200"
+                    : "bg-yellow-100 hover:bg-yellow-200 border-yellow-300 text-yellow-700 hover:text-yellow-800"
+                }`}
               >
                 <X className="w-6 h-6" />
               </motion.button>
@@ -287,10 +268,14 @@ const VIPHeader: React.FC = () => {
                 className="flex items-center justify-center gap-4 mb-4"
               >
                 <Crown className="w-12 h-12 text-yellow-400" />
-                <h2 className="text-3xl font-bold text-yellow-400 font-orbitron">VIP MENU</h2>
+                <h2 className={`text-3xl font-bold font-orbitron ${isDark ? "text-yellow-400" : "text-yellow-600"}`}>
+                  VIP MENU
+                </h2>
                 <Sparkles className="w-8 h-8 text-yellow-300" />
               </motion.div>
-              <div className="w-32 h-1 bg-gradient-to-r from-yellow-400 to-yellow-500 mx-auto rounded-full"></div>
+              <div className={`w-32 h-1 mx-auto rounded-full ${
+                isDark ? "bg-gradient-to-r from-yellow-400 to-yellow-500" : "bg-gradient-to-r from-yellow-500 to-yellow-600"
+              }`}></div>
             </div>
 
             {/* Menu Items */}
@@ -308,14 +293,20 @@ const VIPHeader: React.FC = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={handleMobileMenuToggle}
-                      className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-yellow-300 hover:bg-yellow-500/10 rounded-xl transition-all duration-300 border border-transparent hover:border-yellow-500/30 backdrop-blur-sm"
+                      className={`flex items-center gap-4 px-6 py-4 rounded-xl transition-all duration-300 border border-transparent backdrop-blur-sm ${
+                        isDark
+                          ? "text-gray-300 hover:text-yellow-300 hover:bg-yellow-500/10 hover:border-yellow-500/30"
+                          : "text-gray-700 hover:text-yellow-700 hover:bg-yellow-100/50 hover:border-yellow-400/40"
+                      }`}
                     >
-                      <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center border border-yellow-500/30">
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${
+                        isDark ? "bg-yellow-500/20 border-yellow-500/30" : "bg-yellow-100 border-yellow-300"
+                      }`}>
                         <i className={`${item.icon} text-yellow-400`}></i>
                       </div>
                       <div className="flex-1">
                         <span className="font-medium text-lg">{item.name}</span>
-                        <p className="text-sm text-gray-400">External link</p>
+                        <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>External link</p>
                       </div>
                       <i className="fa-solid fa-external-link text-xs"></i>
                     </a>
@@ -323,59 +314,68 @@ const VIPHeader: React.FC = () => {
                     <Link
                       to={item.path}
                       onClick={handleMobileMenuToggle}
-                      className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-yellow-300 hover:bg-yellow-500/10 rounded-xl transition-all duration-300 border border-transparent hover:border-yellow-500/30 backdrop-blur-sm"
+                      className={`flex items-center gap-4 px-6 py-4 rounded-xl transition-all duration-300 border border-transparent backdrop-blur-sm ${
+                        isDark
+                          ? "text-gray-300 hover:text-yellow-300 hover:bg-yellow-500/10 hover:border-yellow-500/30"
+                          : "text-gray-700 hover:text-yellow-700 hover:bg-yellow-100/50 hover:border-yellow-400/40"
+                      }`}
                     >
-                      <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center border border-yellow-500/30">
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${
+                        isDark ? "bg-yellow-500/20 border-yellow-500/30" : "bg-yellow-100 border-yellow-300"
+                      }`}>
                         <i className={`${item.icon} text-yellow-400`}></i>
                       </div>
                       <div className="flex-1">
                         <span className="font-medium text-lg">{item.name}</span>
-                        <p className="text-sm text-gray-400">VIP exclusive</p>
+                        <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>VIP exclusive</p>
                       </div>
                       <i className="fa-solid fa-chevron-right text-xs"></i>
                     </Link>
                   )}
                 </motion.div>
               ))}
-              
-              {/* Account Section for Mobile */}
-<motion.div
-  initial={{ opacity: 0, y: 20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ delay: 0.8 }}
-  className="pt-6 border-t border-yellow-500/30 space-y-3"
->
-  <Link to="/account" onClick={handleMobileMenuToggle}>
-    <div className="flex items-center gap-4 px-6 py-4 text-gray-300 hover:text-yellow-300 hover:bg-yellow-500/10 rounded-xl transition-all duration-300 border border-transparent hover:border-yellow-500/30 backdrop-blur-sm">
-      <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center border border-yellow-500/30">
-        <i className="fa-solid fa-user text-yellow-400" />
-      </div>
-      <div className="flex-1">
-        <span className="font-medium text-lg">My VIP Account</span>
-        <p className="text-sm text-gray-400">Manage your premium account</p>
-      </div>
-      <i className="fa-solid fa-chevron-right text-xs" />
-    </div>
-  </Link>
 
-  <button
-    onClick={() => {
-      localStorage.removeItem("Token");
-      localStorage.removeItem("name");
-      localStorage.removeItem("email");
-      window.location.href = "/";
-    }}
-    className="w-full flex items-center gap-4 px-6 py-4 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-all duration-300 border border-transparent hover:border-red-500/30"
-  >
-    <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center border border-red-500/30">
-      <i className="fa-solid fa-sign-out-alt text-red-400" />
-    </div>
-    <div className="flex-1 text-left">
-      <span className="font-medium text-lg">Logout</span>
-      <p className="text-sm text-red-300">Sign out of VIP account</p>
-    </div>
-  </button>
-</motion.div>
+              {/* Account Section for Mobile */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8 }}
+                className={`pt-6 border-t space-y-3 ${isDark ? "border-yellow-500/30" : "border-yellow-400/40"}`}
+              >
+                <Link to="/account" onClick={handleMobileMenuToggle}>
+                  <div className={`flex items-center gap-4 px-6 py-4 rounded-xl transition-all duration-300 border border-transparent backdrop-blur-sm ${
+                    isDark
+                      ? "text-gray-300 hover:text-yellow-300 hover:bg-yellow-500/10 hover:border-yellow-500/30"
+                      : "text-gray-700 hover:text-yellow-700 hover:bg-yellow-100/50 hover:border-yellow-400/40"
+                  }`}>
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${
+                      isDark ? "bg-yellow-500/20 border-yellow-500/30" : "bg-yellow-100 border-yellow-300"
+                    }`}>
+                      <i className="fa-solid fa-user text-yellow-400" />
+                    </div>
+                    <div className="flex-1">
+                      <span className="font-medium text-lg">My VIP Account</span>
+                      <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>Manage your premium account</p>
+                    </div>
+                    <i className="fa-solid fa-chevron-right text-xs" />
+                  </div>
+                </Link>
+
+                <button
+                  onClick={() => {
+                    localStorage.clear();
+                    window.location.href = "/";
+                  }}
+                  className={`w-full text-left flex items-center gap-4 px-6 py-4 rounded-xl transition-all duration-300 border border-transparent backdrop-blur-sm ${
+                    isDark
+                      ? "text-red-400 hover:text-red-500 hover:bg-red-500/10 hover:border-red-500/30"
+                      : "text-red-600 hover:text-red-700 hover:bg-red-100/50 hover:border-red-400/40"
+                  }`}
+                >
+                  <i className="fa-solid fa-right-from-bracket w-12 h-12 flex items-center justify-center"></i>
+                  <span className="font-medium text-lg">Logout</span>
+                </button>
+              </motion.div>
             </div>
           </motion.div>
         )}

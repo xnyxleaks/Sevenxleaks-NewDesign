@@ -51,6 +51,7 @@ const WesternPage: React.FC = () => {
   const [hasMoreContent, setHasMoreContent] = useState(true);
   const [searchLoading, setSearchLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
+  const [dateFilter, setDateFilter] = useState("all");
 
   function decodeModifiedBase64<T>(encodedStr: string): T {
     const fixedBase64 = encodedStr.slice(0, 2) + encodedStr.slice(3);
@@ -78,6 +79,24 @@ const WesternPage: React.FC = () => {
       }
       if (selectedMonth) {
         params.append('month', selectedMonth);
+      }
+      
+      if (dateFilter !== 'all') {
+        const today = new Date();
+        let targetDate = new Date();
+        
+        switch (dateFilter) {
+          case 'today':
+            break;
+          case 'yesterday':
+            targetDate.setDate(today.getDate() - 1);
+            break;
+          case '7days':
+            targetDate.setDate(today.getDate() - 7);
+            break;
+        }
+        
+        params.append('month', (targetDate.getMonth() + 1).toString().padStart(2, '0'));
       }
 
       const endpoint = searchName ? '/westerncontent/search' : '/westerncontent';
@@ -141,7 +160,7 @@ const WesternPage: React.FC = () => {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchName, selectedCategory, selectedMonth]);
+  }, [searchName, selectedCategory, selectedMonth, dateFilter]);
 
   const handleLoadMore = () => {
     if (loadingMore || currentPage >= totalPages) return;
@@ -224,6 +243,30 @@ const WesternPage: React.FC = () => {
             )}
             </div>
 
+                            <div className="flex items-center gap-2">
+              {["all", "today", "yesterday", "7days"].map((filter) => (
+                <button
+                  key={filter}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 border whitespace-nowrap ${
+                    dateFilter === filter
+                      ? isDark
+                        ? "bg-orange-500 text-white border-orange-400"
+                        : "bg-orange-600 text-white border-orange-500"
+                      : isDark
+                        ? "bg-gray-700/50 text-gray-300 hover:bg-orange-500/20 border-gray-600/50"
+                        : "bg-gray-200/50 text-gray-700 hover:bg-orange-100 border-gray-300/50"
+                  }`}
+                  onClick={() => setDateFilter(filter)}
+                >
+                  {filter === "all"
+                    ? "All"
+                    : filter === "7days"
+                    ? "7 Days"
+                    : filter.charAt(0).toUpperCase() + filter.slice(1)}
+                </button>
+              ))}
+            </div>
+
             {/* Filter Buttons */}
             <div className="flex items-center gap-2">
               <MonthFilter
@@ -232,6 +275,7 @@ const WesternPage: React.FC = () => {
                 themeColor="orange"
               />
             </div>
+
 
             {/* Category Select */}
             <div className="flex items-center gap-2">
