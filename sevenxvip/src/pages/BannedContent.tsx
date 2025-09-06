@@ -57,19 +57,15 @@ const BannedContent: React.FC = () => {
         sortBy: "postDate",
         sortOrder: "DESC",
         limit: "24",
+        contentType: "banned"
       });
 
-      if (searchName) {
-        params.append('search', searchName);
-      }
-      
-      if (selectedMonth) {
-        params.append('month', selectedMonth);
-      }
+      if (searchName) params.append('search', searchName);
+      if (selectedMonth) params.append('month', selectedMonth);
+      if (sortOption !== 'mostRecent') params.append('dateFilter', sortOption);
 
-      const endpoint = searchName ? '/bannedcontent/search' : '/bannedcontent';
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}${endpoint}?${params}`,
+        `${import.meta.env.VITE_BACKEND_URL}/universal-search/search?${params}`,
         {
           headers: {
             "x-api-key": `${import.meta.env.VITE_FRONTEND_API_KEY}`,
@@ -239,11 +235,13 @@ const BannedContent: React.FC = () => {
 
               {/* Filter Controls */}
               <div className="flex items-center gap-2">
-                <MonthFilter
+                <div className="month-filter-container">
+                  <MonthFilter
                   selectedMonth={selectedMonth}
                   onMonthChange={setSelectedMonth}
                   themeColor="red"
-                />
+                  />
+                </div>
 
                 <select
                   value={sortOption}

@@ -73,20 +73,15 @@ const UnknownContent: React.FC = () => {
         sortBy: "postDate",
         sortOrder: "DESC",
         limit: "24",
+        contentType: "unknown"
       });
 
-      if (searchName) {
-        params.append('search', searchName);
-      }
-      
+      if (searchName) params.append('search', searchName);
+      if (selectedMonth) params.append('month', selectedMonth);
+      if (sortOption !== 'mostRecent') params.append('dateFilter', sortOption);
 
-      if (selectedMonth) {
-        params.append('month', selectedMonth);
-      }
-
-      const endpoint = searchName ? '/unknowncontent/search' : '/unknowncontent';
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}${endpoint}?${params}`,
+        `${import.meta.env.VITE_BACKEND_URL}/universal-search/search?${params}`,
         {
           headers: {
             "x-api-key": `${import.meta.env.VITE_FRONTEND_API_KEY}`,

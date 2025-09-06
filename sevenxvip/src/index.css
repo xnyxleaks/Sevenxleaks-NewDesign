@@ -746,3 +746,22 @@ body.light-mode .dreamy-form {
 .animate-bounce {
   transition: none !important;
 }
+/* Ensure month filter stays on top */
+.month-filter-container {
+  z-index: 9999 !important;
+  position: relative;
+}
+
+.month-filter-dropdown {
+  z-index: 9999 !important;
+  position: absolute;
+}
+
+/* Fix z-index stacking context issues */
+.content-item {
+  z-index: 1;
+}
+
+.filter-controls {
+  z-index: 10;
+}

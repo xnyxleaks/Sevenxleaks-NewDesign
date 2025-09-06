@@ -99,12 +99,12 @@ const MonthFilter: React.FC<MonthFilterProps> = ({
   const selectedMonthLabel = months.find(m => m.value === selectedMonth)?.label || "All Months";
 
   return (
-    <div className="relative z-50">
+    <div className="relative z-[9999]">
       <motion.button
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 border ${themeClasses.button} z-50`}
+        className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 border ${themeClasses.button} z-[9999]`}
       >
         <Calendar className="w-4 h-4" />
         <span className="text-xs font-medium min-w-[80px] text-left">{selectedMonthLabel}</span>
@@ -118,9 +118,9 @@ const MonthFilter: React.FC<MonthFilterProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.2 }}
-            className={`absolute top-full mt-2 right-0 w-48 rounded-xl shadow-xl border backdrop-blur-xl z-50 ${themeClasses.dropdown}`}
+            className={`absolute top-full mt-2 right-0 w-48 rounded-xl shadow-xl border backdrop-blur-xl z-[9999] ${themeClasses.dropdown}`}
           >
-            <div className="p-2 max-h-64 overflow-y-auto">
+            <div className="p-2 max-h-64 overflow-y-auto z-[9999]">
               {months.map((month) => (
                 <motion.button
                   key={month.value}
@@ -149,7 +149,7 @@ const MonthFilter: React.FC<MonthFilterProps> = ({
       {/* Backdrop */}
       {isOpen && (
         <div 
-          className="fixed inset-0 z-[99998]" 
+          className="fixed inset-0 z-[9998]" 
           onClick={() => setIsOpen(false)}
         />
       )}

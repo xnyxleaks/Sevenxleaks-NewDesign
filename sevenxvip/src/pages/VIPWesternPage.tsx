@@ -71,39 +71,16 @@ const VIPWesternPage: React.FC = () => {
         sortBy: "postDate",
         sortOrder: "DESC",
         limit: "24",
+        contentType: "vip-western"
       });
 
-      if (searchName) {
-        params.append('search', searchName);
-      }
-      if (selectedCategory) {
-        params.append('category', selectedCategory);
-      }
-      if (selectedMonth) {
-        params.append('month', selectedMonth);
-      }
-      
-      if (dateFilter !== 'all') {
-        const today = new Date();
-        let targetDate = new Date();
-        
-        switch (dateFilter) {
-          case 'today':
-            break;
-          case 'yesterday':
-            targetDate.setDate(today.getDate() - 1);
-            break;
-          case '7days':
-            targetDate.setDate(today.getDate() - 7);
-            break;
-        }
-        
-        params.append('month', (targetDate.getMonth() + 1).toString().padStart(2, '0'));
-      }
+      if (searchName) params.append('search', searchName);
+      if (selectedCategory) params.append('category', selectedCategory);
+      if (selectedMonth) params.append('month', selectedMonth);
+      if (dateFilter !== 'all') params.append('dateFilter', dateFilter);
 
-      const endpoint = searchName ? '/vip-westerncontent/search' : '/vip-westerncontent';
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}${endpoint}?${params}`,
+        `${import.meta.env.VITE_BACKEND_URL}/universal-search/search?${params}`,
         {
           headers: {
             "x-api-key": `${import.meta.env.VITE_FRONTEND_API_KEY}`,
@@ -270,11 +247,13 @@ const VIPWesternPage: React.FC = () => {
                 </button>
               ))}
               
-              <MonthFilter
+              <div className="month-filter-container">
+                <MonthFilter
                 selectedMonth={selectedMonth}
                 onMonthChange={setSelectedMonth}
                 themeColor="yellow"
-              />
+                />
+              </div>
             </div>
 
             {/* Category Select */}
