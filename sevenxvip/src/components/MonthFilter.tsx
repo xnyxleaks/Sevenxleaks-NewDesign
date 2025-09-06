@@ -104,7 +104,7 @@ const MonthFilter: React.FC<MonthFilterProps> = ({
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 border ${themeClasses.button}`}
+        className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 border ${themeClasses.button} z-50`}
       >
         <Calendar className="w-4 h-4" />
         <span className="text-xs font-medium min-w-[80px] text-left">{selectedMonthLabel}</span>
@@ -118,7 +118,7 @@ const MonthFilter: React.FC<MonthFilterProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.2 }}
-            className={`absolute top-full mt-2 right-0 w-48 rounded-xl shadow-xl border backdrop-blur-xl z-[99999] ${themeClasses.dropdown}`}
+            className={`absolute top-full mt-2 right-0 w-48 rounded-xl shadow-xl border backdrop-blur-xl z-50 ${themeClasses.dropdown}`}
           >
             <div className="p-2 max-h-64 overflow-y-auto">
               {months.map((month) => (

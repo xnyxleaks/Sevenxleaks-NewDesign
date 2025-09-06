@@ -270,7 +270,7 @@ const AsianPage: React.FC = () => {
               ))}
             </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 z-[99px]">
               <MonthFilter
                 selectedMonth={selectedMonth}
                 onMonthChange={setSelectedMonth}
