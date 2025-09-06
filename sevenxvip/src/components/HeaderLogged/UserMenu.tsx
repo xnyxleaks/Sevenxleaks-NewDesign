@@ -137,7 +137,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
     className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 group border ${
       isDark
         ? "border-transparent hover:border-blue-500/20 hover:shadow-lg hover:shadow-blue-500/10"
-        : "border-gray-200" // Light theme: borda clara
+        : "hover:bg-blue-300 border-gray-200" // Light theme: borda clara
     }`}
   >
     {/* Icon */}
@@ -278,7 +278,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
               <div className="px-3 mt-4 pt-3 border-t border-gray-700/50">
                 <a
                   href="https://discord.gg/95BKaYTPPS"
-                  className="flex items-center gap-3 px-3 py-3 hover:bg-gray-800/60 rounded-xl transition-all duration-200 group border border-transparent hover:border-purple-500/20 hover:shadow-lg hover:shadow-purple-500/10"
+                  className={`${isDark ? 'flex items-center gap-3 px-3 py-3 hover:bg-gray-800/60 rounded-xl transition-all duration-200 group border border-transparent hover:border-purple-500/20 hover:shadow-lg hover:shadow-purple-500/10': 'flex items-center gap-3 px-3 py-3 hover:bg-purple-300/60 rounded-xl transition-all duration-200 group border border-transparent hover:border-purple-500/20 hover:shadow-lg hover:shadow-purple-500/10'}`}
                   onClick={handleMenuToggle}
                   target="_blank"
                   rel="noopener noreferrer"
